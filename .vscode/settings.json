@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "*.embeddedhtml": "html",
+        "Makefile": "cpp",
+        "iostream": "cpp"
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/mario/Escritorio/IG",
+            "binaryPath": "/home/mario/Escritorio/IG/pracs_exe",
+            "binaryArgs": []
+        }
+    ]
+}
