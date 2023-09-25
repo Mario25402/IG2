@@ -88,19 +88,14 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    switch( toupper(tecla) )
    {
       default:
-         if (modoMenu == SELOBJETO)
-            cout << "Letra incorrecta, las opciones son: C, P, o Q" << endl;
-         else if (modoMenu == SELVISUALIZACION)
-            cout << "Letra incorrecta, las opciones son: D, L, S, o Q" << endl;
-         else
-            cout << "Letra incorrecta, las opciones son: O, V, o Q" << endl;
+         cout << "Letra incorrecta" << endl;
          break;
 
       case 'Q' :
          if (modoMenu != NADA){
             if (modoMenu == SELOBJETO) obj = NINGUNO;
 
-            cout << "\nSELECCIÓN DE MENÚ" << endl;
+            cout << "\nSELECCIÓN DE MENÚ (OPCIONES: O, V, Q)" << endl;
             modoMenu = NADA;
          }
          
@@ -111,7 +106,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // ESTAMOS EN MODO SELECCION DE OBJETO
 
       case 'O' :
-         cout << "\nSELECCIÓN DE OBJETO" << endl;
+         cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Q)" << endl;
          modoMenu=SELOBJETO; 
          break ;
 
@@ -135,7 +130,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
 
       case 'V':
-         cout << "\nSELECCIÓN DE VISUALIZACIÓN" << endl;
+         cout << "\nSELECCIÓN DE VISUALIZACIÓN (OPCIONES D, L, S, Q)" << endl;
          modoMenu=SELVISUALIZACION;
          break ;
       

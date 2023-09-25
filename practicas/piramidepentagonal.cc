@@ -8,19 +8,19 @@ PiramidePentagonal::PiramidePentagonal(float h, float r)
    // inicializar la tabla de vértices
    v.resize(12);
 
-   v[0] = Tupla3f(r * cos(0), h / 2.0f, r * sin(0));
-   v[1] = Tupla3f(r * cos(60), h / 2.0f, r * sin(60));
-   v[2] = Tupla3f(r * cos(120), h / 2.0f, r * sin(120));
-   v[3] = Tupla3f(r * cos(180), h / 2.0f, r * sin(180));
-   v[4] = Tupla3f(r * cos(240), h / 2.0f, r * sin(240));
-   v[5] = Tupla3f(r * cos(300), h / 2.0f, r * sin(300));
+   v[0] = Tupla3f(r * cos(0), 0, r * sin(0));
+   v[1] = Tupla3f(r * cos(60), 0, r * sin(60));
+   v[2] = Tupla3f(r * cos(120), 0, r * sin(120));
+   v[3] = Tupla3f(r * cos(180), 0, r * sin(180));
+   v[4] = Tupla3f(r * cos(240), 0, r * sin(240));
+   v[5] = Tupla3f(r * cos(300), 0, r * sin(300));
 
-   v[6] = Tupla3f(r * cos(0), h / 4.0f, r * sin(0));
-   v[7] = Tupla3f(r * cos(60), h / 4.0f, r * sin(60));
-   v[8] = Tupla3f(r * cos(120), h / 4.0f, r * sin(120));
-   v[9] = Tupla3f(r * cos(180), h / 4.0f, r * sin(180));
-   v[10] = Tupla3f(r * cos(240), h / 4.0f, r * sin(240));
-   v[11] = Tupla3f(r * cos(300), h / 4.0f, r * sin(300));
+   v[6] = Tupla3f((r/2) * cos(0), h / 2.0f, (r/2) * sin(0));
+   v[7] = Tupla3f((r/2) * cos(60), h / 2.0f, (r/2) * sin(60));
+   v[8] = Tupla3f((r/2) * cos(120), h / 2.0f, (r/2) * sin(120));
+   v[9] = Tupla3f((r/2) * cos(180), h / 2.0f, (r/2) * sin(180));
+   v[10] = Tupla3f((r/2) * cos(240), h / 2.0f, (r/2) * sin(240));
+   v[11] = Tupla3f((r/2) * cos(300), h / 2.0f, (r/2) * sin(300));
         
    // inicializar la tabla de caras o triángulos:
    // (es importante en cada cara ordenar los vértices en sentido contrario
