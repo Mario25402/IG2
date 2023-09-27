@@ -37,10 +37,6 @@ private:
    GLuint id_vbo_tri = 0;
    GLuint id_vbo_c   = 0;
 
-   void draw_alambre();
-   void draw_puntos();
-   void draw_solido();
-
    void setColor();
 
    GLuint CrearVBO(GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);

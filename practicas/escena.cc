@@ -53,7 +53,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 void Escena::dibujar()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-   glEnable(GL_CULL_FACE);
+   //glEnable(GL_CULL_FACE);
 	change_observer();
    ejes.draw();
     // COMPLETAR
@@ -148,7 +148,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          if (modoMenu == SELVISUALIZACION){
             alambre = !alambre;
 
-            if (puntos)
+            if (alambre)
                cout << "VISUALIZACIÓN: LÍNEAS ACTIVADA" << endl;
             else
                cout << "VISUALIZACIÓN: LÍNEAS DESACTIVADA" << endl;
@@ -169,6 +169,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break;
    }
    
+   dibujar();
    return salir;
 }
 //**************************************************************************
