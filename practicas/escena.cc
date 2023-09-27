@@ -18,10 +18,8 @@ Escena::Escena()
 
     ejes.changeAxisSize( 5000 );
 
-    // crear los objetos de la escena....
-    // .......completar: ...
-    // .....
-
+    cubo = new Cubo(50);
+    piramide = new PiramidePentagonal(50,25);
 }
 
 //**************************************************************************
@@ -57,7 +55,7 @@ void Escena::dibujar()
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
    glEnable(GL_CULL_FACE);
 	change_observer();
-    ejes.draw();
+   ejes.draw();
     // COMPLETAR
     //   Dibujar los diferentes elementos de la escena
     // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
