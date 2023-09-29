@@ -19,7 +19,7 @@ Escena::Escena()
     ejes.changeAxisSize( 5000 );
 
     cubo = new Cubo(50);
-    piramide = new PiramidePentagonal(50,25);
+    piramide = new PiramidePentagonal(50,50);
 }
 
 //**************************************************************************
@@ -53,19 +53,13 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 void Escena::dibujar()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-   //glEnable(GL_CULL_FACE);
-	change_observer();
+   glEnable(GL_CULL_FACE);
+	
+   change_observer();
    ejes.draw();
-    // COMPLETAR
-    //   Dibujar los diferentes elementos de la escena
-    // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
-    // y hacer 
-    // cubo->draw()
-    // o    piramide->draw()
-   
+
    if (obj == CUBO) cubo->draw(puntos, alambre, solido);
    else if (obj == PIRAMIDE) piramide->draw(puntos, alambre, solido);
-    
 }
 
 //**************************************************************************
@@ -82,6 +76,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    cout << "Tecla pulsada: '" << tecla << "'" << endl;
 
    bool salir = false;
+   static objeto anterior = NINGUNO;
 
    switch( toupper(tecla) )
    {
@@ -91,8 +86,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       case 'Q' :
          if (modoMenu != NADA){
-            if (modoMenu == SELOBJETO) obj = NINGUNO;
-
             cout << "\nSELECCIÓN DE MENÚ (OPCIONES: O, V, Q)" << endl;
             modoMenu = NADA;
          }
@@ -110,16 +103,32 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       case 'C':
          if (modoMenu == SELOBJETO){
-            obj = CUBO;
-            cout << "OBJETO: CUBO" << endl;
+            if (obj == CUBO){
+               obj = NINGUNO;
+               anterior = obj;
+               cout << "OBJETO: CUBO DESACTIVADO" << endl;
+            }
+            else{
+               obj = CUBO;
+               anterior = obj;
+               cout << "OBJETO: CUBO ACTIVADO" << endl;
+            }
          }
          else cout << "Letra incorrecta" << endl;
          break;
 
       case 'P':
          if (modoMenu == SELOBJETO){
-            obj = PIRAMIDE;
-            cout << "OBJETO: PIRÁMIDE" << endl;
+            if (obj == PIRAMIDE){
+               obj = NINGUNO;
+               anterior = obj;
+               cout << "OBJETO: PIRÁMIDE DESACTIVADO" << endl;
+            }
+            else{
+               obj = PIRAMIDE;
+               anterior = obj;
+               cout << "OBJETO: PIRÁMIDE ACTIVADO" << endl;
+            }
          }
          else cout << "Letra incorrecta" << endl;
          break;
@@ -140,6 +149,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                cout << "VISUALIZACIÓN: DOTS ACTIVADA" << endl;
             else
                cout << "VISUALIZACIÓN: DOTS DESACTIVADA" << endl;
+
+            if (!puntos and !alambre and !solido)
+               obj = NINGUNO;
+            else
+               obj = anterior;
          }
          else cout << "Letra incorrecta" << endl;
          break;
@@ -152,24 +166,33 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                cout << "VISUALIZACIÓN: LÍNEAS ACTIVADA" << endl;
             else
                cout << "VISUALIZACIÓN: LÍNEAS DESACTIVADA" << endl;
+
+            if (!puntos and !alambre and !solido)
+               obj = NINGUNO;
+            else
+               obj = anterior;
          }
          else cout << "Letra incorrecta" << endl;
          break;
 
       case 'S':
-         if (modoMenu == SELVISUALIZACION){
+         if (modoMenu == SELVISUALIZACION){ 
             solido = !solido;
 
             if (solido)
                cout << "VISUALIZACIÓN: SÓLIDO ACTIVADO" << endl;
             else
                cout << "VISUALIZACIÓN: SÓLIDO DESACTIVADO" << endl;
+
+            if (!puntos and !alambre and !solido)
+               obj = NINGUNO;
+            else
+               obj = anterior;
          }
          else cout << "Letra incorrecta" << endl;
          break;
    }
    
-   dibujar();
    return salir;
 }
 //**************************************************************************

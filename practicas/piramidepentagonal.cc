@@ -33,52 +33,52 @@ PiramidePentagonal::PiramidePentagonal(float h, float r)
    //  de las agujas del reloj, cuando esa cara se observa desde el exterior del cubo)
    f.resize(24);
 
-   // Frontal central
-   f[0] = Tupla3i(0,1,7);
-   f[1] = Tupla3i(0,7,6);
-
-   // Frontal derecha
-   f[2] = Tupla3i(1,2,7);
-   f[3] = Tupla3i(2,8,7);
+   // Trasera central
+   f[0] = Tupla3i(0,7,1);
+   f[1] = Tupla3i(0,6,7);
 
    // Trasera derecha
-   f[4] = Tupla3i(3,2,4);
-   f[5] = Tupla3i(2,8,4);
+   f[2] = Tupla3i(1,7,2);
+   f[3] = Tupla3i(2,7,8);
 
-   // Trasera central
+   // Frontal derecha
+   f[4] = Tupla3i(3,2,9);
+   f[5] = Tupla3i(9,2,8);
+
+   // Frontal central
    f[6] = Tupla3i(4,3,9);
    f[7] = Tupla3i(4,9,10);
 
-   // Trasera izquierda
-   f[8] = Tupla3i(4,11,5);
+   // Frontal izquierda
+   f[8] = Tupla3i(5,4,11);
    f[9] = Tupla3i(4,10,11);
 
-   // Frontal izquierda
-   f[10] = Tupla3i(0,11,5);
-   f[11] = Tupla3i(0,6,11);
+   // Trasera izquierda
+   f[10] = Tupla3i(0,5,11);
+   f[11] = Tupla3i(0,11,6);
 
    // Base inferior
-   f[12] = Tupla3i(1,0,13);
-   f[13] = Tupla3i(2,1,13);
-   f[14] = Tupla3i(3,2,13);
-   f[15] = Tupla3i(4,3,13);
-   f[16] = Tupla3i(5,4,13);
-   f[17] = Tupla3i(0,5,13);
+   f[12] = Tupla3i(1,13,0);
+   f[13] = Tupla3i(2,13,1);
+   f[14] = Tupla3i(3,13,2);
+   f[15] = Tupla3i(4,13,3);
+   f[16] = Tupla3i(5,13,4);
+   f[17] = Tupla3i(0,13,5);
 
    // Base superior
-   f[18] = Tupla3i(6,7,12);
-   f[19] = Tupla3i(7,8,12);
-   f[20] = Tupla3i(8,9,12);
-   f[21] = Tupla3i(9,10,12);
-   f[22] = Tupla3i(10,11,12);
-   f[23] = Tupla3i(11,6,12);
+   f[18] = Tupla3i(6,12,7);
+   f[19] = Tupla3i(7,12,8);
+   f[20] = Tupla3i(8,12,9);
+   f[21] = Tupla3i(9,12,10);
+   f[22] = Tupla3i(10,12,11);
+   f[23] = Tupla3i(11,12,6);
 
    /********************************************/
    // inicializar la/s tabla/s de colores
    c.resize(v.size());
 
    for (int i = 0; i < c.size(); i++){
-      c[i] = Tupla3f(1.0f, 1.0f, 1.0f);
+      c[i] = Tupla3i(0, 127, 255);
    }
 }
 
