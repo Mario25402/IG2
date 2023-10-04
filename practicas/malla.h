@@ -27,19 +27,22 @@ public:
 protected:
    std::vector<Tupla3f> v; // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f; // una terna de 3 enteros por cada cara o triángulo
-   std::vector<Tupla3i> c; // tabla de colores
-
-   // completar P1: tabla de colores
-   // Completar P1: vbo y método asociado
+   std::vector<Tupla3f> c; // tabla de colores
 
 private:
-   GLuint id_vbo_ver = 0;
-   GLuint id_vbo_tri = 0;
-   GLuint id_vbo_c   = 0;
+   GLuint id_vbo_ver = 0;  // variables que controlan
+   GLuint id_vbo_tri = 0;  // si un VBO ha sido creado
+   GLuint id_vbo_c   = 0;  // o no, además de identificarlo
 
-   void setColor(bool puntos, bool alambre, bool solido);
+   bool oldPuntos = false;    // variables que controlan que no
+   bool oldAlambre = false;   // se rellenen de nuevo 
+   bool oldSolido = false;    // los colores innecesariamente
 
+   // función que crea un VBO
    GLuint CrearVBO(GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);
+
+   // función que cambia el color de los objetos según el modo de dibujado
+   void setColor(bool puntos, bool alambre, bool solido);
 
 };
 

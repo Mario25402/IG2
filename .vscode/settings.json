@@ -2,7 +2,8 @@
     "files.associations": {
         "*.embeddedhtml": "html",
         "Makefile": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "ostream": "cpp"
     },
     "makefile.launchConfigurations": [
         {

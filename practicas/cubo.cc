@@ -6,6 +6,7 @@ Cubo::Cubo(float lado)
 {
    // inicializar la tabla de vértices
    v.resize(8);
+   c.resize(v.size());
 
    // Vertices inferiores
    v[0] = Tupla3f(-lado/2.0f, 0, lado/2.0f);
@@ -48,12 +49,4 @@ Cubo::Cubo(float lado)
    // Superior
    f[10] = Tupla3i(4,5,6);
    f[11] = Tupla3i(4,6,7);
-
-   /********************************************/
-   // inicializar la/s tabla/s de colores
-   c.resize(v.size());
-
-   for (int i = 0; i < c.size(); i++){
-      c[i] = Tupla3i(120, 20, 200);
-   }
 }

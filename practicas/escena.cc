@@ -41,8 +41,6 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	glViewport( 0, 0, UI_window_width, UI_window_height );
 }
 
-
-
 // **************************************************************************
 //
 // función de dibujo de la escena: limpia ventana, fija cámara, dibuja ejes,
@@ -53,13 +51,25 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 void Escena::dibujar()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-   glEnable(GL_CULL_FACE);
+   glEnable(GL_CULL_FACE); // Ocultar elementos no visibles
 	
    change_observer();
    ejes.draw();
 
-   if (obj == CUBO) cubo->draw(puntos, alambre, solido);
-   else if (obj == PIRAMIDE) piramide->draw(puntos, alambre, solido);
+   // Si algún modo esta activo, dibujar el objeto correspondiente
+   if (puntos or alambre or solido){
+      if (obj == CUBO){
+         cubo->draw(puntos, false, false);
+         cubo->draw(false, alambre, false);
+         cubo->draw(false, false, solido);
+      }
+         
+      else if (obj == PIRAMIDE){
+         piramide->draw(puntos, false, false);
+         piramide->draw(false, alambre, false);
+         piramide->draw(false, false, solido);
+      }
+   }
 }
 
 //**************************************************************************
@@ -76,7 +86,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    cout << "Tecla pulsada: '" << tecla << "'" << endl;
 
    bool salir = false;
-   static objeto anterior = NINGUNO;
 
    switch( toupper(tecla) )
    {
@@ -84,6 +93,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          cout << "Letra incorrecta" << endl;
          break;
 
+      // SALIR //
       case 'Q' :
          if (modoMenu != NADA){
             cout << "\nSELECCIÓN DE MENÚ (OPCIONES: O, V, Q)" << endl;
@@ -94,39 +104,37 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break ;
 
       /////////////////
-      // ESTAMOS EN MODO SELECCION DE OBJETO
+      // MODO SELECCIÓN DE OBJETO
 
       case 'O' :
          cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Q)" << endl;
          modoMenu=SELOBJETO; 
          break ;
 
+      // CUBO //
       case 'C':
          if (modoMenu == SELOBJETO){
             if (obj == CUBO){
                obj = NINGUNO;
-               anterior = obj;
                cout << "OBJETO: CUBO DESACTIVADO" << endl;
             }
             else{
                obj = CUBO;
-               anterior = obj;
                cout << "OBJETO: CUBO ACTIVADO" << endl;
             }
          }
          else cout << "Letra incorrecta" << endl;
          break;
 
+      // PIRÁMIDE //
       case 'P':
          if (modoMenu == SELOBJETO){
             if (obj == PIRAMIDE){
                obj = NINGUNO;
-               anterior = obj;
                cout << "OBJETO: PIRÁMIDE DESACTIVADO" << endl;
             }
             else{
                obj = PIRAMIDE;
-               anterior = obj;
                cout << "OBJETO: PIRÁMIDE ACTIVADO" << endl;
             }
          }
@@ -134,47 +142,40 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break;
 
       /////////////////
-      // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
+      // SELECCIÓN DE MODO DE VISUALIZACION //
 
       case 'V':
          cout << "\nSELECCIÓN DE VISUALIZACIÓN (OPCIONES D, L, S, Q)" << endl;
          modoMenu=SELVISUALIZACION;
          break ;
       
+      // PUNTOS //
       case 'D':
          if (modoMenu == SELVISUALIZACION){
             puntos = !puntos;
             
             if (puntos)
-               cout << "VISUALIZACIÓN: DOTS ACTIVADA" << endl;
+               cout << "VISUALIZACIÓN: DOTS ACTIVADO" << endl;
             else
-               cout << "VISUALIZACIÓN: DOTS DESACTIVADA" << endl;
-
-            if (!puntos and !alambre and !solido)
-               obj = NINGUNO;
-            else
-               obj = anterior;
+               cout << "VISUALIZACIÓN: DOTS DESACTIVADO" << endl;
          }
          else cout << "Letra incorrecta" << endl;
          break;
 
+      // ALAMBRE //
       case 'L':
          if (modoMenu == SELVISUALIZACION){
             alambre = !alambre;
 
             if (alambre)
-               cout << "VISUALIZACIÓN: LÍNEAS ACTIVADA" << endl;
+               cout << "VISUALIZACIÓN: LÍNEAS ACTIVADO" << endl;
             else
-               cout << "VISUALIZACIÓN: LÍNEAS DESACTIVADA" << endl;
-
-            if (!puntos and !alambre and !solido)
-               obj = NINGUNO;
-            else
-               obj = anterior;
+               cout << "VISUALIZACIÓN: LÍNEAS DESACTIVADO" << endl;
          }
          else cout << "Letra incorrecta" << endl;
          break;
 
+      // SÓLIDO //
       case 'S':
          if (modoMenu == SELVISUALIZACION){ 
             solido = !solido;
@@ -183,11 +184,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                cout << "VISUALIZACIÓN: SÓLIDO ACTIVADO" << endl;
             else
                cout << "VISUALIZACIÓN: SÓLIDO DESACTIVADO" << endl;
-
-            if (!puntos and !alambre and !solido)
-               obj = NINGUNO;
-            else
-               obj = anterior;
          }
          else cout << "Letra incorrecta" << endl;
          break;

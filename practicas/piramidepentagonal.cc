@@ -6,6 +6,8 @@ PiramidePentagonal::PiramidePentagonal(float h, float r)
 {
    // inicializar la tabla de vértices
    v.resize(14);
+   c.resize(v.size());
+   
 
    // Vertices inferiores
    v[0] = Tupla3f(r * cos(240 * (M_PI/180)), 0, r * sin(240 * (M_PI/180)));
@@ -72,13 +74,5 @@ PiramidePentagonal::PiramidePentagonal(float h, float r)
    f[21] = Tupla3i(9,12,10);
    f[22] = Tupla3i(10,12,11);
    f[23] = Tupla3i(11,12,6);
-
-   /********************************************/
-   // inicializar la/s tabla/s de colores
-   c.resize(v.size());
-
-   for (int i = 0; i < c.size(); i++){
-      c[i] = Tupla3i(0, 127, 255);
-   }
 }
 
