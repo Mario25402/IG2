@@ -24,6 +24,12 @@ public:
    // función que dibuja el objeto en modo diferido (usando VBOs)
    void draw(bool puntos, bool alambre, bool solido);
 
+   // función que fija el material del objeto
+   //void setMaterial (Material mat);
+
+   // función que calcula las normales del objeto
+   //void calcularNormales();
+
 protected:
    std::vector<Tupla3f> v; // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f; // una terna de 3 enteros por cada cara o triángulo
@@ -43,7 +49,6 @@ private:
 
    // función que cambia el color de los objetos según el modo de dibujado
    void setColor(bool puntos, bool alambre, bool solido);
-
 };
 
 #endif

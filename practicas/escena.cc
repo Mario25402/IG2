@@ -10,16 +10,20 @@
 
 Escena::Escena()
 {
-    Front_plane       = 50.0;
-    Back_plane        = 2000.0;
-    Observer_distance = 4*Front_plane;
-    Observer_angle_x  = 0.0 ;
-    Observer_angle_y  = 0.0 ;
+   Front_plane       = 50.0;
+   Back_plane        = 2000.0;
+   Observer_distance = 4*Front_plane;
+   Observer_angle_x  = 0.0 ;
+   Observer_angle_y  = 0.0 ;
 
-    ejes.changeAxisSize( 5000 );
+   ejes.changeAxisSize( 5000 );
 
-    cubo = new Cubo(50);
-    piramide = new PiramidePentagonal(50,50);
+   cubo = new Cubo(50);
+   piramide = new PiramidePentagonal(50,50);
+   ply = new ObjPLY("../plys_ejemplo/beethoven.ply");
+   cilindro = new Cilindro(2, 20, 50, 50);
+   esfera = new Esfera(10, 20, 50);
+   cono = new Cono(3, 20, 50, 50);
 }
 
 //**************************************************************************
@@ -69,6 +73,35 @@ void Escena::dibujar()
          piramide->draw(false, alambre, false);
          piramide->draw(false, false, solido);
       }
+
+      else if (obj == PLY){
+         ply->draw(puntos, false, false);
+         ply->draw(false, alambre, false);
+         ply->draw(false, false, solido);
+      }
+
+      else if (obj == CILINDRO){
+         cilindro->draw(puntos, false, false);
+         cilindro->draw(false, alambre, false);
+         cilindro->draw(false, false, solido);
+      }
+
+      else if (obj = ESFERA){
+         esfera->draw(puntos, false, false);
+         esfera->draw(false, alambre, false);
+         esfera->draw(false, false, solido);
+      }
+
+      else if (obj == CONO){
+         cono->draw(puntos, false, false);
+         cono->draw(false, alambre, false);
+         cono->draw(false, false, solido);
+      }
+
+      /*glMatrixMode(GL_MODELVIEW);
+      glPushMatrix();
+      // Trasformación
+      glPopMatrix();*/
    }
 }
 
@@ -107,7 +140,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // MODO SELECCIÓN DE OBJETO
 
       case 'O' :
-         cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Q)" << endl;
+         cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Y, E, I, N, Q)" << endl;
          modoMenu=SELOBJETO; 
          break ;
 
@@ -136,6 +169,66 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             else{
                obj = PIRAMIDE;
                cout << "OBJETO: PIRÁMIDE ACTIVADO" << endl;
+            }
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // PLY //
+      case 'Y':
+         if (modoMenu == SELOBJETO){
+            if (obj == PLY){
+               obj = NINGUNO;
+               cout << "OBJETO: PLY DESACTIVADO" << endl;
+            }
+            else{
+               obj = PLY;
+               cout << "OBJETO: PLY ACTIVADO" << endl;
+            }
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // CILINDRO //
+      case 'I':
+         if (modoMenu == SELOBJETO){
+            if (obj == CILINDRO){
+               obj = NINGUNO;
+               cout << "OBJETO: CILINDRO DESACTIVADO" << endl;
+            }
+            else{
+               obj = CILINDRO;
+               cout << "OBJETO: CILINDRO ACTIVADO" << endl;
+            }
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // ESFERA //
+      case 'E':
+         if (modoMenu == SELOBJETO){
+            if (obj == ESFERA){
+               obj = NINGUNO;
+               cout << "OBJETO: ESFERA DESACTIVADO" << endl;
+            }
+            else{
+               obj = ESFERA;
+               cout << "OBJETO: ESFERA ACTIVADO" << endl;
+            }
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // CONO //
+      case 'N':
+         if (modoMenu == SELOBJETO){
+            if (obj == CONO){
+               obj = NINGUNO;
+               cout << "OBJETO: CONO DESACTIVADO" << endl;
+            }
+            else{
+               obj = CONO;
+               cout << "OBJETO: CONO ACTIVADO" << endl;
             }
          }
          else cout << "Letra incorrecta" << endl;

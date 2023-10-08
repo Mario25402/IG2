@@ -5,9 +5,13 @@
 #include "malla.h"
 #include "cubo.h"
 #include "piramidepentagonal.h"
+#include "objply.h"
+#include "cilindro.h"
+#include "esfera.h"
+#include "cono.h"
 
 typedef enum {NADA, SELOBJETO, SELVISUALIZACION} menu;
-typedef enum {CUBO, PIRAMIDE, NINGUNO} objeto;
+typedef enum {CUBO, PIRAMIDE, PLY, CILINDRO, ESFERA, CONO, NINGUNO} objeto;
 
 class Escena
 {
@@ -31,10 +35,14 @@ private:
     menu modoMenu = NADA;
     objeto obj = NINGUNO;
 
-    // Objetos de la escena
+    // Objetos de la escena, importante inicializarlos a nullptr
     Ejes ejes;
-    Cubo *cubo = nullptr;                   // es importante inicializarlo a 'nullptr'
-    PiramidePentagonal *piramide = nullptr; // es importante inicializarlo a 'nullptr'
+    Cubo *cubo = nullptr;
+    PiramidePentagonal *piramide = nullptr; 
+    ObjPLY *ply = nullptr;
+    Cilindro *cilindro = nullptr;
+    Esfera *esfera = nullptr;
+    Cono *cono = nullptr;           
 
     // Variables de estado de visualización
     bool puntos = false;
