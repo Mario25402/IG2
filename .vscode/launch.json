@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Your Program",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/mario/Escritorio/IG/practicas/pracs_exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "/home/mario/Escritorio/IG/practicas/",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build",
+            "internalConsoleOptions": "neverOpen"
+        }
+    ]
+}

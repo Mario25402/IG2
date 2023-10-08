@@ -77,7 +77,9 @@ void Escena::dibujar()
       else if (obj == PLY){
          ply->draw(puntos, false, false);
          ply->draw(false, alambre, false);
+         std::cout << "\n\n Bien \n\n";
          ply->draw(false, false, solido);
+         std::cout << "\n\n Bien \n\n";
       }
 
       else if (obj == CILINDRO){
