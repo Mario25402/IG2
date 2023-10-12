@@ -20,10 +20,10 @@ Escena::Escena()
 
    cubo = new Cubo(50);
    piramide = new PiramidePentagonal(50,50);
+   cilindro = new Cilindro(4, 20, 100, 50);
+   esfera = new Esfera(20, 20, 50);
+   cono = new Cono(3, 20, 100, 50);
    ply = new ObjPLY("../plys_ejemplo/beethoven.ply");
-   cilindro = new Cilindro(2, 20, 50, 50);
-   esfera = new Esfera(10, 20, 50);
-   cono = new Cono(3, 20, 50, 50);
 }
 
 //**************************************************************************
@@ -35,7 +35,6 @@ Escena::Escena()
 void Escena::inicializar( int UI_window_width, int UI_window_height )
 {
 	glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
-
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
 
 	Width  = UI_window_width/10;
@@ -75,11 +74,15 @@ void Escena::dibujar()
       }
 
       else if (obj == PLY){
+         glMatrixMode(GL_MODELVIEW);
+         glPushMatrix();
+         glScalef(10, 10, 10);
+
          ply->draw(puntos, false, false);
          ply->draw(false, alambre, false);
-         std::cout << "\n\n Bien \n\n";
          ply->draw(false, false, solido);
-         std::cout << "\n\n Bien \n\n";
+
+         glPopMatrix();
       }
 
       else if (obj == CILINDRO){
@@ -88,7 +91,7 @@ void Escena::dibujar()
          cilindro->draw(false, false, solido);
       }
 
-      else if (obj = ESFERA){
+      else if (obj == ESFERA){
          esfera->draw(puntos, false, false);
          esfera->draw(false, alambre, false);
          esfera->draw(false, false, solido);
@@ -99,11 +102,6 @@ void Escena::dibujar()
          cono->draw(false, alambre, false);
          cono->draw(false, false, solido);
       }
-
-      /*glMatrixMode(GL_MODELVIEW);
-      glPushMatrix();
-      // Trasformación
-      glPopMatrix();*/
    }
 }
 

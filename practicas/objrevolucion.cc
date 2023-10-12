@@ -58,6 +58,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
 
    v.clear();
    v.resize(N*perfil_original.size());
+   c.resize(v.size());
 
    for (unsigned long long i = 0; i < N; ++i){
       for (unsigned long j = 0; j < perfil_original.size(); ++j){

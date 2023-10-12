@@ -26,23 +26,33 @@ private:
     // variables que controlan la ventana y la transformacion de perspectiva
     GLfloat Width, Height, Front_plane, Back_plane;
 
+    /////
+
     // Transformación de cámara
     void change_projection(const float ratio_xy);
     void change_observer();
 
     void clear_window();
 
+    /////
+
+    // Selección de teclas
     menu modoMenu = NADA;
     objeto obj = NINGUNO;
+
+    /////
 
     // Objetos de la escena, importante inicializarlos a nullptr
     Ejes ejes;
     Cubo *cubo = nullptr;
-    PiramidePentagonal *piramide = nullptr; 
+    PiramidePentagonal *piramide = nullptr;
+
     ObjPLY *ply = nullptr;
     Cilindro *cilindro = nullptr;
     Esfera *esfera = nullptr;
-    Cono *cono = nullptr;           
+    Cono *cono = nullptr;    
+
+    /////       
 
     // Variables de estado de visualización
     bool puntos = false;
