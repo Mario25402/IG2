@@ -20,10 +20,13 @@ Escena::Escena()
 
    cubo = new Cubo(50);
    piramide = new PiramidePentagonal(50,50);
-   ply = new ObjPLY("../plys_ejemplo/beethoven.ply");
-   cilindro = new Cilindro(2, 20, 50, 50);
-   esfera = new Esfera(10, 20, 50);
-   cono = new Cono(3, 20, 50, 50);
+   cilindro = new Cilindro(4, 20, 100, 50);
+   esfera = new Esfera(20, 20, 50);
+   cono = new Cono(3, 20, 100, 50);
+
+   ply1 = new ObjPLY("../plys_ejemplo/beethoven.ply");
+   ply2 = new ObjPLY("../plys_ejemplo/big_dodge.ply");
+   ply3 = new ObjPLY("../plys_ejemplo/ant.ply");
 }
 
 //**************************************************************************
@@ -35,7 +38,6 @@ Escena::Escena()
 void Escena::inicializar( int UI_window_width, int UI_window_height )
 {
 	glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
-
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
 
 	Width  = UI_window_width/10;
@@ -75,11 +77,37 @@ void Escena::dibujar()
       }
 
       else if (obj == PLY){
-         ply->draw(puntos, false, false);
-         ply->draw(false, alambre, false);
-         std::cout << "\n\n Bien \n\n";
-         ply->draw(false, false, solido);
-         std::cout << "\n\n Bien \n\n";
+         glMatrixMode(GL_MODELVIEW);
+         glPushMatrix();
+
+         if (objPlySel == PLY1){
+            glTranslatef(0, -10 * ply1->centrar(), 0);
+            glScalef(10, 10, 10);
+
+            ply1->draw(puntos, false, false);
+            ply1->draw(false, alambre, false);
+            ply1->draw(false, false, solido);
+         }
+
+         else if (objPlySel == PLY2){
+            glTranslatef(0, -10 * ply2->centrar(), 0);
+            glScalef(10, 10, 10);
+
+            ply2->draw(puntos, false, false);
+            ply2->draw(false, alambre, false);
+            ply2->draw(false, false, solido);
+         }
+
+         else if (objPlySel == PLY3){
+            glTranslatef(0, -10 * ply3->centrar(), 0);
+            glScalef(10, 10, 10);
+
+            ply3->draw(puntos, false, false);
+            ply3->draw(false, alambre, false);
+            ply3->draw(false, false, solido);
+         }
+            
+         glPopMatrix();
       }
 
       else if (obj == CILINDRO){
@@ -88,7 +116,7 @@ void Escena::dibujar()
          cilindro->draw(false, false, solido);
       }
 
-      else if (obj = ESFERA){
+      else if (obj == ESFERA){
          esfera->draw(puntos, false, false);
          esfera->draw(false, alambre, false);
          esfera->draw(false, false, solido);
@@ -100,10 +128,40 @@ void Escena::dibujar()
          cono->draw(false, false, solido);
       }
 
-      /*glMatrixMode(GL_MODELVIEW);
-      glPushMatrix();
-      // Trasformación
-      glPopMatrix();*/
+      else if (obj == MULTIPLE){
+         // Cilindro
+         glMatrixMode(GL_MODELVIEW);
+         glPushMatrix();
+
+         glTranslatef(0, 0, -75);
+         cilindro->draw(puntos, false, false);
+         cilindro->draw(false, alambre, false);
+         cilindro->draw(false, false, solido);
+
+         glPopMatrix();
+         
+         // Cono
+         glMatrixMode(GL_MODELVIEW);
+         glPushMatrix();
+
+         glTranslatef(-75, 0, 75);
+         cono->draw(puntos, false, false);
+         cono->draw(false, alambre, false);
+         cono->draw(false, false, solido);
+
+         glPopMatrix();
+
+         // Esfera
+         glMatrixMode(GL_MODELVIEW);
+         glPushMatrix();
+
+         glTranslatef(75, esfera->getRadio() , 75); 
+         esfera->draw(puntos, false, false);
+         esfera->draw(false, alambre, false);
+         esfera->draw(false, false, solido);
+
+         glPopMatrix();
+      }
    }
 }
 
@@ -129,7 +187,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break;
 
       // SALIR //
-      case 'Q' :
+      case 'Q':
          if (modoMenu != NADA){
             cout << "\nSELECCIÓN DE MENÚ (OPCIONES: O, V, Q)" << endl;
             modoMenu = NADA;
@@ -141,9 +199,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       /////////////////
       // MODO SELECCIÓN DE OBJETO
 
-      case 'O' :
-         cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Y, E, I, N, Q)" << endl;
-         modoMenu=SELOBJETO; 
+      case 'O':
+         if (modoMenu == NADA){
+            cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Y, E, I, N, M, Q)" << endl;
+            modoMenu = SELOBJETO; 
+         }
+         else cout << "Letra incorrecta" << endl;
          break ;
 
       // CUBO //
@@ -236,12 +297,29 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          else cout << "Letra incorrecta" << endl;
          break;
 
+      // MÚLTIPLE //
+      case 'M':
+         if (modoMenu == SELOBJETO){
+            if (obj == MULTIPLE){
+               obj = NINGUNO;
+               cout << "OBJETO: MÚLTIPLE DESACTIVADO" << endl;
+            }
+            else{
+               obj = MULTIPLE;
+               cout << "OBJETO: MÚLTIPLE ACTIVADO" << endl;
+            }
+         }
+         break ;
+
       /////////////////
       // SELECCIÓN DE MODO DE VISUALIZACION //
 
       case 'V':
-         cout << "\nSELECCIÓN DE VISUALIZACIÓN (OPCIONES D, L, S, Q)" << endl;
-         modoMenu=SELVISUALIZACION;
+         if (modoMenu == NADA){
+            cout << "\nSELECCIÓN DE VISUALIZACIÓN (OPCIONES D, L, S, Q)" << endl;
+            modoMenu = SELVISUALIZACION;
+         }
+         else cout << "Letra incorrecta" << endl;
          break ;
       
       // PUNTOS //
@@ -282,6 +360,48 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
          else cout << "Letra incorrecta" << endl;
          break;
+
+      /////////////////
+      // SELECCIÓN DE OBJETO PLYS //
+
+      if (obj == PLY){
+
+         // PLY 1 //
+         case '1':
+            if (objPlySel == PLY1){
+               objPlySel = NONE;
+               cout << "OBJETO: PLY1 DESACTIVADO" << endl;
+            }
+            else{
+               objPlySel = PLY1;
+               cout << "OBJETO: PLY1 ACTIVADO" << endl;
+            }
+            break;
+
+         // PLY 2  //
+         case '2':
+            if (objPlySel == PLY2){
+               objPlySel = NONE;
+               cout << "OBJETO: PLY2 DESACTIVADO" << endl;
+            }
+            else{
+               objPlySel = PLY2;
+               cout << "OBJETO: PLY2 ACTIVADO" << endl;
+            }
+            break;
+
+         // PLY 3 //
+         case '3':
+            if (objPlySel == PLY3){
+               objPlySel = NONE;
+               cout << "OBJETO: PLY3 DESACTIVADO" << endl;
+            }
+            else{
+               objPlySel = PLY3;
+               cout << "OBJETO: PLY3 ACTIVADO" << endl;
+            }
+            break;
+      }
    }
    
    return salir;
