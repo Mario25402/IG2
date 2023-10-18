@@ -124,6 +124,7 @@
             ],
             "preLaunchTask": "C/C++: gcc compilar archivo activo",
             "miDebuggerPath": "/usr/bin/gdb"
+<<<<<<< HEAD
         },
         {
             "name": "C/C++: g++ Compilar y depurar el archivo activo",
@@ -150,6 +151,8 @@
             ],
             "preLaunchTask": "C/C++: g++ compilar archivo activo",
             "miDebuggerPath": "/usr/bin/gdb"
+=======
+>>>>>>> 1acc1eafb45204ff5e8b998024488801c7890594
         }
     ]
 }
