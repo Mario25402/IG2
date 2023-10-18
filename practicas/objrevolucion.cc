@@ -18,6 +18,7 @@ ObjRevolucion::ObjRevolucion() {}
 
 ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup, bool tapa_inf)
 {
+   //ply::read_vertices(archivo, v);
    ply::read(archivo, v, f);
 
    /////
@@ -45,34 +46,34 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 
    /////
 
+   int M = archivo.size();
+   int N = num_instancias;
+
    // añadir tapa inferior
-   if (tapa_inf){
+   if (tapa_inf)
       v.push_back(polo_sur);
-   }
+
    else{
       float coordY = v.front()[1];
       v.push_back(Tupla3f(0.0f, coordY, 0.0f)); // añadir polo sur
    }
 
+   /*for (int i = 0; i < N; i++){
+      f.push_back(Tupla3i(i*M, ((i*M)+M) % (M*N), v.size()-1));
+   }*/
+
    // añadir tapa superior
-   if (tapa_sup){
+   if (tapa_sup)
       v.push_back(polo_norte);
-   }
+
    else{
-      float coordY = v.back()[1];
+      float coordY = v.at(v.size()-2)[1];
       v.push_back(Tupla3f(0.0f, coordY, 0.0f)); // añadir polo norte
    }
 
-   /////
-
-   for (int i = 0; i < num_instancias; i++){
-      f.push_back(Tupla3i(i*num_vertices-1, ((i+1)* num_vertices-1)%(v.size()-2), v.size()-2));
-   }
-
-   for (int i = 0; i < num_instancias; i++){
-      f.push_back(Tupla3i(v.size()-1, ((i+1) % num_instancias) * num_vertices, i * num_vertices));
-   }   
-
+   /* for (int i = 1; i <= N; i++){
+      f.push_back(Tupla3i((i*M)-1, ((i*M)+M-1) % (M*N), v.size()-1));
+   } */
 }
 
 // *****************************************************************************
@@ -111,31 +112,35 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
 
    // añadir tapa inferior
    if (tapa_inf){
+      int M = archivo.size();
+      int N = num_instancias;
+
       v.push_back(polo_sur);
+
+      for (int i = 0; i < N; i++){
+         f.push_back(Tupla3i(i*M, ((i*M)+M) % (M*N), v.size()-1));
+      }
    }
-   else{
+   /*else{
       float coordY = v.front()[1];
       v.push_back(Tupla3f(0.0f, coordY, 0.0f)); // añadir polo sur
-   }
+   }*/
 
    // añadir tapa superior
    if (tapa_sup){
+      int M = archivo.size();
+      int N = num_instancias;
+
       v.push_back(polo_norte);
+
+      for (int i = 1; i <= N; i++){
+         f.push_back(Tupla3i((i*M)-1, ((i*M)+M-1) % (M*N), v.size()-1));
+      }
    }
-   else{
+   /*else{
       float coordY = v.back()[1];
       v.push_back(Tupla3f(0.0f, coordY, 0.0f)); // añadir polo norte
-   }
-
-   /////
-
-   for (int i = 0; i < num_instancias; i++){
-      f.push_back(Tupla3i(i*num_vertices-1, ((i+1)* num_vertices-1)%(v.size()-2), v.size()-2));
-   }
-
-   for (int i = 0; i < num_instancias; i++){
-      f.push_back(Tupla3i(v.size()-1, ((i+1) % num_instancias) * num_vertices, i * num_vertices));
-   }
+   }*/
 }
 
 // *****************************************************************************
@@ -168,8 +173,8 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
          int a = M * i + j;
          int b = M * ((i+1) % N) + j;
 
-         f.push_back(Tupla3i(a, b+1, b));
-         f.push_back(Tupla3i(a, a+1, b+1));
+         f.push_back(Tupla3i(a, b+1, b));    // (a, b, b+1)
+         f.push_back(Tupla3i(a, a+1, b+1));  // (a, b+1, a+1)
       }
    }
 }

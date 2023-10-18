@@ -53,7 +53,7 @@ private:
     Esfera *esfera = nullptr;
     Cono *cono = nullptr;    
 
-    ObjPLY *ply1 = nullptr;
+    ObjRevolucion *ply1 = nullptr;
     ObjPLY *ply2 = nullptr;
     ObjPLY *ply3 = nullptr;
 

@@ -24,9 +24,9 @@ Escena::Escena()
    esfera = new Esfera(20, 20, 50);
    cono = new Cono(3, 20, 100, 50);
 
-   ply1 = new ObjPLY("../plys_ejemplo/beethoven.ply");
+   ply1 = new ObjRevolucion("../plys_ejemplo/prueba.ply", 20, false, false);
    ply2 = new ObjPLY("../plys_ejemplo/big_dodge.ply");
-   ply3 = new ObjPLY("../plys_ejemplo/ant.ply");
+   ply3 = new ObjPLY("../plys_ejemplo/beethoven.ply");
 }
 
 //**************************************************************************
@@ -81,8 +81,8 @@ void Escena::dibujar()
          glPushMatrix();
 
          if (objPlySel == PLY1){
-            glTranslatef(0, -10 * ply1->centrar(), 0);
-            glScalef(10, 10, 10);
+            //glTranslatef(0, -10 * ply1->centrar(), 0);
+            glScalef(50, 50, 50);
 
             ply1->draw(puntos, false, false);
             ply1->draw(false, alambre, false);
