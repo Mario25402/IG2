@@ -11,11 +11,8 @@ Esfera::Esfera (int num_vert_perfil, int num_instancias_perf, float r){
     }
 
     crearMalla(perfil, num_instancias_perf);
-<<<<<<< HEAD
 }
 
 float Esfera::getRadio(){
     return radio;
-=======
->>>>>>> 1acc1eafb45204ff5e8b998024488801c7890594
 }

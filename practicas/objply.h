@@ -25,7 +25,6 @@ class ObjPLY: public Malla3D {
 public:
     ObjPLY( const std::string & nombre_archivo ) ;
     float centrar();
- 
 };
 
 #endif

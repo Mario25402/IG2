@@ -51,21 +51,14 @@ private:
     Cubo *cubo = nullptr;
     PiramidePentagonal *piramide = nullptr;
 
-<<<<<<< HEAD
-=======
-    ObjPLY *ply = nullptr;
->>>>>>> 1acc1eafb45204ff5e8b998024488801c7890594
     Cilindro *cilindro = nullptr;
     Esfera *esfera = nullptr;
     Cono *cono = nullptr;    
 
-<<<<<<< HEAD
     ObjRevolucion *ply1 = nullptr;
     ObjPLY *ply2 = nullptr;
     ObjPLY *ply3 = nullptr;
 
-=======
->>>>>>> 1acc1eafb45204ff5e8b998024488801c7890594
     /////       
 
     // Variables de estado de visualización

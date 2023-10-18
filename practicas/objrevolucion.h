@@ -22,10 +22,10 @@ class ObjRevolucion : public Malla3D
     ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
     ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup=true, bool tapa_inf=true) ;
 
+    float centrar();
 protected:
     std::vector<Tupla3f> perfil;
     void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias);
-
 } ;
 
 

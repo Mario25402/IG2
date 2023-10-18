@@ -23,14 +23,10 @@ Escena::Escena()
    cilindro = new Cilindro(4, 20, 100, 50);
    esfera = new Esfera(20, 20, 50);
    cono = new Cono(3, 20, 100, 50);
-<<<<<<< HEAD
 
    ply1 = new ObjRevolucion("../plys_ejemplo/prueba.ply", 20, false, false);
    ply2 = new ObjPLY("../plys_ejemplo/big_dodge.ply");
    ply3 = new ObjPLY("../plys_ejemplo/beethoven.ply");
-=======
-   ply = new ObjPLY("../plys_ejemplo/beethoven.ply");
->>>>>>> 1acc1eafb45204ff5e8b998024488801c7890594
 }
 
 //**************************************************************************
@@ -83,10 +79,9 @@ void Escena::dibujar()
       else if (obj == PLY){
          glMatrixMode(GL_MODELVIEW);
          glPushMatrix();
-<<<<<<< HEAD
 
          if (objPlySel == PLY1){
-            //glTranslatef(0, -10 * ply1->centrar(), 0);
+            glTranslatef(0, -50 * ply1->centrar(), 0);
             glScalef(50, 50, 50);
 
             ply1->draw(puntos, false, false);
@@ -111,16 +106,6 @@ void Escena::dibujar()
             ply3->draw(false, alambre, false);
             ply3->draw(false, false, solido);
          }
-            
-=======
-         glScalef(10, 10, 10);
-
-         ply->draw(puntos, false, false);
-         ply->draw(false, alambre, false);
-         ply->draw(false, false, solido);
-
->>>>>>> 1acc1eafb45204ff5e8b998024488801c7890594
-         glPopMatrix();
       }
 
       else if (obj == CILINDRO){
@@ -140,7 +125,6 @@ void Escena::dibujar()
          cono->draw(false, alambre, false);
          cono->draw(false, false, solido);
       }
-<<<<<<< HEAD
 
       else if (obj == MULTIPLE){
          // Cilindro
@@ -153,7 +137,7 @@ void Escena::dibujar()
          cilindro->draw(false, false, solido);
 
          glPopMatrix();
-         
+
          // Cono
          glMatrixMode(GL_MODELVIEW);
          glPushMatrix();
@@ -176,8 +160,6 @@ void Escena::dibujar()
 
          glPopMatrix();
       }
-=======
->>>>>>> 1acc1eafb45204ff5e8b998024488801c7890594
    }
 }
 
@@ -381,7 +363,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // SELECCIÓN DE OBJETO PLYS //
 
       if (obj == PLY){
-
          // PLY 1 //
          case '1':
             if (objPlySel == PLY1){
