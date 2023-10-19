@@ -45,8 +45,14 @@ Saldremos del modo de selección de objetos.
 Entramos al modo de selección de visualización, es decir, cómo veremos el objeto. Aquí disponemos de las siguientes opciones:
 
 ### Opción "D"
+Se visualizarán los vertices de los triangulos que forman el objeto.
+
 ### Opción "L"
+Se visualizará el perimetro de los triangulos que forman el objeto.
+
 ### Opción "S"
+Se visualizarán los triangulos coloreados que forman el objeto.
+
 ### Opción "Q"
 Saldremos del modo de selección de visualización.
 
