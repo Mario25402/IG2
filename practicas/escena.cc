@@ -24,7 +24,7 @@ Escena::Escena()
    esfera = new Esfera(20, 20, 50);
    cono = new Cono(3, 20, 100, 50);
 
-   ply1 = new ObjRevolucion("../plys_ejemplo/prueba.ply", 20, false, false);
+   ply1 = new ObjRevolucion("../plys_ejemplo/copa.ply", 20);
    ply2 = new ObjPLY("../plys_ejemplo/big_dodge.ply");
    ply3 = new ObjPLY("../plys_ejemplo/beethoven.ply");
 }
@@ -160,6 +160,19 @@ void Escena::dibujar()
 
          glPopMatrix();
       }
+
+      else if (obj == VECTOR){
+         glMatrixMode(GL_MODELVIEW);
+         glPushMatrix();
+
+         glTranslatef(0, -50 * rev->centrar(), 0);
+         glScalef(50, 50, 50);
+         rev->draw(puntos, false, false);
+         rev->draw(false, alambre, false);
+         rev->draw(false, false, solido);
+
+         glPopMatrix();
+      }
    }
 }
 
@@ -199,7 +212,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       case 'O':
          if (modoMenu == NADA){
-            cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Y, E, I, N, M, Q)" << endl;
+            cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Y, E, I, N, M, 4, Q)" << endl;
             modoMenu = SELOBJETO; 
          }
          else cout << "Letra incorrecta" << endl;
@@ -309,6 +322,39 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
          break ;
 
+      // VECTOR DE PUNTOS //
+      case '4':
+         if (modoMenu == SELOBJETO){
+            if (obj == VECTOR){
+               obj = NINGUNO;
+               delete rev;
+               cout << "OBJETO: VECTOR DE PUNTOS DESACTIVADO" << endl;
+            }
+            else{
+               obj = VECTOR;
+               cout << "OBJETO: VECTOR DE PUNTOS ACTIVADO" << endl;
+
+               std::vector<Tupla3f> perfil;
+               perfil.push_back(Tupla3f(0.0, -1.4, 0.0));
+               perfil.push_back(Tupla3f(1, -1.4, 0.0));
+               perfil.push_back(Tupla3f(1, -1.1, 0.0));
+               perfil.push_back(Tupla3f(0.5, -0.7, 0.0));
+               perfil.push_back(Tupla3f(0.4, -0.4, 0.0));
+               perfil.push_back(Tupla3f(0.4, 0.5, 0.0));
+               perfil.push_back(Tupla3f(0.5, 0.6, 0.0));
+               perfil.push_back(Tupla3f(0.3, 0.6, 0.0));
+               perfil.push_back(Tupla3f(0.5, 0.8, 0.0));
+               perfil.push_back(Tupla3f(0.55, 1.0, 0.0));
+               perfil.push_back(Tupla3f(0.5, 1.2, 0.0));
+               perfil.push_back(Tupla3f(0.3, 1.4, 0.0));
+               perfil.push_back(Tupla3f(0.0, 1.4, 0.0));
+
+               rev = new ObjRevolucion(perfil, 20);
+            }
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
       /////////////////
       // SELECCIÓN DE MODO DE VISUALIZACION //
 
@@ -362,9 +408,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       /////////////////
       // SELECCIÓN DE OBJETO PLYS //
 
-      if (obj == PLY){
-         // PLY 1 //
-         case '1':
+      // PLY 1 //
+      case '1':
+         if (obj == PLY){
             if (objPlySel == PLY1){
                objPlySel = NONE;
                cout << "OBJETO: PLY1 DESACTIVADO" << endl;
@@ -373,10 +419,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                objPlySel = PLY1;
                cout << "OBJETO: PLY1 ACTIVADO" << endl;
             }
-            break;
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
 
-         // PLY 2  //
-         case '2':
+      // PLY 2  //
+      case '2':
+         if (obj == PLY){
             if (objPlySel == PLY2){
                objPlySel = NONE;
                cout << "OBJETO: PLY2 DESACTIVADO" << endl;
@@ -385,10 +434,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                objPlySel = PLY2;
                cout << "OBJETO: PLY2 ACTIVADO" << endl;
             }
-            break;
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
 
-         // PLY 3 //
-         case '3':
+      // PLY 3 //
+      case '3':
+         if (obj == PLY){
             if (objPlySel == PLY3){
                objPlySel = NONE;
                cout << "OBJETO: PLY3 DESACTIVADO" << endl;
@@ -397,8 +449,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                objPlySel = PLY3;
                cout << "OBJETO: PLY3 ACTIVADO" << endl;
             }
-            break;
-      }
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
    }
    
    return salir;

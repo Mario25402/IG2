@@ -16,11 +16,11 @@
 
 ObjRevolucion::ObjRevolucion() {}
 
-ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bool tapa_sup, bool tapa_inf)
+ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias)
 {
    // leer datos del archivo PLY
-   //ply::read_vertices(archivo, v);
-   ply::read(archivo, v, f);
+   ply::read_vertices(archivo, v);
+   //ply::read(archivo, v, f);
 
    // rellenar en orden ascendente en el eje Y
    if (v.front()[1] > v.back()[1]){
@@ -30,24 +30,22 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
    /////
 
    Tupla3f polo_sur, polo_norte;
+   bool tapa_inf = false;
+   bool tapa_sup = false;
 
-   // Comprobar si no hay polo sur
-   if (!tapa_sup){
-      polo_sur = v.back();
-      tapa_sup = (polo_sur[0] == 0.0f and polo_sur[2] == 0.0f);
+   // Comprobar si hay polo sur
+   polo_sur = v.front();
+   tapa_inf = (polo_sur[0] == 0.0f and polo_sur[2] == 0.0f);
 
-      // eliminar polo sur
-      if (tapa_sup) v.erase(v.begin());
-   }
+   // eliminar polo sur
+   if (tapa_inf) v.erase(v.begin());
 
-   // Comprobar si no hay polo norte
-   if (!tapa_sup){
-      polo_norte = v.back();
-      tapa_sup = (polo_norte[0] == 0.0f and polo_norte[2] == 0.0f);
+   // Comprobar si hay polo norte
+   polo_norte = v.back();
+   tapa_sup = (polo_norte[0] == 0.0f and polo_norte[2] == 0.0f);
 
-      // eliminar polo norte
-      if (tapa_sup) v.pop_back();
-   }
+   // eliminar polo norte
+   if (tapa_sup) v.pop_back();
 
    /////
    
@@ -59,30 +57,30 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
    if (tapa_inf)
       v.push_back(polo_sur);
 
-   else{
-      float coordY = v.front()[1];
-      v.push_back(Tupla3f(0.0f, coordY, 0.0f)); // añadir polo sur
-   }
-
    // añadir vertice de la tapa superior
    if (tapa_sup)
       v.push_back(polo_norte);
 
-   else{
-      float coordY = v.at(v.size()-2)[1];
-      v.push_back(Tupla3f(0.0f, coordY, 0.0f)); // añadir polo norte
-   }
-
    /////
 
-   c.resize(v.size());
-   int N = num_instancias;
-   int M = v.size() / N; // inicio o fin de la fila en la malla
+   if (tapa_inf or tapa_sup){
+      c.resize(v.size());
+      int N = num_instancias;
+      int M = v.size() / N; // inicio o fin de la fila en la malla
 
-   // añadir caras de la tapas
-   for (int i = 0; i < N; i++){
-      f.push_back(Tupla3i(v.size()-2, i*M, ((i*M)+M) % (M*N)));               // inferior
-      f.push_back(Tupla3i(((i+1)*M)-1, v.size()-1, (((i+1)*M)+M-1) % (M*N))); // superior
+      // determinar posición del polo en el vector de vértices
+      int pos_polo;
+      if (tapa_inf and tapa_sup) pos_polo = v.size()-2;
+      else if (tapa_inf) pos_polo = v.size()-1;
+
+      // añadir caras de la tapas
+      for (int i = 0; i < N; i++){
+         if (tapa_inf)
+            f.push_back(Tupla3i(pos_polo, i*M, ((i*M)+M) % (M*N)));
+
+         if (tapa_sup)
+            f.push_back(Tupla3i(((i+1)*M)-1, v.size()-1, (((i+1)*M)+M-1) % (M*N)));
+      }
    }
 }
 
@@ -90,29 +88,36 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 // objeto de revolución obtenido a partir de un perfil (en un vector de puntos)
 
  
-ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool tapa_sup, bool tapa_inf) 
+ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias) 
 {
+   // rellenar el vector de vertices
    for (int i = 0; i < archivo.size(); i++)
       v.push_back(archivo[i]);
 
+   // rellenar en orden ascendente en el eje Y
+   if (v.front()[1] > v.back()[1]){
+      std::reverse(v.begin(), v.end());
+   }
+
    /////
 
-   int num_vertices = v.size();
    Tupla3f polo_sur, polo_norte;
+   bool tapa_inf = false;
+   bool tapa_sup = false;
+
+   // Comprobar si hay polo sur
+   polo_sur = v.front();
+   tapa_inf = (polo_sur[0] == 0.0f and polo_sur[2] == 0.0f);
 
    // eliminar polo sur
-   if (tapa_inf){
-      polo_sur = v[0];
-      v.erase(v.begin());
-      num_vertices--;
-   }
-   
+   if (tapa_inf) v.erase(v.begin());
+
+   // Comprobar si hay polo norte
+   polo_norte = v.back();
+   tapa_sup = (polo_norte[0] == 0.0f and polo_norte[2] == 0.0f);
+
    // eliminar polo norte
-   if (tapa_sup){
-      polo_norte = v[num_vertices-1];
-      v.pop_back();
-      num_vertices--;
-   }
+   if (tapa_sup) v.pop_back();
 
    /////
    
@@ -124,29 +129,30 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
    if (tapa_inf)
       v.push_back(polo_sur);
 
-   else{
-      float coordY = v.front()[1];
-      v.push_back(Tupla3f(0.0f, coordY, 0.0f)); // añadir polo sur
-   }
-
    // añadir vertice de la tapa superior
    if (tapa_sup)
       v.push_back(polo_norte);
 
-   else{
-      float coordY = v.at(v.size()-2)[1];
-      v.push_back(Tupla3f(0.0f, coordY, 0.0f)); // añadir polo norte
-   }
-
    /////
 
-   int N = num_instancias;
-   int M = v.size() / N; // inicio o fin de la fila en la malla
+   if (tapa_inf or tapa_sup){
+      c.resize(v.size());
+      int N = num_instancias;
+      int M = v.size() / N; // inicio o fin de la fila en la malla
 
-   // añadir caras de la tapas
-   for (int i = 0; i < N; i++){
-      f.push_back(Tupla3i(v.size()-2, i*M, ((i*M)+M) % (M*N)));               // inferior
-      f.push_back(Tupla3i(((i+1)*M)-1, v.size()-1, (((i+1)*M)+M-1) % (M*N))); // superior
+      // determinar posición del polo en el vector de vértices
+      int pos_polo;
+      if (tapa_inf and tapa_sup) pos_polo = v.size()-2;
+      else if (tapa_inf) pos_polo = v.size()-1;
+
+      // añadir caras de la tapas
+      for (int i = 0; i < N; i++){
+         if (tapa_inf)
+            f.push_back(Tupla3i(pos_polo, i*M, ((i*M)+M) % (M*N)));
+
+         if (tapa_sup)
+            f.push_back(Tupla3i(((i+1)*M)-1, v.size()-1, (((i+1)*M)+M-1) % (M*N)));
+      }
    }
 }
 

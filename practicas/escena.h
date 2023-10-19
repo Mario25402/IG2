@@ -11,7 +11,7 @@
 #include "cono.h"
 
 typedef enum {NADA, SELOBJETO, SELVISUALIZACION} menu;
-typedef enum {CUBO, PIRAMIDE, PLY, CILINDRO, ESFERA, CONO, MULTIPLE, NINGUNO} objeto;
+typedef enum {CUBO, PIRAMIDE, PLY, CILINDRO, ESFERA, CONO, MULTIPLE, VECTOR, NINGUNO} objeto;
 typedef enum {PLY1, PLY2, PLY3, NONE} objPly;
 
 class Escena
@@ -44,8 +44,6 @@ private:
 
     /////
 
-    /////
-
     // Objetos de la escena, importante inicializarlos a nullptr
     Ejes ejes;
     Cubo *cubo = nullptr;
@@ -58,6 +56,7 @@ private:
     ObjRevolucion *ply1 = nullptr;
     ObjPLY *ply2 = nullptr;
     ObjPLY *ply3 = nullptr;
+    ObjRevolucion *rev = nullptr;
 
     /////       
 
