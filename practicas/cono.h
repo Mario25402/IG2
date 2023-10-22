@@ -22,7 +22,7 @@ private:
     float radio;
 
 public:
-    Cono(int num_vert_perfil = 3, int num_instancias_perf = 20, float h = 1.0f, float r = 1.0f);
+    Cono(int num_vert_perfil = 2, int num_instancias_perf = 20, float h = 1.0f, float r = 1.0f);
 
 };
 

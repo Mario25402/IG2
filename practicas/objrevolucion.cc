@@ -68,7 +68,7 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias)
       int N = num_instancias;
       int M = v.size() / N; // inicio o fin de la fila en la malla
 
-      // determinar posición del polo en el vector de vértices
+      // determinar posición del polo sur en el vector de vértices
       int pos_polo;
       if (tapa_inf and tapa_sup) pos_polo = v.size()-2;
       else if (tapa_inf) pos_polo = v.size()-1;
@@ -76,10 +76,10 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias)
       // añadir caras de la tapas
       for (int i = 0; i < N; i++){
          if (tapa_inf)
-            f.push_back(Tupla3i(pos_polo, i*M, ((i*M)+M) % (M*N)));
+            f.push_back(Tupla3i(pos_polo, ((i*M)+M) % (M*N), i*M));
 
          if (tapa_sup)
-            f.push_back(Tupla3i(((i+1)*M)-1, v.size()-1, (((i+1)*M)+M-1) % (M*N)));
+            f.push_back(Tupla3i(v.size()-1, ((i+1)*M)-1, (((i+1)*M)+M-1) % (M*N)));
       }
    }
 }
@@ -140,7 +140,7 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias)
       int N = num_instancias;
       int M = v.size() / N; // inicio o fin de la fila en la malla
 
-      // determinar posición del polo en el vector de vértices
+      // determinar posición del polo sur en el vector de vértices
       int pos_polo;
       if (tapa_inf and tapa_sup) pos_polo = v.size()-2;
       else if (tapa_inf) pos_polo = v.size()-1;
@@ -148,10 +148,10 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias)
       // añadir caras de la tapas
       for (int i = 0; i < N; i++){
          if (tapa_inf)
-            f.push_back(Tupla3i(pos_polo, i*M, ((i*M)+M) % (M*N)));
+            f.push_back(Tupla3i(pos_polo, ((i*M)+M) % (M*N), i*M));
 
          if (tapa_sup)
-            f.push_back(Tupla3i(((i+1)*M)-1, v.size()-1, (((i+1)*M)+M-1) % (M*N)));
+            f.push_back(Tupla3i(v.size()-1, ((i+1)*M)-1, (((i+1)*M)+M-1) % (M*N)));
       }
    }
 }
@@ -167,9 +167,11 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    v.clear();
    for (int i = 0; i < N; i++){
       for (int j = 0; j < M; j++){
-         float x = perfil_original[j][0] * cos(2.0f*M_PI*i/N);
+         float x = perfil_original[j][0] * cos(2.0f*M_PI*i/N) + 
+                   perfil_original[j][2] * sin(2.0f*M_PI*i/N);
          float y = perfil_original[j][1];
-         float z = perfil_original[j][0] * sin(2.0f*M_PI*i/N);
+         float z = perfil_original[j][0] * (-1 * sin(2.0f*M_PI*i/N)) + 
+                   perfil_original[j][2] * cos(2.0f*M_PI*i/N);
 
          v.push_back(Tupla3f(x,y,z));
       }
@@ -182,8 +184,8 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
          int a = M * i + j;
          int b = M * ((i+1) % N) + j;
 
-         f.push_back(Tupla3i(a, b+1, b));    // f.push_back(Tupla3i((a, b, b+1));
-         f.push_back(Tupla3i(a, a+1, b+1));  // f.push_back(Tupla3i((a, b+1, a+1));
+         f.push_back(Tupla3i(a,b,b+1));   //f.push_back(Tupla3i(a, b+1, b)); 
+         f.push_back(Tupla3i(a,b+1,a+1)); //f.push_back(Tupla3i(a, a+1, b+1));
       }
    }
 }

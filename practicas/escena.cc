@@ -81,8 +81,8 @@ void Escena::dibujar()
          glPushMatrix();
 
          if (objPlySel == PLY1){
-            glTranslatef(0, -50 * ply1->centrar(), 0);
-            glScalef(50, 50, 50);
+            glTranslatef(0, -15 * ply1->centrar(), 0);
+            glScalef(15, 15, 15);
 
             ply1->draw(puntos, false, false);
             ply1->draw(false, alambre, false);
