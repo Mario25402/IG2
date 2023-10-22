@@ -141,9 +141,8 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias)
       int M = v.size() / N; // inicio o fin de la fila en la malla
 
       // determinar posición del polo sur en el vector de vértices
-      int pos_polo;
+      int pos_polo = v.size()-1;;
       if (tapa_inf and tapa_sup) pos_polo = v.size()-2;
-      else if (tapa_inf) pos_polo = v.size()-1;
 
       // añadir caras de la tapas
       for (int i = 0; i < N; i++){
