@@ -19,4 +19,5 @@ Cilindro::Cilindro (int num_vert_perfil, int num_instancias_perf, float h, float
     }*/
 
     crearMalla(perfil, num_instancias_perf);
+    calcularNormales();
 }

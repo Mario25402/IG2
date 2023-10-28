@@ -28,12 +28,13 @@ public:
    //void setMaterial (Material mat);
 
    // función que calcula las normales del objeto
-   //void calcularNormales();
+   void calcularNormales();
 
 protected:
-   std::vector<Tupla3f> v; // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
-   std::vector<Tupla3i> f; // una terna de 3 enteros por cada cara o triángulo
-   std::vector<Tupla3f> c; // tabla de colores
+   std::vector<Tupla3f> v;  // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
+   std::vector<Tupla3i> f;  // una terna de 3 enteros por cada cara o triángulo
+   std::vector<Tupla3f> c;  // tabla de colores
+   std::vector<Tupla3f> nv; // tabla de normales de vértices
 
 private:
    GLuint id_vbo_ver = 0;  // variables que controlan

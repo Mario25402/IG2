@@ -16,7 +16,7 @@ Cono::Cono(int num_vert_perfil, int num_instancias_perf, float h, float r){
             perfil.push_back(Tupla3f(r - (r / (num_vert_perfil-i)), h / (num_vert_perfil-i), 0.0f));
         }    
     }*/
-    
 
     crearMalla(perfil, num_instancias_perf);
+    calcularNormales();
 }

@@ -49,4 +49,8 @@ Cubo::Cubo(float lado)
    // Superior
    f[10] = Tupla3i(4,5,6);
    f[11] = Tupla3i(4,6,7);
+
+   /********************************************/
+
+   calcularNormales();
 }

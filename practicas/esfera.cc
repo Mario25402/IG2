@@ -11,6 +11,7 @@ Esfera::Esfera (int num_vert_perfil, int num_instancias_perf, float r){
     }
 
     crearMalla(perfil, num_instancias_perf);
+    calcularNormales();
 }
 
 float Esfera::getRadio(){

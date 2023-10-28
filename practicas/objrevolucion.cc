@@ -82,6 +82,8 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias)
             f.push_back(Tupla3i(v.size()-1, ((i+1)*M)-1, (((i+1)*M)+M-1) % (M*N)));
       }
    }
+
+   calcularNormales();
 }
 
 // *****************************************************************************
@@ -153,6 +155,8 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias)
             f.push_back(Tupla3i(v.size()-1, ((i+1)*M)-1, (((i+1)*M)+M-1) % (M*N)));
       }
    }
+
+   calcularNormales();
 }
 
 // *****************************************************************************

@@ -39,6 +39,9 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 {
 	glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
+   glEnable(GL_CULL_FACE); // Ocultar elementos no visibles
+   glEnable(GL_LIGHTING); // Activar iluminación
+   glEnable(GL_LIGHT0);
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
@@ -57,7 +60,6 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 void Escena::dibujar()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-   glEnable(GL_CULL_FACE); // Ocultar elementos no visibles
 	
    change_observer();
    ejes.draw();

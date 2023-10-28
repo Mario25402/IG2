@@ -74,5 +74,9 @@ PiramidePentagonal::PiramidePentagonal(float h, float r)
    f[21] = Tupla3i(9,12,10);
    f[22] = Tupla3i(10,12,11);
    f[23] = Tupla3i(11,12,6);
+
+   /********************************************/
+   
+   calcularNormales();
 }
 

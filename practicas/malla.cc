@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 // -----------------------------------------------------------------------------
-// Función de visualización de la malla,
+// Función de visualización de la malla
 
 void Malla3D::draw(bool puntos, bool alambre, bool solido)
 {
@@ -116,4 +116,34 @@ void Malla3D::setColor(bool puntos, bool alambre, bool solido)
    oldPuntos = puntos;
    oldAlambre = alambre;
    oldSolido = solido;
+}
+
+// ************************************************************************* //
+
+void Malla3D::calcularNormales()
+{
+   nv.resize(v.size());
+   Tupla3f nc;
+
+   for (int i = 0; i < f.size(); i++){
+      float p = f[i][0]; // Índice del vértice 0 de la cara i
+      float q = f[i][1]; // Índice del vértice 1 de la cara i
+      float r = f[i][2]; // Índice del vértice 2 de la cara i
+
+      Tupla3f a = v[q] - v[p];
+      Tupla3f b = v[r] - v[p];
+
+      Tupla3f mc = a.cross(b); 
+
+      if (nc.lengthSq() == 0)  // No dividir por 0
+         nc = mc.normalized(); // Normal de la cara i
+
+      nv[p] = nv[p] + nc; // Sumar la normal de la cara i al vértice p
+      nv[q] = nv[q] + nc; // Sumar la normal de la cara i al vértice q
+      nv[r] = nv[r] + nc; // Sumar la normal de la cara i al vértice r
+   }
+
+   // Normalizar los vectores normales
+   for (int i = 0; i < v.size(); i++)
+      nv[i] = nv[i].normalized();
 }
