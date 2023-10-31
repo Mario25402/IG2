@@ -7,8 +7,9 @@ class Luz
 {
 public:
     void activar();
+    void desactivar();
     
-private:
+protected:
     Tupla4f posicion;
     Tupla4f colorAmbiente;
     Tupla4f colorDifuso;

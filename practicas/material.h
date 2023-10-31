@@ -11,11 +11,11 @@ public:
     void aplicar();
 
 private:
+    float brillo;
+
     Tupla4f ambiente;
     Tupla4f difuso;
     Tupla4f especular;
-    float brillo;
-
 };
 
 #endif

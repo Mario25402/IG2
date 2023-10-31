@@ -39,15 +39,24 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 {
 	glClearColor( 1.0, 1.0, 1.0, 1.0 );// se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 	glEnable( GL_DEPTH_TEST );	// se habilita el z-bufer
-   glEnable(GL_CULL_FACE); // Ocultar elementos no visibles
-   glEnable(GL_LIGHTING); // Activar iluminación
-   glEnable(GL_LIGHT0);
 
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
    change_projection( float(UI_window_width)/float(UI_window_height) );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
+
+   // Inicializar luces
+   luzPos = new LuzPosicional({0,0}, 1, {0.2,0.2,0.2,1}, {1,1,1,1}, {1,1,1,1});
+   luzDir = new LuzDireccional({1,1}, 2, {0,0,0,0}, {0.5,0.5,1,1}, {0,0,0,0});
+
+   // Inicializar materiales
+   mat1 = new Material({0,0,0,0}, {0,0,0,0}, {0,0,0,0}, 0);
+   mat2 = new Material({0,0,0,0}, {0,0,0,0}, {0,0,0,0}, 0);
+   mat3 = new Material({0,0,0,0}, {0,0,0,0}, {0,0,0,0}, 0);
+
+   matBlanco = new Material({1,1,1,1}, {1,1,1,1}, {0,0,0,1}, 0);
+   matNegro = new Material({0,0,0,1}, {0,0,0,1}, {1,1,1,1}, 100);
 }
 
 // **************************************************************************
@@ -59,8 +68,34 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 void Escena::dibujar()
 {
+   // EVALUACIÓN DE VARIABLES
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-	
+   glEnable(GL_CULL_FACE);                               // Ocultar elementos no visiles
+   glShadeModel(GL_SMOOTH);                              // Sombreado suave
+   glEnable(GL_COLOR_MATERIAL) ;                         // Activar iluminación 
+   glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE) ;   // de los materiales
+   
+   // Activar iluminación
+   if (iluminado) glEnable(GL_LIGHTING);
+   else glDisable(GL_LIGHTING);
+
+   // Activar luces
+   if (luz0) glEnable(GL_LIGHT0);
+   else glDisable(GL_LIGHT0);
+
+   if (luz1) luzPos->activar();
+   else luzPos->desactivar();
+
+   if (luz2){
+      luzDir->setAnguloAlfa(angulo_alfa);
+      luzDir->setAnguloBeta(angulo_beta);
+      luzDir->activar();
+   }
+   else luzDir->desactivar();
+
+   /**************************************************************************/
+   // DIBUJADO
+
    change_observer();
    ejes.draw();
 
@@ -134,6 +169,7 @@ void Escena::dibujar()
          glPushMatrix();
 
          glTranslatef(0, 0, -75);
+         cilindro->setMaterial(mat1);
          cilindro->draw(puntos, false, false);
          cilindro->draw(false, alambre, false);
          cilindro->draw(false, false, solido);
@@ -145,6 +181,7 @@ void Escena::dibujar()
          glPushMatrix();
 
          glTranslatef(-75, 0, 75);
+         cono->setMaterial(mat2);
          cono->draw(puntos, false, false);
          cono->draw(false, alambre, false);
          cono->draw(false, false, solido);
@@ -156,6 +193,7 @@ void Escena::dibujar()
          glPushMatrix();
 
          glTranslatef(75, esfera->getRadio() , 75); 
+         esfera->setMaterial(mat3);
          esfera->draw(puntos, false, false);
          esfera->draw(false, alambre, false);
          esfera->draw(false, false, solido);
@@ -167,8 +205,19 @@ void Escena::dibujar()
          glMatrixMode(GL_MODELVIEW);
          glPushMatrix();
 
-         glTranslatef(0, -50 * rev->centrar(), 0);
+         glTranslatef(-75, -50 * rev->centrar(), 0);
          glScalef(50, 50, 50);
+         rev->setMaterial(matBlanco);
+         rev->draw(puntos, false, false);
+         rev->draw(false, alambre, false);
+         rev->draw(false, false, solido);
+
+         glPopMatrix();
+         glPushMatrix();
+
+         glTranslatef(75, -50 * rev->centrar(), 0);
+         glScalef(50, 50, 50);
+         rev->setMaterial(matNegro);
          rev->draw(puntos, false, false);
          rev->draw(false, alambre, false);
          rev->draw(false, false, solido);
@@ -214,7 +263,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       case 'O':
          if (modoMenu == NADA){
-            cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Y, E, I, N, M, 4, Q)" << endl;
+            cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Y, E, R, N, M, 4, Q)" << endl;
             modoMenu = SELOBJETO; 
          }
          else cout << "Letra incorrecta" << endl;
@@ -266,7 +315,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break;
 
       // CILINDRO //
-      case 'I':
+      case 'R':
          if (modoMenu == SELOBJETO){
             if (obj == CILINDRO){
                obj = NINGUNO;
@@ -324,7 +373,180 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
          break ;
 
-      // VECTOR DE PUNTOS //
+      /////////////////
+      // SELECCIÓN DE MODO DE VISUALIZACION //
+
+      case 'V':
+         if (modoMenu == NADA){
+            cout << "\nSELECCIÓN DE VISUALIZACIÓN (OPCIONES D, L, S, I, Q)" << endl;
+            modoMenu = SELVISUALIZACION;
+         }
+         else cout << "Letra incorrecta" << endl;
+         break ;
+      
+      // PUNTOS //
+      case 'D':
+         if (modoMenu == SELVISUALIZACION){
+            puntos = !puntos;
+            iluminado = false;
+            
+            if (puntos)
+               cout << "VISUALIZACIÓN: DOTS ACTIVADO" << endl;
+            else
+               cout << "VISUALIZACIÓN: DOTS DESACTIVADO" << endl;
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // ALAMBRE //
+      case 'L':
+         if (modoMenu == SELVISUALIZACION){
+            alambre = !alambre;
+            iluminado = false;
+
+            if (alambre)
+               cout << "VISUALIZACIÓN: LÍNEAS ACTIVADO" << endl;
+            else
+               cout << "VISUALIZACIÓN: LÍNEAS DESACTIVADO" << endl;
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // SÓLIDO //
+      case 'S':
+         if (modoMenu == SELVISUALIZACION){ 
+            solido = !solido;
+            iluminado = false;
+
+            if (solido)
+               cout << "VISUALIZACIÓN: SÓLIDO ACTIVADO" << endl;
+            else
+               cout << "VISUALIZACIÓN: SÓLIDO DESACTIVADO" << endl;
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // ILUMINACIÓN //
+      case 'I':
+         if (modoMenu == SELVISUALIZACION){
+            if (iluminado){
+               iluminado = false;
+               cout << "\nVISUALIZACIÓN: ILUMINACIÓN DESACTIVADA" << endl;
+            }
+            else{
+               iluminado = true;
+               cout << "\nVISUALIZACIÓN: ILUMINACIÓN ACTIVADA" << endl
+                    << "OPCIONES: 0, 1, 2, A, B, < , >" << endl;
+            }
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      /////////////////
+      // MODIFICACIÓN DE VARIABLES DE ILUMINACIÓN //
+      // SELECCIÓN DE OBJETO PLYS //
+
+      // LUZ 0 //
+      case '0':
+         if (modoMenu == SELVISUALIZACION){
+            if (iluminado){
+               if (luz0){
+                  luz0 = false;
+                  cout << "LUZ 0 DESACTIVADA" << endl;
+               }
+               else{
+                  luz0 = true;
+                  cout << "LUZ 0 ACTIVADA" << endl;
+               }
+            }
+            else cout << "Letra incorrecta" << endl;
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // LUZ 1 o PLY 1//
+      case '1':
+         if (modoMenu == SELOBJETO){
+            if (obj == PLY){
+               if (objPlySel == PLY1){
+                  objPlySel = NONE;
+                  cout << "OBJETO: PLY1 DESACTIVADO" << endl;
+               }
+               else{
+                  objPlySel = PLY1;
+                  cout << "OBJETO: PLY1 ACTIVADO" << endl;
+               }
+            }
+            else cout << "Letra incorrecta" << endl;
+         }
+
+         else if (modoMenu == SELVISUALIZACION){
+            if (iluminado){
+               if (luz1){
+                  luz1 = false;
+                  cout << "LUZ 1 DESACTIVADA" << endl;
+               }
+               else{
+                  luz1 = true;
+                  cout << "LUZ 1 ACTIVADA" << endl;
+               }
+            }
+            else cout << "Letra incorrecta" << endl;
+         }
+
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // LUZ 2 o PLY 2 //
+      case '2':
+         if (modoMenu == SELOBJETO){
+            if (obj == PLY){
+               if (objPlySel == PLY2){
+                  objPlySel = NONE;
+                  cout << "OBJETO: PLY2 DESACTIVADO" << endl;
+               }
+               else{
+                  objPlySel = PLY2;
+                  cout << "OBJETO: PLY2 ACTIVADO" << endl;
+               }
+            }
+         }
+
+         else if (modoMenu == SELVISUALIZACION){
+            if (iluminado){
+               if (luz2){
+                  luz2 = false;
+                  cout << "LUZ 2 DESACTIVADA" << endl;
+               }
+               else{
+                  luz2 = true;
+                  cout << "LUZ 2 ACTIVADA" << endl;
+               }
+            }
+            else cout << "Letra incorrecta" << endl;
+         }
+
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // PLY 3 //
+      case '3':
+         if (modoMenu == SELOBJETO){
+            if (obj == PLY){
+               if (objPlySel == PLY3){
+                  objPlySel = NONE;
+                  cout << "OBJETO: PLY3 DESACTIVADO" << endl;
+               }
+               else{
+                  objPlySel = PLY3;
+                  cout << "OBJETO: PLY3 ACTIVADO" << endl;
+               }
+            }
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // VECTOR DE PUNTOS//
       case '4':
          if (modoMenu == SELOBJETO){
             if (obj == VECTOR){
@@ -357,100 +579,67 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          else cout << "Letra incorrecta" << endl;
          break;
 
-      /////////////////
-      // SELECCIÓN DE MODO DE VISUALIZACION //
-
-      case 'V':
-         if (modoMenu == NADA){
-            cout << "\nSELECCIÓN DE VISUALIZACIÓN (OPCIONES D, L, S, Q)" << endl;
-            modoMenu = SELVISUALIZACION;
-         }
-         else cout << "Letra incorrecta" << endl;
-         break ;
-      
-      // PUNTOS //
-      case 'D':
+      // ALFA //
+      case 'A':
          if (modoMenu == SELVISUALIZACION){
-            puntos = !puntos;
-            
-            if (puntos)
-               cout << "VISUALIZACIÓN: DOTS ACTIVADO" << endl;
-            else
-               cout << "VISUALIZACIÓN: DOTS DESACTIVADO" << endl;
+            if (iluminado){
+               alfa = true;
+               beta = false;
+
+               cout << "ALFA ACTIVADO - BETA DESACTIVADO" << endl;
+            }
          }
          else cout << "Letra incorrecta" << endl;
          break;
-
-      // ALAMBRE //
-      case 'L':
+         
+      // BETA //
+      case 'B':
          if (modoMenu == SELVISUALIZACION){
-            alambre = !alambre;
+            if (iluminado){
+               beta = true;
+               alfa = false;
 
-            if (alambre)
-               cout << "VISUALIZACIÓN: LÍNEAS ACTIVADO" << endl;
-            else
-               cout << "VISUALIZACIÓN: LÍNEAS DESACTIVADO" << endl;
+               cout << "BETA ACTIVADO - ALFA DESACTIVADO" << endl;
+            }
+            else cout << "Letra incorrecta" << endl;
          }
          else cout << "Letra incorrecta" << endl;
          break;
 
-      // SÓLIDO //
-      case 'S':
-         if (modoMenu == SELVISUALIZACION){ 
-            solido = !solido;
+      // INCREMENTAR //
+      case '>':
+         if (modoMenu == SELVISUALIZACION){
+            if (iluminado){
+               if (alfa){
+                  angulo_alfa += 5;
+                  cout << "ALFA: " << angulo_alfa << endl;
+               }
 
-            if (solido)
-               cout << "VISUALIZACIÓN: SÓLIDO ACTIVADO" << endl;
-            else
-               cout << "VISUALIZACIÓN: SÓLIDO DESACTIVADO" << endl;
+               else if (beta){
+                  angulo_beta += 5;
+                  cout << "BETA: " << angulo_beta << endl;
+               }
+            }
+            else cout << "Letra incorrecta" << endl;
          }
          else cout << "Letra incorrecta" << endl;
          break;
 
-      /////////////////
-      // SELECCIÓN DE OBJETO PLYS //
+      // DECREMENTAR //
+      case '<':
+         if (modoMenu == SELVISUALIZACION){
+            if (iluminado){
+               if (alfa){
+                  angulo_alfa -= 5;
+                  cout << "ALFA: " << angulo_alfa << endl;
+               }
 
-      // PLY 1 //
-      case '1':
-         if (obj == PLY){
-            if (objPlySel == PLY1){
-               objPlySel = NONE;
-               cout << "OBJETO: PLY1 DESACTIVADO" << endl;
+               else if (beta){
+                  angulo_beta -= 5;
+                  cout << "BETA: " << angulo_beta << endl;
+               }
             }
-            else{
-               objPlySel = PLY1;
-               cout << "OBJETO: PLY1 ACTIVADO" << endl;
-            }
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // PLY 2  //
-      case '2':
-         if (obj == PLY){
-            if (objPlySel == PLY2){
-               objPlySel = NONE;
-               cout << "OBJETO: PLY2 DESACTIVADO" << endl;
-            }
-            else{
-               objPlySel = PLY2;
-               cout << "OBJETO: PLY2 ACTIVADO" << endl;
-            }
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // PLY 3 //
-      case '3':
-         if (obj == PLY){
-            if (objPlySel == PLY3){
-               objPlySel = NONE;
-               cout << "OBJETO: PLY3 DESACTIVADO" << endl;
-            }
-            else{
-               objPlySel = PLY3;
-               cout << "OBJETO: PLY3 ACTIVADO" << endl;
-            }
+            else cout << "Letra incorrecta" << endl;
          }
          else cout << "Letra incorrecta" << endl;
          break;

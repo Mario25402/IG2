@@ -89,7 +89,6 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias)
 // *****************************************************************************
 // objeto de revolución obtenido a partir de un perfil (en un vector de puntos)
 
- 
 ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias) 
 {
    // rellenar el vector de vertices

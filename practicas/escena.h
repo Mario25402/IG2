@@ -9,6 +9,9 @@
 #include "cilindro.h"
 #include "esfera.h"
 #include "cono.h"
+#include "luz.h"
+#include "luzPosicional.h"
+#include "luzDireccional.h"
 
 typedef enum {NADA, SELOBJETO, SELVISUALIZACION} menu;
 typedef enum {CUBO, PIRAMIDE, PLY, CILINDRO, ESFERA, CONO, MULTIPLE, VECTOR, NINGUNO} objeto;
@@ -37,7 +40,7 @@ private:
 
     /////
 
-    // Selección de teclas
+    // Selección de opciones
     menu modoMenu = NADA;
     objeto obj = NINGUNO;
     objPly objPlySel = NONE;
@@ -58,12 +61,36 @@ private:
     ObjPLY *ply3 = nullptr;
     ObjRevolucion *rev = nullptr;
 
+    // Objetos de iluminación
+    LuzPosicional *luzPos = nullptr;
+    LuzDireccional *luzDir = nullptr;
+
     /////       
 
     // Variables de estado de visualización
     bool puntos = false;
     bool alambre = false;
     bool solido = true;
+
+    // Variables relacionadas con la iliuminación
+    bool iluminado = false;
+    bool alfa = false;
+    bool beta = false;
+    int angulo_alfa = 0;
+    int angulo_beta = 0;
+
+    bool luz0 = false;
+    bool luz1 = false;
+    bool luz2 = false;
+
+    // Variables relacionadas con el material
+    Material *mat1 = nullptr;
+    Material *mat2 = nullptr;
+    Material *mat3 = nullptr;
+
+    Material *matBlanco = nullptr;
+    Material *matNegro = nullptr;
+    
 
 public:
     Escena();

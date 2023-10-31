@@ -26,7 +26,7 @@ Mostrará el busto de Beethoven.
 ### Opción "E"
 Seleccionaremos el objeto esfera, creada a partil de su perfil revolucionado.
 
-### Opción "I"
+### Opción "R"
 Seleccionaremos el objeto cilindro, creada a partil de su perfil revolucionado.
 
 ### Opción "N"
@@ -52,6 +52,30 @@ Se visualizará el perimetro de los triangulos que forman el objeto.
 
 ### Opción "S"
 Se visualizarán los triangulos coloreados que forman el objeto.
+
+### Opción "I"
+Activa el modo de visualización con iluminación, si activamos una de las opciones de visualización anterior se desactivará este modo.
+
+#### Opción "0"
+Activa la luz 0, predefinida en OpenGL.
+
+#### Opción "1"
+Activa la luz 1 (Luz Posicional).
+
+#### Opción "2"
+Activa la luz 2 (Luz Direccional).
+
+#### Opción "A"
+Permite la variación del ángulo alfa, cuando éste está activado, beta se desactiva y viceversa.
+
+#### Opción "B"
+Permite la variación del ángulo beta.
+
+#### Opción "<"
+Decrementa el valor del ángulo que esté activado.
+
+#### Opción ">"
+Aumenta el valor del ángulo que esté activado.
 
 ### Opción "Q"
 Saldremos del modo de selección de visualización.

@@ -11,6 +11,7 @@
 #define MALLA3D_H_INCLUDED
 
 #include "auxiliar.h"
+#include "material.h"
 
 // *****************************************************************************
 //
@@ -25,7 +26,7 @@ public:
    void draw(bool puntos, bool alambre, bool solido);
 
    // función que fija el material del objeto
-   //void setMaterial (Material mat);
+   void setMaterial (Material *mat);
 
    // función que calcula las normales del objeto
    void calcularNormales();
