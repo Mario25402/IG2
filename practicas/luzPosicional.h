@@ -7,7 +7,7 @@
 class LuzPosicional : public Luz
 {
 public:
-    LuzPosicional(Tupla2f direccion, int idLuz, Tupla4f colorAmbiente, Tupla4f colorDifuso, Tupla4f colorEspecular);
+    LuzPosicional(Tupla3f direccion, GLenum idLuz, Tupla4f colorAmbiente, Tupla4f colorDifuso, Tupla4f colorEspecular);
 
 };
 

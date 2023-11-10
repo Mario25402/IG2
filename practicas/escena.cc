@@ -18,15 +18,11 @@ Escena::Escena()
 
    ejes.changeAxisSize( 5000 );
 
-   cubo = new Cubo(50);
-   piramide = new PiramidePentagonal(50,50);
-   cilindro = new Cilindro(4, 20, 100, 50);
-   esfera = new Esfera(20, 20, 50);
-   cono = new Cono(3, 20, 100, 50);
+   /////
 
-   ply1 = new ObjRevolucion("../plys_ejemplo/copa.ply", 20);
-   ply2 = new ObjPLY("../plys_ejemplo/big_dodge.ply");
-   ply3 = new ObjPLY("../plys_ejemplo/beethoven.ply");
+   init_objetos();
+   init_luces();
+   init_materiales();
 }
 
 //**************************************************************************
@@ -45,18 +41,38 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
    change_projection( float(UI_window_width)/float(UI_window_height) );
 	glViewport( 0, 0, UI_window_width, UI_window_height );
+}
 
-   // Inicializar luces
-   luzPos = new LuzPosicional({0,0}, 1, {0.2,0.2,0.2,1}, {1,1,1,1}, {1,1,1,1});
-   luzDir = new LuzDireccional({1,1}, 2, {0,0,0,0}, {0.5,0.5,1,1}, {0,0,0,0});
+void Escena::init_objetos()
+{
+   cubo = new Cubo(50);
+   piramide = new PiramidePentagonal(50,50);
+   cilindro = new Cilindro(4, 20, 100, 50);
+   esfera = new Esfera(20, 20, 50);
+   cono = new Cono(3, 20, 100, 50);
 
-   // Inicializar materiales
-   mat1 = new Material({0,0,0,0}, {0,0,0,0}, {0,0,0,0}, 0);
-   mat2 = new Material({0,0,0,0}, {0,0,0,0}, {0,0,0,0}, 0);
-   mat3 = new Material({0,0,0,0}, {0,0,0,0}, {0,0,0,0}, 0);
+   ply1 = new ObjRevolucion("../plys_ejemplo/copa.ply", 20);
+   ply2 = new ObjPLY("../plys_ejemplo/big_dodge.ply");
+   ply3 = new ObjPLY("../plys_ejemplo/beethoven.ply");
+}
 
-   matBlanco = new Material({1,1,1,1}, {1,1,1,1}, {0,0,0,1}, 0);
-   matNegro = new Material({0,0,0,1}, {0,0,0,1}, {1,1,1,1}, 100);
+void Escena::init_luces()
+{
+   angulo_alfa = 0;
+   angulo_beta = 0;
+
+   luzPos = new LuzPosicional({0,50,0}, GL_LIGHT1, {0.2,0.2,0.2,1}, {1,1,1,1}, {1,1,1,1});
+   luzDir = new LuzDireccional({angulo_alfa,angulo_beta}, GL_LIGHT2, {0.2,0.2,0.2,1}, {1,1,1,1}, {1,1,1,1});
+}
+
+void Escena::init_materiales()
+{
+   bronce = new Material({0.2125,0.1275,0.054,1}, {0.714,0.4284,0.18144,1}, {0.393548,0.271906,0.166721,1}, 25.6);
+   oro = new Material({0.329412,0.223529,0.027451,1}, {0.780392,0.568627,0.113725,1}, {0.992157,0.941176,0.807843,1}, 27.8974);
+   perla = new Material({0.25,0.20725,0.20725,0.922}, {1,0.829,0.829,0.922}, {0.296648,0.296648,0.296648,0.922}, 11.264);
+
+   matBlanco = new Material({0.2,0.2,0.2,1}, {0.9,0.9,0.9,1}, {0,0,0,0}, 10);
+   matNegro = new Material({0.2,0.2,0.2,1}, {0.2,0.2,0.2,1}, {0.9,0.9,0.9,0.9}, 90);
 }
 
 // **************************************************************************
@@ -68,37 +84,26 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 void Escena::dibujar()
 {
+   /**************************************************************************/
    // EVALUACIÓN DE VARIABLES
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
    glEnable(GL_CULL_FACE);                               // Ocultar elementos no visiles
    glShadeModel(GL_SMOOTH);                              // Sombreado suave
-   glEnable(GL_COLOR_MATERIAL) ;                         // Activar iluminación 
-   glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE) ;   // de los materiales
-   
-   // Activar iluminación
-   if (iluminado) glEnable(GL_LIGHTING);
-   else glDisable(GL_LIGHTING);
-
-   // Activar luces
-   if (luz0) glEnable(GL_LIGHT0);
-   else glDisable(GL_LIGHT0);
-
-   if (luz1) luzPos->activar();
-   else luzPos->desactivar();
-
-   if (luz2){
-      luzDir->setAnguloAlfa(angulo_alfa);
-      luzDir->setAnguloBeta(angulo_beta);
-      luzDir->activar();
-   }
-   else luzDir->desactivar();
+   glEnable(GL_NORMALIZE);                               // Normalizar normales
 
    /**************************************************************************/
-   // DIBUJADO
+   // ESCENA
 
    change_observer();
-   ejes.draw();
+   draw_axis();
+   draw_lights();
+   draw_objects();
+}
 
+// Dibujado de Objetos
+
+void Escena::draw_objects()
+{
    // Si algún modo esta activo, dibujar el objeto correspondiente
    if (puntos or alambre or solido){
       if (obj == CUBO){
@@ -139,6 +144,7 @@ void Escena::dibujar()
             glTranslatef(0, -10 * ply3->centrar(), 0);
             glScalef(10, 10, 10);
 
+            cilindro->setMaterial(bronce);
             ply3->draw(puntos, false, false);
             ply3->draw(false, alambre, false);
             ply3->draw(false, false, solido);
@@ -146,12 +152,14 @@ void Escena::dibujar()
       }
 
       else if (obj == CILINDRO){
+         cilindro->setMaterial(bronce);
          cilindro->draw(puntos, false, false);
          cilindro->draw(false, alambre, false);
          cilindro->draw(false, false, solido);
       }
 
       else if (obj == ESFERA){
+         esfera->setMaterial(matBlanco);
          esfera->draw(puntos, false, false);
          esfera->draw(false, alambre, false);
          esfera->draw(false, false, solido);
@@ -169,7 +177,7 @@ void Escena::dibujar()
          glPushMatrix();
 
          glTranslatef(0, 0, -75);
-         cilindro->setMaterial(mat1);
+         cilindro->setMaterial(bronce);
          cilindro->draw(puntos, false, false);
          cilindro->draw(false, alambre, false);
          cilindro->draw(false, false, solido);
@@ -181,7 +189,7 @@ void Escena::dibujar()
          glPushMatrix();
 
          glTranslatef(-75, 0, 75);
-         cono->setMaterial(mat2);
+         cono->setMaterial(oro);
          cono->draw(puntos, false, false);
          cono->draw(false, alambre, false);
          cono->draw(false, false, solido);
@@ -193,7 +201,7 @@ void Escena::dibujar()
          glPushMatrix();
 
          glTranslatef(75, esfera->getRadio() , 75); 
-         esfera->setMaterial(mat3);
+         esfera->setMaterial(perla);
          esfera->draw(puntos, false, false);
          esfera->draw(false, alambre, false);
          esfera->draw(false, false, solido);
@@ -225,6 +233,43 @@ void Escena::dibujar()
          glPopMatrix();
       }
    }
+}
+
+// Dibujado de luces
+
+void Escena::draw_lights()
+{
+   if (iluminado){
+      glEnable(GL_LIGHTING);
+      
+      // Activar luces
+      if (luz0) glEnable(GL_LIGHT0);
+      else glDisable(GL_LIGHT0);
+
+      if (luz1) luzPos->activar();
+      else luzPos->desactivar();
+
+      if (luz2){
+         luzDir->setAnguloAlfa(angulo_alfa);
+         luzDir->setAnguloBeta(angulo_beta);
+         luzDir->activar();
+      }
+      else luzDir->desactivar();
+   }
+   else glDisable(GL_LIGHTING);
+}
+
+// Dibujado de Ejes
+
+void Escena::draw_axis()
+{
+   // Desactivar las luces al dibujar los ejes para que se vean de color
+   if (glIsEnabled(GL_LIGHTING)){
+      glDisable(GL_LIGHTING);
+      ejes.draw();
+      glEnable(GL_LIGHTING);
+   }
+   else ejes.draw();
 }
 
 //**************************************************************************

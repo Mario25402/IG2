@@ -1,10 +1,8 @@
 #include "luzDireccional.h"
+#include "GL/gl.h"
 using namespace std;
 
-LuzDireccional::LuzDireccional(Tupla2f direccion, int idLuz, Tupla4f colorAmbiente, Tupla4f colorDifuso, Tupla4f colorEspecular){
-    // No tenemos mas de 8 luces
-    assert (idLuz >= 1 and idLuz <= 8);
-
+LuzDireccional::LuzDireccional(Tupla2f direccion, GLenum idLuz, Tupla4f colorAmbiente, Tupla4f colorDifuso, Tupla4f colorEspecular){
     // Rellenar variables de la superclase
     this->id = idLuz;
     alfa = direccion[0];
@@ -33,5 +31,7 @@ void LuzDireccional::calcularPosicion(int alfa, int beta){
     float y = sin(alfa) * sin(beta);
     float z = cos(alfa);
 
-    this->posicion = Tupla4f(x*30, y*30, z*30, 0);
+    this->posicion = Tupla4f(x*10, y*10, z*10, 0); // Ajustar al tamaño de los objetos
+    glLightfv(id, GL_POSITION, posicion);
+
 }

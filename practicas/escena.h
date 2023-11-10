@@ -74,22 +74,34 @@ private:
 
     // Variables relacionadas con la iliuminación
     bool iluminado = false;
+
     bool alfa = false;
     bool beta = false;
-    int angulo_alfa = 0;
-    int angulo_beta = 0;
+    
+    float angulo_alfa = 0;
+    float angulo_beta = 0;
 
     bool luz0 = false;
     bool luz1 = false;
     bool luz2 = false;
 
     // Variables relacionadas con el material
-    Material *mat1 = nullptr;
-    Material *mat2 = nullptr;
-    Material *mat3 = nullptr;
+    Material *bronce = nullptr;
+    Material *oro = nullptr;
+    Material *perla = nullptr;
 
     Material *matBlanco = nullptr;
     Material *matNegro = nullptr;
+
+    /////
+
+    void init_objetos();
+    void init_luces();
+    void init_materiales();
+
+    void draw_objects();
+    void draw_axis();
+    void draw_lights();
     
 
 public:

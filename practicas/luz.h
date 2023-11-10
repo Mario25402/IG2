@@ -2,6 +2,7 @@
 #define LUZ_H_INCLUDED
 
 #include "auxiliar.h"
+#include "GL/gl.h"
 
 class Luz
 {
@@ -15,7 +16,7 @@ protected:
     Tupla4f colorDifuso;
     Tupla4f colorEspecular;
 
-    int id;
+    GLenum id;
 };
 
 #endif

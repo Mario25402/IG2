@@ -122,34 +122,28 @@ void Malla3D::setColor(bool puntos, bool alambre, bool solido)
 
 void Malla3D::calcularNormales()
 {
-   nv.resize(v.size());
-   Tupla3f normal_vertice(0,0,0);
+   nv.resize(v.size(), Tupla3f(0,0,0));
 
    for (int i = 0; i < f.size(); i++){
-      float p = f[i][0]; // Índice del vértice 0 de la cara i
-      float q = f[i][1]; // Índice del vértice 1 de la cara i
-      float r = f[i][2]; // Índice del vértice 2 de la cara i
+      Tupla3f p = v[f[i][0]];
+      Tupla3f q = v[f[i][1]];
+      Tupla3f r = v[f[i][2]];
 
-      Tupla3f a = v[q] - v[p];
-      Tupla3f b = v[r] - v[p];
+      Tupla3f normal = (p - q);
+      normal.cross(r - p);
 
-      Tupla3f normal_cara = a.cross(b);
+      if (normal.lengthSq() > 0)
+         normal = normal.normalized();
 
-      // Si la normal de la cara i no vale cero, normalizarla
-      if (normal_vertice.lengthSq() != 0)
-         normal_vertice = normal_vertice.normalized(); // Normal de la cara i
-      else 
-         normal_vertice = normal_cara;     
-
-      nv[p] = nv[p] + normal_vertice; // Sumar la normal de la cara i al vértice p
-      nv[q] = nv[q] + normal_vertice; // Sumar la normal de la cara i al vértice q
-      nv[r] = nv[r] + normal_vertice; // Sumar la normal de la cara i al vértice r
+      nv[f[i][0]] = nv[f[i][0]] + normal;
+      nv[f[i][1]] = nv[f[i][1]] + normal;
+      nv[f[i][2]] = nv[f[i][2]] + normal;
    }
 
-   // Normalizar los vectores normales
-   std::cout << "Tamaño: " << nv.size() << std::endl;
    for (int i = 0; i < nv.size(); i++){
-      nv[i] = nv[i].normalized(); std::cout << i << std::endl;}
+      if (nv[i].lengthSq() > 0)
+         nv[i] = nv[i].normalized();
+   }
 }
 
 // ************************************************************************* //

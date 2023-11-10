@@ -11,7 +11,7 @@ private:
     int beta;
 
 public:
-    LuzDireccional(Tupla2f direccion, int idLuz, Tupla4f colorAmbiente, Tupla4f colorDifuso, Tupla4f colorEspecular);
+    LuzDireccional(Tupla2f direccion, GLenum idLuz, Tupla4f colorAmbiente, Tupla4f colorDifuso, Tupla4f colorEspecular);
     
     void setAnguloAlfa(int angulo);
     void setAnguloBeta(int angulo);
