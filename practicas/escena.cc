@@ -61,8 +61,8 @@ void Escena::init_luces()
    angulo_alfa = 0;
    angulo_beta = 0;
 
-   luzPos = new LuzPosicional({0,50,0}, GL_LIGHT1, {0.2,0.2,0.2,1}, {1,1,1,1}, {1,1,1,1});
-   luzDir = new LuzDireccional({angulo_alfa,angulo_beta}, GL_LIGHT2, {0.2,0.2,0.2,1}, {1,1,1,1}, {1,1,1,1});
+   luzPos = new LuzPosicional({0,50,0}, GL_LIGHT1, {0.0,0.0,1,1}, {0,0,1,1}, {0,0,1,1});
+   luzDir = new LuzDireccional({angulo_alfa,angulo_beta}, GL_LIGHT2, {0.2,0.2,0.2,1}, {0.4,0.4,0.4,1}, {0.4,0.4,0.4,1});
 }
 
 void Escena::init_materiales()
@@ -107,12 +107,14 @@ void Escena::draw_objects()
    // Si algún modo esta activo, dibujar el objeto correspondiente
    if (puntos or alambre or solido){
       if (obj == CUBO){
+         cubo->setMaterial(matBlanco);
          cubo->draw(puntos, false, false);
          cubo->draw(false, alambre, false);
          cubo->draw(false, false, solido);
       }
          
       else if (obj == PIRAMIDE){
+         piramide->setMaterial(matBlanco);
          piramide->draw(puntos, false, false);
          piramide->draw(false, alambre, false);
          piramide->draw(false, false, solido);
@@ -126,6 +128,7 @@ void Escena::draw_objects()
             glTranslatef(0, -15 * ply1->centrar(), 0);
             glScalef(15, 15, 15);
 
+            ply1->setMaterial(matBlanco);
             ply1->draw(puntos, false, false);
             ply1->draw(false, alambre, false);
             ply1->draw(false, false, solido);
@@ -135,6 +138,7 @@ void Escena::draw_objects()
             glTranslatef(0, -10 * ply2->centrar(), 0);
             glScalef(10, 10, 10);
 
+            ply1->setMaterial(matBlanco);
             ply2->draw(puntos, false, false);
             ply2->draw(false, alambre, false);
             ply2->draw(false, false, solido);
@@ -144,7 +148,7 @@ void Escena::draw_objects()
             glTranslatef(0, -10 * ply3->centrar(), 0);
             glScalef(10, 10, 10);
 
-            cilindro->setMaterial(bronce);
+            ply3->setMaterial(matBlanco);
             ply3->draw(puntos, false, false);
             ply3->draw(false, alambre, false);
             ply3->draw(false, false, solido);
@@ -166,6 +170,7 @@ void Escena::draw_objects()
       }
 
       else if (obj == CONO){
+         cono->setMaterial(matBlanco);
          cono->draw(puntos, false, false);
          cono->draw(false, alambre, false);
          cono->draw(false, false, solido);
@@ -241,10 +246,6 @@ void Escena::draw_lights()
 {
    if (iluminado){
       glEnable(GL_LIGHTING);
-      
-      // Activar luces
-      if (luz0) glEnable(GL_LIGHT0);
-      else glDisable(GL_LIGHT0);
 
       if (luz1) luzPos->activar();
       else luzPos->desactivar();
@@ -481,7 +482,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             else{
                iluminado = true;
                cout << "\nVISUALIZACIÓN: ILUMINACIÓN ACTIVADA" << endl
-                    << "OPCIONES: 0, 1, 2, A, B, < , >" << endl;
+                    << "OPCIONES: 1, 2, A, B, < , >" << endl;
             }
          }
          else cout << "Letra incorrecta" << endl;
@@ -490,24 +491,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       /////////////////
       // MODIFICACIÓN DE VARIABLES DE ILUMINACIÓN //
       // SELECCIÓN DE OBJETO PLYS //
-
-      // LUZ 0 //
-      case '0':
-         if (modoMenu == SELVISUALIZACION){
-            if (iluminado){
-               if (luz0){
-                  luz0 = false;
-                  cout << "LUZ 0 DESACTIVADA" << endl;
-               }
-               else{
-                  luz0 = true;
-                  cout << "LUZ 0 ACTIVADA" << endl;
-               }
-            }
-            else cout << "Letra incorrecta" << endl;
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
 
       // LUZ 1 o PLY 1//
       case '1':
@@ -656,12 +639,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          if (modoMenu == SELVISUALIZACION){
             if (iluminado){
                if (alfa){
-                  angulo_alfa += 5;
+                  angulo_alfa += 0.2;
                   cout << "ALFA: " << angulo_alfa << endl;
                }
 
                else if (beta){
-                  angulo_beta += 5;
+                  angulo_beta += 0.2;
                   cout << "BETA: " << angulo_beta << endl;
                }
             }
@@ -675,12 +658,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          if (modoMenu == SELVISUALIZACION){
             if (iluminado){
                if (alfa){
-                  angulo_alfa -= 5;
+                  angulo_alfa -= 0.2;
                   cout << "ALFA: " << angulo_alfa << endl;
                }
 
                else if (beta){
-                  angulo_beta -= 5;
+                  angulo_beta -= 0.2;
                   cout << "BETA: " << angulo_beta << endl;
                }
             }

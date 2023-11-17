@@ -27,11 +27,16 @@ void LuzDireccional::setAnguloBeta(int angulo){
 
 void LuzDireccional::calcularPosicion(int alfa, int beta){
     // Pasar las coordendas esfericas a coordenadas cartesianas
-    float x = sin(alfa) * cos(beta);
-    float y = sin(alfa) * sin(beta);
-    float z = cos(alfa);
+    float x = sin(beta) * cos(alfa);
+    float y = sin(beta) * sin(alfa);
+    float z = cos(beta);
 
-    this->posicion = Tupla4f(x*10, y*10, z*10, 0); // Ajustar al tamaño de los objetos
+    float modulo = sqrt(x*x + y*y + z*z);
+    x /= modulo;
+    y /= modulo;
+    z /= modulo;
+
+    this->posicion = Tupla4f(x, y, z, 0); // Ajustar al tamaño de los objetos
     glLightfv(id, GL_POSITION, posicion);
 
 }

@@ -81,7 +81,6 @@ private:
     float angulo_alfa = 0;
     float angulo_beta = 0;
 
-    bool luz0 = false;
     bool luz1 = false;
     bool luz2 = false;
 
