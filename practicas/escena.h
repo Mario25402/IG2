@@ -12,9 +12,10 @@
 #include "luz.h"
 #include "luzPosicional.h"
 #include "luzDireccional.h"
+#include "modelo_jerarquico.h"
 
 typedef enum {NADA, SELOBJETO, SELVISUALIZACION} menu;
-typedef enum {CUBO, PIRAMIDE, PLY, CILINDRO, ESFERA, CONO, MULTIPLE, VECTOR, NINGUNO} objeto;
+typedef enum {CUBO, PIRAMIDE, PLY, CILINDRO, ESFERA, CONO, MULTIPLE, VECTOR, JERARQUICO, NINGUNO} objeto;
 typedef enum {PLY1, PLY2, PLY3, NONE} objPly;
 
 class Escena
@@ -60,6 +61,8 @@ private:
     ObjPLY *ply2 = nullptr;
     ObjPLY *ply3 = nullptr;
     ObjRevolucion *rev = nullptr;
+
+    ModeloJerarquico *modelo = nullptr;
 
     // Objetos de iluminación
     LuzPosicional *luzPos = nullptr;

@@ -11,6 +11,7 @@
 #define PIRAMIDE_PENTAGONAL_H_INCLUDED
 
 #include "auxiliar.h"
+#include "malla.h"
 
 // *****************************************************************************
 //

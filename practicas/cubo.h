@@ -11,6 +11,7 @@
 #define CUBO_H_INCLUDED
 
 #include "auxiliar.h"
+#include "malla.h"
 
 // *****************************************************************************
 //

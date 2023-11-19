@@ -54,6 +54,8 @@ void Escena::init_objetos()
    ply1 = new ObjRevolucion("../plys_ejemplo/copa.ply", 20);
    ply2 = new ObjPLY("../plys_ejemplo/big_dodge.ply");
    ply3 = new ObjPLY("../plys_ejemplo/beethoven.ply");
+
+   modelo = new ModeloJerarquico();
 }
 
 void Escena::init_luces()
@@ -237,6 +239,10 @@ void Escena::draw_objects()
 
          glPopMatrix();
       }
+
+      else if (obj == JERARQUICO){
+         modelo->draw(puntos, alambre, solido);
+      }
    }
 }
 
@@ -309,7 +315,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       case 'O':
          if (modoMenu == NADA){
-            cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Y, E, R, N, M, 4, Q)" << endl;
+            cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Y, E, R, N, M, 4, J, Q)" << endl;
             modoMenu = SELOBJETO; 
          }
          else cout << "Letra incorrecta" << endl;
@@ -415,6 +421,20 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             else{
                obj = MULTIPLE;
                cout << "OBJETO: MÚLTIPLE ACTIVADO" << endl;
+            }
+         }
+         break ;
+
+      // MODELO JERARQUICO //
+      case 'J':
+         if (modoMenu == SELOBJETO){
+            if (obj == JERARQUICO){
+               obj = NINGUNO;
+               cout << "OBJETO: MODELO JERARQUICO DESACTIVADO" << endl;
+            }
+            else{
+               obj = JERARQUICO;
+               cout << "OBJETO: MODELO JERARQUICO ACTIVADO" << endl;
             }
          }
          break ;
