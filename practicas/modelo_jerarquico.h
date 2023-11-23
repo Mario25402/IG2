@@ -1,13 +1,12 @@
 #include "hier_soporte.h"
-#include "hier_brazo.h"
-#include "hier_eje.h"
+#include "hier_brazos_eje.h"
+#include "hier_asiento_giratorio.h"
 
 class ModeloJerarquico{
     private:    
-        //Pie *pie;
-        //Soporte *soporte;
-        Brazo *brazo;
-        Eje *eje;
+        Soporte *soporte;
+        BrazosEje *brazosEje;
+        AsientoGiratorio *asientoGiratorio;
 
     public:
         ModeloJerarquico();

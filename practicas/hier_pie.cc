@@ -8,7 +8,8 @@ Pie::Pie(){
 void Pie::draw(bool puntos, bool alambre, bool solido){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glScalef(1, 0.75, 1);
+        glScalef(2, 0.75, 2);
+        
         piramide->draw(puntos, false, false);
         piramide->draw(false, alambre, false);
         piramide->draw(false, false, solido);
@@ -16,8 +17,9 @@ void Pie::draw(bool puntos, bool alambre, bool solido){
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glTranslatef(0, 37.5, 0);
-    glScalef(1, 10, 1);
+        glTranslatef(0, 37.5, 0);
+        glScalef(2, 25, 2);
+
         cubo->draw(puntos, false, false);
         cubo->draw(false, alambre, false);
         cubo->draw(false, false, solido);

@@ -1,15 +1,26 @@
 #include "modelo_jerarquico.h"
 
 ModeloJerarquico::ModeloJerarquico(){
-    //pie = new Pie();
-    //soporte = new Soporte();
-    brazo = new Brazo();
-    eje = new Eje();
+    soporte = new Soporte();
+    brazosEje = new BrazosEje();
+    asientoGiratorio = new AsientoGiratorio();
 }
 
 void ModeloJerarquico::draw(bool puntos, bool alambre, bool solido){
-    //pie->draw(puntos, alambre, solido);
-    //soporte->draw(puntos, alambre, solido);
-    //brazo->draw(puntos, alambre, solido);
-    eje->draw(puntos, alambre, solido);
+    /*glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+        glTranslatef(0, 875, 0);
+
+        brazosEje->draw(puntos, alambre, solido);
+    glPopMatrix();
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+        soporte->draw(puntos, alambre, solido);
+    glPopMatrix();*/
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+        asientoGiratorio->draw(puntos, alambre, solido);
+    glPopMatrix();
 }

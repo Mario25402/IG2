@@ -72,7 +72,7 @@ private:
 
     // Variables de estado de visualización
     bool puntos = false;
-    bool alambre = false;
+    bool alambre = true;
     bool solido = true;
 
     // Variables relacionadas con la iliuminación

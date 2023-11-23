@@ -6,10 +6,12 @@ Brazo::Brazo(){
 }
 
 void Brazo::draw(bool puntos, bool alambre, bool solido){
+    // Panel
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glTranslatef(0,-100,0);
-    glScalef(200, 20, 2.5);
+        glTranslatef(0,-50,0);
+        glScalef(120, 12, 2.5);
+
         cubo->draw(puntos, false, false);
         cubo->draw(false, alambre, false);
         cubo->draw(false, false, solido);
@@ -18,9 +20,10 @@ void Brazo::draw(bool puntos, bool alambre, bool solido){
     // Izquierda
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glTranslatef(-1000, 0, -12.5);
-    glScalef(15, 15, 1);
-    glRotatef(90, 1, 0, 0);
+        glTranslatef(-600, 0, -12.5);
+        glScalef(10, 10, 1);
+        glRotatef(90, 1, 0, 0);
+
         cilindro->draw(puntos, false, false);
         cilindro->draw(false, alambre, false);
         cilindro->draw(false, false, solido);
@@ -29,9 +32,10 @@ void Brazo::draw(bool puntos, bool alambre, bool solido){
     // Centro
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glTranslatef(0, 0, -12.5);
-    glScalef(20, 20, 1);
-    glRotatef(90, 1, 0, 0);
+        glTranslatef(0, 0, -12.5);
+        glScalef(15, 15, 1);
+        glRotatef(90, 1, 0, 0);
+
         cilindro->draw(puntos, false, false);
         cilindro->draw(false, alambre, false);
         cilindro->draw(false, false, solido);
@@ -40,9 +44,10 @@ void Brazo::draw(bool puntos, bool alambre, bool solido){
     // Derecha
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glTranslatef(1000, 0, -12.5);
-    glScalef(15, 15, 1);
-    glRotatef(90, 1, 0, 0);
+        glTranslatef(600, 0, -12.5);
+        glScalef(10, 10, 1);
+        glRotatef(90, 1, 0, 0);
+        
         cilindro->draw(puntos, false, false);
         cilindro->draw(false, alambre, false);
         cilindro->draw(false, false, solido);
