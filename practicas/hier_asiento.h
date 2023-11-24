@@ -6,7 +6,12 @@ class Asiento{
         Cubo *cubo;
         Barra *barra;
 
+        float translacion;
+        bool acercando;
+
     public:
         Asiento();
+
+        void animar();
         void draw(bool puntos, bool alambre, bool solido);
 };

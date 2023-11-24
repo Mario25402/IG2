@@ -8,14 +8,17 @@ AsientoGiratorio::AsientoGiratorio(){
 void AsientoGiratorio::draw(bool puntos, bool alambre, bool solido){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
+        glTranslatef(0, -90, 25);
+        glScalef(0.6, 1, 1);
 
         asiento->draw(puntos, alambre, solido);
     glPopMatrix();
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-        glTranslatef(97.5, 90, -25);
+        glTranslatef(77.5, 0, 0);
         glRotatef(90, 0, 0, 1);
+        glScalef(1, 3, 1);
         
         cilindro->draw(puntos, false, false);
         cilindro->draw(false, alambre, false);
@@ -24,11 +27,16 @@ void AsientoGiratorio::draw(bool puntos, bool alambre, bool solido){
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-        glTranslatef(-87.5, 90, -25);
+        glTranslatef(-47.5, 0, 0);
         glRotatef(90, 0, 0, 1);
+        glScalef(1, 3, 1);
         
         cilindro->draw(puntos, false, false);
         cilindro->draw(false, alambre, false);
         cilindro->draw(false, false, solido);
     glPopMatrix();
+}
+
+void AsientoGiratorio::animar(){
+    asiento->animar();
 }

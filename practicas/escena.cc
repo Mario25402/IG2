@@ -241,13 +241,22 @@ void Escena::draw_objects()
       }
 
       else if (obj == JERARQUICO){
-         modelo->draw(puntos, alambre, solido);
+         glMatrixMode(GL_MODELVIEW);
+         glPushMatrix();
+            glScalef(1, 0.5, 0.5);
+
+            modelo->draw(puntos, alambre, solido);
+         glPopMatrix();
       }
    }
 }
 
-// Dibujado de luces
+void Escena::animarModeloJerarquico()
+{
+   modelo->animar();
+}
 
+// Dibujado de luces
 void Escena::draw_lights()
 {
    if (iluminado){
@@ -267,7 +276,6 @@ void Escena::draw_lights()
 }
 
 // Dibujado de Ejes
-
 void Escena::draw_axis()
 {
    // Desactivar las luces al dibujar los ejes para que se vean de color

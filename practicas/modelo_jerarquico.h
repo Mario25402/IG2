@@ -1,14 +1,16 @@
 #include "hier_soporte.h"
-#include "hier_brazos_eje.h"
-#include "hier_asiento_giratorio.h"
+#include "hier_atraccion.h"
 
 class ModeloJerarquico{
     private:    
         Soporte *soporte;
-        BrazosEje *brazosEje;
-        AsientoGiratorio *asientoGiratorio;
+        Atraccion *atraccion;
+
+        int rotacion;
 
     public:
         ModeloJerarquico();
+
+        void animar();
         void draw(bool puntos, bool alambre, bool solido);
 };

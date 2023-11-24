@@ -1,6 +1,9 @@
 #include "hier_asiento.h"
 
 Asiento::Asiento(){
+    translacion = 0;
+    acercando = true;
+
     cubo = new Cubo(50);
     barra = new Barra();
 }
@@ -41,8 +44,26 @@ void Asiento::draw(bool puntos, bool alambre, bool solido){
     // Barra de Seguridad
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-        glTranslatef(0, 0, 35);
+        glTranslatef(0, 5, 45 + translacion);
 
         barra->draw(puntos, alambre, solido);
     glPopMatrix();
+}
+
+void Asiento::animar(){
+    if (acercando){
+        translacion -= 0.2;
+
+        if (translacion <= -20)
+            acercando = false;
+    }
+
+    else{
+        translacion += 0.2;
+
+        if (translacion >= 0)
+            acercando = true;
+    }
+
+    barra->animar();
 }

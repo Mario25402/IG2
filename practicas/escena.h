@@ -114,6 +114,9 @@ public:
     // Dibujar
     void dibujar();
 
+    // Animación
+    void animarModeloJerarquico();
+
     // Interacción con la escena
     bool teclaPulsada(unsigned char Tecla1, int x, int y);
     void teclaEspecial(int Tecla1, int x, int y);

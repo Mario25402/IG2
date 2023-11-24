@@ -8,5 +8,7 @@ class AsientoGiratorio{
 
     public:
         AsientoGiratorio();
+
+        void animar();
         void draw(bool puntos, bool alambre, bool solido);
 };
