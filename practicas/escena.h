@@ -14,9 +14,10 @@
 #include "luzDireccional.h"
 #include "modelo_jerarquico.h"
 
-typedef enum {NADA, SELOBJETO, SELVISUALIZACION} menu;
-typedef enum {CUBO, PIRAMIDE, PLY, CILINDRO, ESFERA, CONO, MULTIPLE, VECTOR, JERARQUICO, NINGUNO} objeto;
-typedef enum {PLY1, PLY2, PLY3, NONE} objPly;
+typedef enum {NADA, VISUALIZACION} menu;
+typedef enum {JERARQUICO, NINGUNO} objeto;
+//typedef enum {PLY1, PLY2, PLY3, NONE} objPly;
+typedef enum {BARRA, ASIENTO, ATRACCION, NONE} movimeinto;
 
 class Escena
 {
@@ -43,14 +44,15 @@ private:
 
     // Selección de opciones
     menu modoMenu = NADA;
-    objeto obj = NINGUNO;
-    objPly objPlySel = NONE;
+    objeto obj = JERARQUICO;
+    //objPly objPlySel = NONE;
+    movimeinto move = NONE;
 
     /////
 
     // Objetos de la escena, importante inicializarlos a nullptr
     Ejes ejes;
-    Cubo *cubo = nullptr;
+    /*Cubo *cubo = nullptr;
     PiramidePentagonal *piramide = nullptr;
 
     Cilindro *cilindro = nullptr;
@@ -60,13 +62,21 @@ private:
     ObjRevolucion *ply1 = nullptr;
     ObjPLY *ply2 = nullptr;
     ObjPLY *ply3 = nullptr;
-    ObjRevolucion *rev = nullptr;
+    ObjRevolucion *rev = nullptr;*/
 
     ModeloJerarquico *modelo = nullptr;
 
     // Objetos de iluminación
     LuzPosicional *luzPos = nullptr;
     LuzDireccional *luzDir = nullptr;
+
+    // Variables relacionadas con el material
+    Material *bronce = nullptr;
+    Material *oro = nullptr;
+    Material *perla = nullptr;
+
+    Material *matBlanco = nullptr;
+    Material *matNegro = nullptr;
 
     /////       
 
@@ -81,19 +91,26 @@ private:
     bool alfa = false;
     bool beta = false;
     
-    float angulo_alfa = 0;
-    float angulo_beta = 0;
+    float angulo_alfa = 0.0f;
+    float angulo_beta = 0.0f;
 
     bool luz1 = false;
     bool luz2 = false;
 
-    // Variables relacionadas con el material
-    Material *bronce = nullptr;
-    Material *oro = nullptr;
-    Material *perla = nullptr;
+    // Variables de moviemiento de la animación
+    bool animacion = false;
+    bool manual = true;
 
-    Material *matBlanco = nullptr;
-    Material *matNegro = nullptr;
+        // Automático
+    bool turnoBarra = true;
+    bool turnoAsiento = false;
+    bool turnoAtraccion = false;
+
+        // Manual
+    float velAnimacion = 1.0f;
+    float velBarra = 1.0f;
+    float velAsiento = 1.0f;
+    float velAtraccion = 1.0f;
 
     /////
 

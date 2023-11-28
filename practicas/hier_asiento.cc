@@ -1,8 +1,8 @@
 #include "hier_asiento.h"
 
 Asiento::Asiento(){
-    translacion = 0;
-    acercando = true;
+    translacion = -20;
+    acercando = false;
 
     cubo = new Cubo(50);
     barra = new Barra();
@@ -50,20 +50,22 @@ void Asiento::draw(bool puntos, bool alambre, bool solido){
     glPopMatrix();
 }
 
-void Asiento::animar(){
-    if (acercando){
-        translacion -= 0.2;
+void Asiento::animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion){
+    barra->animar(turnoBarra, turnoAsiento, turnoAtraccion);
 
-        if (translacion <= -20)
-            acercando = false;
+    if (turnoBarra){
+        if (acercando){
+            translacion -= (2.0f/9.0f);
+
+            if (translacion <= -20)
+                acercando = false;
+        }
+
+        else{
+            translacion += (2.0f/9.0f);
+
+            if (translacion >= -1) // -1 evita problemas de aproximacion
+                acercando = true;
+        }
     }
-
-    else{
-        translacion += 0.2;
-
-        if (translacion >= 0)
-            acercando = true;
-    }
-
-    barra->animar();
 }

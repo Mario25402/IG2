@@ -45,7 +45,7 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 void Escena::init_objetos()
 {
-   cubo = new Cubo(50);
+   /*cubo = new Cubo(50);
    piramide = new PiramidePentagonal(50,50);
    cilindro = new Cilindro(4, 20, 100, 50);
    esfera = new Esfera(20, 20, 50);
@@ -53,7 +53,7 @@ void Escena::init_objetos()
 
    ply1 = new ObjRevolucion("../plys_ejemplo/copa.ply", 20);
    ply2 = new ObjPLY("../plys_ejemplo/big_dodge.ply");
-   ply3 = new ObjPLY("../plys_ejemplo/beethoven.ply");
+   ply3 = new ObjPLY("../plys_ejemplo/beethoven.ply");*/
 
    modelo = new ModeloJerarquico();
 }
@@ -108,7 +108,7 @@ void Escena::draw_objects()
 {
    // Si algún modo esta activo, dibujar el objeto correspondiente
    if (puntos or alambre or solido){
-      if (obj == CUBO){
+      /*if (obj == CUBO){
          cubo->setMaterial(matBlanco);
          cubo->draw(puntos, false, false);
          cubo->draw(false, alambre, false);
@@ -238,9 +238,9 @@ void Escena::draw_objects()
          rev->draw(false, false, solido);
 
          glPopMatrix();
-      }
+      }*/
 
-      else if (obj == JERARQUICO){
+      if (obj == JERARQUICO){
          glMatrixMode(GL_MODELVIEW);
          glPushMatrix();
             glScalef(1, 0.5, 0.5);
@@ -253,7 +253,8 @@ void Escena::draw_objects()
 
 void Escena::animarModeloJerarquico()
 {
-   modelo->animar();
+   if (animacion)
+      modelo->animar(turnoBarra, turnoAsiento, turnoAtraccion);
 }
 
 // Dibujado de luces
@@ -311,156 +312,44 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // SALIR //
       case 'Q':
          if (modoMenu != NADA){
-            cout << "\nSELECCIÓN DE MENÚ (OPCIONES: O, V, Q)" << endl;
+            cout << "\nSELECCIÓN DE MENÚ (OPCIONES: V, M, A, Q)" << endl;
             modoMenu = NADA;
-         }
-         
-         else salir=true;
+         }         
+         else
+            salir=true;
+
          break ;
 
-      /////////////////
-      // MODO SELECCIÓN DE OBJETO
-
-      case 'O':
-         if (modoMenu == NADA){
-            cout << "\nSELECCIÓN DE OBJETO (OPCIONES C, P, Y, E, R, N, M, 4, J, Q)" << endl;
-            modoMenu = SELOBJETO; 
-         }
-         else cout << "Letra incorrecta" << endl;
-         break ;
-
-      // CUBO //
-      case 'C':
-         if (modoMenu == SELOBJETO){
-            if (obj == CUBO){
-               obj = NINGUNO;
-               cout << "OBJETO: CUBO DESACTIVADO" << endl;
-            }
-            else{
-               obj = CUBO;
-               cout << "OBJETO: CUBO ACTIVADO" << endl;
-            }
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // PIRÁMIDE //
-      case 'P':
-         if (modoMenu == SELOBJETO){
-            if (obj == PIRAMIDE){
-               obj = NINGUNO;
-               cout << "OBJETO: PIRÁMIDE DESACTIVADO" << endl;
-            }
-            else{
-               obj = PIRAMIDE;
-               cout << "OBJETO: PIRÁMIDE ACTIVADO" << endl;
-            }
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // PLY //
-      case 'Y':
-         if (modoMenu == SELOBJETO){
-            if (obj == PLY){
-               obj = NINGUNO;
-               cout << "OBJETO: PLY DESACTIVADO" << endl;
-            }
-            else{
-               obj = PLY;
-               cout << "OBJETO: PLY ACTIVADO" << endl;
-            }
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // CILINDRO //
-      case 'R':
-         if (modoMenu == SELOBJETO){
-            if (obj == CILINDRO){
-               obj = NINGUNO;
-               cout << "OBJETO: CILINDRO DESACTIVADO" << endl;
-            }
-            else{
-               obj = CILINDRO;
-               cout << "OBJETO: CILINDRO ACTIVADO" << endl;
-            }
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // ESFERA //
-      case 'E':
-         if (modoMenu == SELOBJETO){
-            if (obj == ESFERA){
-               obj = NINGUNO;
-               cout << "OBJETO: ESFERA DESACTIVADO" << endl;
-            }
-            else{
-               obj = ESFERA;
-               cout << "OBJETO: ESFERA ACTIVADO" << endl;
-            }
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // CONO //
-      case 'N':
-         if (modoMenu == SELOBJETO){
-            if (obj == CONO){
-               obj = NINGUNO;
-               cout << "OBJETO: CONO DESACTIVADO" << endl;
-            }
-            else{
-               obj = CONO;
-               cout << "OBJETO: CONO ACTIVADO" << endl;
-            }
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // MÚLTIPLE //
+      // MANUAL //
       case 'M':
-         if (modoMenu == SELOBJETO){
-            if (obj == MULTIPLE){
-               obj = NINGUNO;
-               cout << "OBJETO: MÚLTIPLE DESACTIVADO" << endl;
-            }
-            else{
-               obj = MULTIPLE;
-               cout << "OBJETO: MÚLTIPLE ACTIVADO" << endl;
-            }
-         }
-         break ;
+         if (modoMenu != VISUALIZACION){
+            manual = !manual;
+            animacion = !manual;
 
-      // MODELO JERARQUICO //
-      case 'J':
-         if (modoMenu == SELOBJETO){
-            if (obj == JERARQUICO){
-               obj = NINGUNO;
-               cout << "OBJETO: MODELO JERARQUICO DESACTIVADO" << endl;
-            }
-            else{
-               obj = JERARQUICO;
-               cout << "OBJETO: MODELO JERARQUICO ACTIVADO" << endl;
-            }
+            if (manual)
+               cout << "MODO MANUAL ACTIVADO" << endl;
+            else
+               cout << "MODO MANUAL DESACTIVADO" << endl;
          }
-         break ;
+
+         else
+            cout << "Letra incorrecta" << endl;
+         break;
 
       /////////////////
-      // SELECCIÓN DE MODO DE VISUALIZACION //
 
+      // SELECCIÓN DE MODO DE VISUALIZACION //
       case 'V':
          if (modoMenu == NADA){
             cout << "\nSELECCIÓN DE VISUALIZACIÓN (OPCIONES D, L, S, I, Q)" << endl;
-            modoMenu = SELVISUALIZACION;
+            modoMenu = VISUALIZACION;
          }
          else cout << "Letra incorrecta" << endl;
          break ;
       
       // PUNTOS //
       case 'D':
-         if (modoMenu == SELVISUALIZACION){
+         if (modoMenu == VISUALIZACION){
             puntos = !puntos;
             iluminado = false;
             
@@ -474,7 +363,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       // ALAMBRE //
       case 'L':
-         if (modoMenu == SELVISUALIZACION){
+         if (modoMenu == VISUALIZACION){
             alambre = !alambre;
             iluminado = false;
 
@@ -488,7 +377,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       // SÓLIDO //
       case 'S':
-         if (modoMenu == SELVISUALIZACION){ 
+         if (modoMenu == VISUALIZACION){ 
             solido = !solido;
             iluminado = false;
 
@@ -502,7 +391,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       // ILUMINACIÓN //
       case 'I':
-         if (modoMenu == SELVISUALIZACION){
+         if (modoMenu == VISUALIZACION){
             if (iluminado){
                iluminado = false;
                cout << "\nVISUALIZACIÓN: ILUMINACIÓN DESACTIVADA" << endl;
@@ -517,127 +406,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break;
 
       /////////////////
-      // MODIFICACIÓN DE VARIABLES DE ILUMINACIÓN //
-      // SELECCIÓN DE OBJETO PLYS //
-
-      // LUZ 1 o PLY 1//
-      case '1':
-         if (modoMenu == SELOBJETO){
-            if (obj == PLY){
-               if (objPlySel == PLY1){
-                  objPlySel = NONE;
-                  cout << "OBJETO: PLY1 DESACTIVADO" << endl;
-               }
-               else{
-                  objPlySel = PLY1;
-                  cout << "OBJETO: PLY1 ACTIVADO" << endl;
-               }
-            }
-            else cout << "Letra incorrecta" << endl;
-         }
-
-         else if (modoMenu == SELVISUALIZACION){
-            if (iluminado){
-               if (luz1){
-                  luz1 = false;
-                  cout << "LUZ 1 DESACTIVADA" << endl;
-               }
-               else{
-                  luz1 = true;
-                  cout << "LUZ 1 ACTIVADA" << endl;
-               }
-            }
-            else cout << "Letra incorrecta" << endl;
-         }
-
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // LUZ 2 o PLY 2 //
-      case '2':
-         if (modoMenu == SELOBJETO){
-            if (obj == PLY){
-               if (objPlySel == PLY2){
-                  objPlySel = NONE;
-                  cout << "OBJETO: PLY2 DESACTIVADO" << endl;
-               }
-               else{
-                  objPlySel = PLY2;
-                  cout << "OBJETO: PLY2 ACTIVADO" << endl;
-               }
-            }
-         }
-
-         else if (modoMenu == SELVISUALIZACION){
-            if (iluminado){
-               if (luz2){
-                  luz2 = false;
-                  cout << "LUZ 2 DESACTIVADA" << endl;
-               }
-               else{
-                  luz2 = true;
-                  cout << "LUZ 2 ACTIVADA" << endl;
-               }
-            }
-            else cout << "Letra incorrecta" << endl;
-         }
-
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // PLY 3 //
-      case '3':
-         if (modoMenu == SELOBJETO){
-            if (obj == PLY){
-               if (objPlySel == PLY3){
-                  objPlySel = NONE;
-                  cout << "OBJETO: PLY3 DESACTIVADO" << endl;
-               }
-               else{
-                  objPlySel = PLY3;
-                  cout << "OBJETO: PLY3 ACTIVADO" << endl;
-               }
-            }
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // VECTOR DE PUNTOS//
-      case '4':
-         if (modoMenu == SELOBJETO){
-            if (obj == VECTOR){
-               obj = NINGUNO;
-               delete rev;
-               cout << "OBJETO: VECTOR DE PUNTOS DESACTIVADO" << endl;
-            }
-            else{
-               obj = VECTOR;
-               cout << "OBJETO: VECTOR DE PUNTOS ACTIVADO" << endl;
-
-               std::vector<Tupla3f> perfil;
-               perfil.push_back(Tupla3f(0.0, -1.4, 0.0));
-               perfil.push_back(Tupla3f(1, -1.4, 0.0));
-               perfil.push_back(Tupla3f(1, -1.1, 0.0));
-               perfil.push_back(Tupla3f(0.5, -0.7, 0.0));
-               perfil.push_back(Tupla3f(0.4, -0.4, 0.0));
-               perfil.push_back(Tupla3f(0.4, 0.5, 0.0));
-               perfil.push_back(Tupla3f(0.5, 0.6, 0.0));
-               perfil.push_back(Tupla3f(0.3, 0.6, 0.0));
-               perfil.push_back(Tupla3f(0.5, 0.8, 0.0));
-               perfil.push_back(Tupla3f(0.55, 1.0, 0.0));
-               perfil.push_back(Tupla3f(0.5, 1.2, 0.0));
-               perfil.push_back(Tupla3f(0.3, 1.4, 0.0));
-               perfil.push_back(Tupla3f(0.0, 1.4, 0.0));
-
-               rev = new ObjRevolucion(perfil, 20);
-            }
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
 
       // ALFA //
       case 'A':
-         if (modoMenu == SELVISUALIZACION){
+         if (modoMenu == VISUALIZACION){
             if (iluminado){
                alfa = true;
                beta = false;
@@ -645,12 +417,25 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                cout << "ALFA ACTIVADO - BETA DESACTIVADO" << endl;
             }
          }
-         else cout << "Letra incorrecta" << endl;
+
+         else if (modoMenu != VISUALIZACION){
+            animacion = !animacion;
+            manual = !animacion;
+            
+            if (animacion)
+               cout << "ANIMACIÓN ACTIVADA" << endl;
+            else
+               cout << "ANIMACIÓN DESACTIVADA" << endl;
+         }
+
+         else
+            cout << "Letra incorrecta" << endl;
+
          break;
          
       // BETA //
       case 'B':
-         if (modoMenu == SELVISUALIZACION){
+         if (modoMenu == VISUALIZACION){
             if (iluminado){
                beta = true;
                alfa = false;
@@ -664,7 +449,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       // INCREMENTAR //
       case '>':
-         if (modoMenu == SELVISUALIZACION){
+         if (modoMenu == VISUALIZACION){
             if (iluminado){
                if (alfa){
                   angulo_alfa += 0.2;
@@ -683,7 +468,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       // DECREMENTAR //
       case '<':
-         if (modoMenu == SELVISUALIZACION){
+         if (modoMenu == VISUALIZACION){
             if (iluminado){
                if (alfa){
                   angulo_alfa -= 0.2;
@@ -697,6 +482,131 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             }
             else cout << "Letra incorrecta" << endl;
          }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      /////////////////
+
+      // LUZ 1 o 1º Grado Libertad//
+      case '1':
+         if (modoMenu == VISUALIZACION){
+            if (iluminado){
+               if (luz1){
+                  luz1 = false;
+                  cout << "LUZ 1 DESACTIVADA" << endl;
+               }
+               else{
+                  luz1 = true;
+                  cout << "LUZ 1 ACTIVADA" << endl;
+               }
+            }
+            else cout << "Letra incorrecta" << endl;
+         }
+
+         else if (modoMenu != VISUALIZACION){
+            if (manual){
+               if (move == BARRA)
+                  move = NONE;
+               else
+                  move = BARRA;
+            }
+         }
+         
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // LUZ 2 o 2º Grado Libertad//
+      case '2':
+         if (modoMenu == VISUALIZACION){
+            if (iluminado){
+               if (luz2){
+                  luz2 = false;
+                  cout << "LUZ 2 DESACTIVADA" << endl;
+               }
+               else{
+                  luz2 = true;
+                  cout << "LUZ 2 ACTIVADA" << endl;
+               }
+            }
+            else cout << "Letra incorrecta" << endl;
+         }
+
+         else if (modoMenu != VISUALIZACION){
+            if (manual){
+               if (move == ASIENTO)
+                  move = NONE;
+               else
+                  move = ASIENTO;
+            }
+         }
+         
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // 3er Grado Libertad //
+      case '3':
+         if (modoMenu != VISUALIZACION){
+            if (manual){
+               if (move == ATRACCION)
+                  move = NONE;
+               else
+                  move = ATRACCION;
+            }
+         }
+
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      /////////////////
+
+      case '+':
+         if (modoMenu != VISUALIZACION){
+            if (animacion){
+               velAnimacion += 0.1;
+               cout << "VELOCIDAD DE ANIMACIÓN: " << velAnimacion << endl;
+            }
+
+            if (manual){
+               if (move == BARRA)
+                  velBarra += 0.1;
+               else if (move == ASIENTO)
+                  velAsiento += 0.1;
+               else if (move == ATRACCION)
+                  velAtraccion += 0.1;
+               else
+                  cout << "Ningún grado de libertad elegido" << endl;
+
+               modelo->setVelocidad(velBarra, velAsiento, velAtraccion);
+            }
+         }
+
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      case '-':
+         if (modoMenu != VISUALIZACION){
+            if (animacion){
+               if (velAnimacion > 0.1) velAnimacion -= 0.1;
+               cout << "VELOCIDAD DE ANIMACIÓN: " << velAnimacion << endl;
+            }
+
+            if (manual){
+               if (move == BARRA){
+                  if (velBarra >= 0.1) velBarra -= 0.1;
+               }
+               else if (move == ASIENTO){
+                  if (velAsiento >= 0.1) velAsiento -= 0.1;
+               }
+               else if (move == ATRACCION){
+                  if (velAtraccion >= 0.1) velAtraccion -= 0.1;
+               }
+               else
+                  cout << "Ningún grado de libertad elegido" << endl;
+
+               modelo->setVelocidad(velBarra, velAsiento, velAtraccion);
+            }
+         }
+
          else cout << "Letra incorrecta" << endl;
          break;
    }

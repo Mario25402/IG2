@@ -5,6 +5,7 @@ Atraccion::Atraccion(){
     asientoGiratorio = new AsientoGiratorio();
 
     rotacion = 0;
+    vueltas = -1;
 }
 
 void Atraccion::draw(bool puntos, bool alambre, bool solido){
@@ -23,7 +24,21 @@ void Atraccion::draw(bool puntos, bool alambre, bool solido){
     glPopMatrix();
 }
 
-void Atraccion::animar(){
-    rotacion -= 5 % 360;
-    asientoGiratorio->animar();
+void Atraccion::animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion){
+    asientoGiratorio->animar(turnoBarra, turnoAsiento, turnoAtraccion);
+
+    if (turnoAsiento){
+        if (rotacion == 0)
+            vueltas++;
+
+        rotacion = (((int)rotacion - 10) % 360);
+
+        if (vueltas == 2){
+            vueltas = -1;
+
+            turnoAsiento = false;
+            turnoAtraccion = false;
+            turnoBarra = true;
+        }
+    }
 }

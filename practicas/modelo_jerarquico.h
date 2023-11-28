@@ -6,11 +6,12 @@ class ModeloJerarquico{
         Soporte *soporte;
         Atraccion *atraccion;
 
-        int rotacion;
+        float rotacion;
 
     public:
         ModeloJerarquico();
 
-        void animar();
         void draw(bool puntos, bool alambre, bool solido);
+        void animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion);
+        void setVelocidad(float velBarra, float velAsiento, float velAtraccion);
 };

@@ -24,7 +24,9 @@ void ModeloJerarquico::draw(bool puntos, bool alambre, bool solido){
 
 }
 
-void ModeloJerarquico::animar(){
-    rotacion += 1 % 360;
-    atraccion->animar();
+void ModeloJerarquico::animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion){        
+    atraccion->animar(turnoBarra, turnoAsiento, turnoAtraccion);
+
+    if (turnoAtraccion)
+        rotacion += 5 % 360;
 }

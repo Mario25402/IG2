@@ -1,8 +1,8 @@
 #include "hier_barra.h"
 
 Barra::Barra(){
-    rotacion = 0;
-    bajando = true;
+    rotacion = -45;
+    bajando = false;
 
     cilindro = new Cilindro(4, 20, 10, 5);
     barraSuperior = new BarraSuperior();
@@ -51,17 +51,24 @@ void Barra::draw(bool puntos, bool alambre, bool solido){
     glPopMatrix();
 }
 
-void Barra::animar(){
-    if (bajando){
-        rotacion--;
+void Barra::animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion){
+    if (turnoBarra){
+        if (bajando){
+            rotacion -= 0.5;
 
-        if (rotacion <= -45)
-            bajando = false;
-    }
-    else{
-        rotacion++;
+            if (rotacion <= -45){
+                bajando = false;
 
-        if (rotacion >= 0)
-            bajando = true;
+                turnoAsiento = true;
+                turnoAtraccion = true;
+                turnoBarra = false;
+            }
+        }
+        else{
+            rotacion += 0.5;
+
+            if (rotacion >= 0)
+                bajando = true;
+        }
     }
 }
