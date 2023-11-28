@@ -30,3 +30,7 @@ void ModeloJerarquico::animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoA
     if (turnoAtraccion)
         rotacion += 5 % 360;
 }
+
+void ModeloJerarquico::setVelocidad(float velBarra, float velAsiento, float velAtraccion){
+    //atraccion->setVelocidad(velBarra, velAsiento, velAtraccion);
+}

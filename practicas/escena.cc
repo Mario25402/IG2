@@ -326,6 +326,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             manual = !manual;
             animacion = !manual;
 
+            turnoBarra = false;
+            turnoAsiento = false;
+            turnoAtraccion = false;
+            
+            modelo->animar(turnoBarra, turnoAsiento, turnoAtraccion);
+            modelo->setVelocidad(velBarra, velAsiento, velAtraccion);
+
             if (manual)
                cout << "MODO MANUAL ACTIVADO" << endl;
             else
@@ -407,7 +414,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       /////////////////
 
-      // ALFA //
+      // ALFA y ANIMAR //
       case 'A':
          if (modoMenu == VISUALIZACION){
             if (iluminado){
@@ -421,6 +428,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          else if (modoMenu != VISUALIZACION){
             animacion = !animacion;
             manual = !animacion;
+
+            modelo->setVelocidad(0, 0, 0);
+            modelo->animar(turnoBarra, turnoAsiento, turnoAtraccion);
             
             if (animacion)
                cout << "ANIMACIÓN ACTIVADA" << endl;
