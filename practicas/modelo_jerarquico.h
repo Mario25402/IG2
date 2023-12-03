@@ -11,7 +11,7 @@ class ModeloJerarquico{
     public:
         ModeloJerarquico();
 
+        void animar(float velAnimacion);
         void draw(bool puntos, bool alambre, bool solido);
-        void animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion);
-        void setVelocidad(float velBarra, float velAsiento, float velAtraccion);
+        void setVelocidad(float despBarra, float rotAsiento, float rotAtraccion);
 };

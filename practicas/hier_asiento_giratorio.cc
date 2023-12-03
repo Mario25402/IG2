@@ -37,6 +37,10 @@ void AsientoGiratorio::draw(bool puntos, bool alambre, bool solido){
     glPopMatrix();
 }
 
-void AsientoGiratorio::animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion){
-    asiento->animar(turnoBarra, turnoAsiento, turnoAtraccion);
+void AsientoGiratorio::animar(float velAnimacion){
+    asiento->animar(velAnimacion);
+}
+
+void AsientoGiratorio::setVelocidad(float despBarra){
+    asiento->setVelocidad(despBarra);
 }

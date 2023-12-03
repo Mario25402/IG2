@@ -254,7 +254,7 @@ void Escena::draw_objects()
 void Escena::animarModeloJerarquico()
 {
    if (animacion)
-      modelo->animar(turnoBarra, turnoAsiento, turnoAtraccion);
+      modelo->animar(velAnimacion);
 }
 
 // Dibujado de luces
@@ -315,28 +315,30 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             cout << "\nSELECCIÓN DE MENÚ (OPCIONES: V, M, A, Q)" << endl;
             modoMenu = NADA;
          }         
-         else
-            salir=true;
+         else{
+            if (manual){
+               manual = false;
+               cout << "MODO MANUAL DESACTIVADO" << endl;
+            }
+            else salir=true;
+         }
 
          break ;
 
       // MANUAL //
       case 'M':
          if (modoMenu != VISUALIZACION){
-            manual = !manual;
-            animacion = !manual;
+            if (!manual){
+               manual = true;
+               
+               if (animacion){
+                  animacion = false;
+                  cout << "ANIMACIÓN DESACTIVADA" << endl;
+               }
 
-            turnoBarra = false;
-            turnoAsiento = false;
-            turnoAtraccion = false;
-            
-            modelo->animar(turnoBarra, turnoAsiento, turnoAtraccion);
-            modelo->setVelocidad(velBarra, velAsiento, velAtraccion);
-
-            if (manual)
-               cout << "MODO MANUAL ACTIVADO" << endl;
-            else
-               cout << "MODO MANUAL DESACTIVADO" << endl;
+               cout << "MODO MANUAL ACTIVADO (OPCIONES: 1, 2, 3, Q)" << endl;
+            }
+            else cout << "MODO MANUAL YA ACTIVADO" << endl;
          }
 
          else
@@ -425,22 +427,22 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             }
          }
 
-         else if (modoMenu != VISUALIZACION){
+         else{
             animacion = !animacion;
-            manual = !animacion;
 
-            modelo->setVelocidad(0, 0, 0);
-            modelo->animar(turnoBarra, turnoAsiento, turnoAtraccion);
+            if (manual){
+               manual = false;
+               cout << "MODO MANUAL DESACTIVADO" << endl;
+            }
+
+            //modelo->setVelocidad(0, 0, 0);
+            modelo->animar(velAnimacion);
             
             if (animacion)
                cout << "ANIMACIÓN ACTIVADA" << endl;
             else
                cout << "ANIMACIÓN DESACTIVADA" << endl;
          }
-
-         else
-            cout << "Letra incorrecta" << endl;
-
          break;
          
       // BETA //
@@ -513,16 +515,18 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             else cout << "Letra incorrecta" << endl;
          }
 
-         else if (modoMenu != VISUALIZACION){
+         else{
             if (manual){
-               if (move == BARRA)
+               if (move == BARRA){
                   move = NONE;
-               else
+                  cout << "1er Grado de Libertad, BARRA DESACTIVADA" << endl;
+               }
+               else{
                   move = BARRA;
+                  cout << "1er Grado de Libertad, BARRA ACTIVADA" << endl;
+               }
             }
          }
-         
-         else cout << "Letra incorrecta" << endl;
          break;
 
       // LUZ 2 o 2º Grado Libertad//
@@ -541,26 +545,32 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             else cout << "Letra incorrecta" << endl;
          }
 
-         else if (modoMenu != VISUALIZACION){
+         else{
             if (manual){
-               if (move == ASIENTO)
+               if (move == ASIENTO){
                   move = NONE;
-               else
+                  cout << "2º Grado de Libertad, ASIENTO DESACTIVADO" << endl;
+               }
+               else{
                   move = ASIENTO;
+                  cout << "2º Grado de Libertad, ASIENTO ACTIVADO" << endl;
+               }
             }
          }
-         
-         else cout << "Letra incorrecta" << endl;
          break;
 
       // 3er Grado Libertad //
       case '3':
          if (modoMenu != VISUALIZACION){
             if (manual){
-               if (move == ATRACCION)
+               if (move == ATRACCION){
                   move = NONE;
-               else
+                  cout << "3er Grado de Libertad, ATRACCION DESACTIVADA" << endl;
+               }
+               else{
                   move = ATRACCION;
+                  cout << "3er Grado de Libertad, ATRACCION ACTIVADA" << endl;
+               }
             }
          }
 
@@ -572,17 +582,24 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       case '+':
          if (modoMenu != VISUALIZACION){
             if (animacion){
-               velAnimacion += 0.1;
+               if (velAnimacion <= 2.0) velAnimacion += 0.1;
                cout << "VELOCIDAD DE ANIMACIÓN: " << velAnimacion << endl;
+               modelo->animar(velAnimacion);
             }
 
             if (manual){
-               if (move == BARRA)
-                  velBarra += 0.1;
-               else if (move == ASIENTO)
-                  velAsiento += 0.1;
-               else if (move == ATRACCION)
-                  velAtraccion += 0.1;
+               if (move == BARRA){
+                  if (velBarra <= 0.0) velBarra += 0.1;
+                  cout << "TRASLACIÓN DE LA BARRA: " << velBarra << endl;
+               }
+               else if (move == ASIENTO){
+                  velAsiento = ((int)(velAsiento + 1) % 360);
+                  cout << "ROTACIÓN DE LA ASIENTO: " << velAsiento << endl;
+               }
+               else if (move == ATRACCION){
+                  velAtraccion = ((int)(velAtraccion + 1) % 360);
+                  cout << "ROTACIÓN DE LA ATRACCIÓN: " << velAtraccion << endl;
+               }
                else
                   cout << "Ningún grado de libertad elegido" << endl;
 
@@ -596,19 +613,23 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       case '-':
          if (modoMenu != VISUALIZACION){
             if (animacion){
-               if (velAnimacion > 0.1) velAnimacion -= 0.1;
+               if (velAnimacion >= 0.2) velAnimacion -= 0.1;
                cout << "VELOCIDAD DE ANIMACIÓN: " << velAnimacion << endl;
+               modelo->animar(velAnimacion);
             }
 
             if (manual){
                if (move == BARRA){
-                  if (velBarra >= 0.1) velBarra -= 0.1;
+                  if (velBarra > -20) velBarra -= 0.1;
+                  cout << "TRASLACIÓN DE LA BARRA: " << velBarra << endl;
                }
                else if (move == ASIENTO){
-                  if (velAsiento >= 0.1) velAsiento -= 0.1;
+                  velAsiento = ((int)(velAsiento - 1) % 360);
+                  cout << "ROTACIÓN DE LA ASIENTO: " << velAsiento << endl;
                }
                else if (move == ATRACCION){
-                  if (velAtraccion >= 0.1) velAtraccion -= 0.1;
+                  velAtraccion = ((int)(velAtraccion - 1) % 360);
+                  cout << "ROTACIÓN DE LA ATRACCIÓN: " << velAtraccion << endl;
                }
                else
                   cout << "Ningún grado de libertad elegido" << endl;

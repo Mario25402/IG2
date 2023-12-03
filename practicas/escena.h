@@ -17,7 +17,7 @@
 typedef enum {NADA, VISUALIZACION} menu;
 typedef enum {JERARQUICO, NINGUNO} objeto;
 //typedef enum {PLY1, PLY2, PLY3, NONE} objPly;
-typedef enum {BARRA, ASIENTO, ATRACCION, NONE} movimeinto;
+typedef enum {BARRA, ASIENTO, ATRACCION, NONE} movimiento;
 
 class Escena
 {
@@ -46,7 +46,7 @@ private:
     menu modoMenu = NADA;
     objeto obj = JERARQUICO;
     //objPly objPlySel = NONE;
-    movimeinto move = NONE;
+    movimiento move = NONE;
 
     /////
 
@@ -99,18 +99,13 @@ private:
 
     // Variables de moviemiento de la animación
     bool animacion = false;
-    bool manual = true;
+    bool manual = false;
 
-        // Automático
-    bool turnoBarra = true;
-    bool turnoAsiento = false;
-    bool turnoAtraccion = false;
-
-        // Manual
+    // Movimiento
     float velAnimacion = 1.0f;
-    float velBarra = 1.0f;
-    float velAsiento = 1.0f;
-    float velAtraccion = 1.0f;
+    float velBarra = 0.0f;
+    float velAsiento = 0.0f;
+    float velAtraccion = 0.0f;
 
     /////
 

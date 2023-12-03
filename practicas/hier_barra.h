@@ -5,12 +5,12 @@ class Barra{
         Cilindro *cilindro;
         BarraSuperior *barraSuperior;
 
-        float rotacion;
-        bool bajando;
+        //float rotacion;
+        //bool bajando;
     
     public:
         Barra();
 
         void draw(bool puntos, bool alambre, bool solido);
-        void animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion);
+        //void animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion);
 };

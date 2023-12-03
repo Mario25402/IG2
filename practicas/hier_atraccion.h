@@ -7,11 +7,11 @@ class Atraccion{
         AsientoGiratorio *asientoGiratorio;
 
         float rotacion;
-        int vueltas;
 
     public:
         Atraccion();
 
+        void animar(float velAnimacion);
         void draw(bool puntos, bool alambre, bool solido);
-        void animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion);
+        void setVelocidad(float despBarra, float rotAsiento);
 };

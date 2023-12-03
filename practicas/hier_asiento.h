@@ -12,6 +12,7 @@ class Asiento{
     public:
         Asiento();
 
+        void animar(float velAnimacion);
+        void setVelocidad(float despBarra);
         void draw(bool puntos, bool alambre, bool solido);
-        void animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion);
 };

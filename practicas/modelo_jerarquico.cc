@@ -24,13 +24,15 @@ void ModeloJerarquico::draw(bool puntos, bool alambre, bool solido){
 
 }
 
-void ModeloJerarquico::animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion){        
-    atraccion->animar(turnoBarra, turnoAsiento, turnoAtraccion);
+void ModeloJerarquico::animar(float velAnimacion){        
+    atraccion->animar(velAnimacion);
 
-    if (turnoAtraccion)
-        rotacion += 5 % 360;
+    rotacion += 5 * velAnimacion;
+    rotacion = (int)rotacion % 360;
 }
 
-void ModeloJerarquico::setVelocidad(float velBarra, float velAsiento, float velAtraccion){
-    //atraccion->setVelocidad(velBarra, velAsiento, velAtraccion);
+void ModeloJerarquico::setVelocidad(float despBarra, float rotAsiento, float rotAtraccion){
+    rotacion = rotAtraccion;
+
+    atraccion->setVelocidad(despBarra, rotAsiento);
 }
