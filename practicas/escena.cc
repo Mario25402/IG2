@@ -45,10 +45,10 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 void Escena::init_objetos()
 {
-   /*cubo = new Cubo(50);
-   piramide = new PiramidePentagonal(50,50);
-   cilindro = new Cilindro(4, 20, 100, 50);
+   cubo = new Cubo(50);
    esfera = new Esfera(20, 20, 50);
+   /*piramide = new PiramidePentagonal(50,50);
+   cilindro = new Cilindro(4, 20, 100, 50);
    cono = new Cono(3, 20, 100, 50);
 
    ply1 = new ObjRevolucion("../plys_ejemplo/copa.ply", 20);
@@ -108,13 +108,13 @@ void Escena::draw_objects()
 {
    // Si algún modo esta activo, dibujar el objeto correspondiente
    if (puntos or alambre or solido){
-      /*if (obj == CUBO){
+      if (obj == CUBO){
          cubo->setMaterial(matBlanco);
          cubo->draw(puntos, false, false);
          cubo->draw(false, alambre, false);
          cubo->draw(false, false, solido);
       }
-         
+      /*   
       else if (obj == PIRAMIDE){
          piramide->setMaterial(matBlanco);
          piramide->draw(puntos, false, false);
@@ -163,14 +163,14 @@ void Escena::draw_objects()
          cilindro->draw(false, alambre, false);
          cilindro->draw(false, false, solido);
       }
-
+      */
       else if (obj == ESFERA){
          esfera->setMaterial(matBlanco);
          esfera->draw(puntos, false, false);
          esfera->draw(false, alambre, false);
          esfera->draw(false, false, solido);
       }
-
+      /*
       else if (obj == CONO){
          cono->setMaterial(matBlanco);
          cono->draw(puntos, false, false);
@@ -240,7 +240,7 @@ void Escena::draw_objects()
          glPopMatrix();
       }*/
 
-      if (obj == JERARQUICO){
+      else if (obj == JERARQUICO){
          glMatrixMode(GL_MODELVIEW);
          glPushMatrix();
             glScalef(1, 0.5, 0.5);
@@ -328,21 +328,22 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // MANUAL //
       case 'M':
          if (modoMenu != VISUALIZACION){
-            if (!manual){
-               manual = true;
-               
-               if (animacion){
-                  animacion = false;
-                  cout << "ANIMACIÓN DESACTIVADA" << endl;
+            if (obj == JERARQUICO){
+               if (!manual){
+                  manual = true;
+                  
+                  if (animacion){
+                     animacion = false;
+                     cout << "ANIMACIÓN DESACTIVADA" << endl;
+                  }
+
+                  cout << "MODO MANUAL ACTIVADO (OPCIONES: 1, 2, 3, Q)" << endl;
                }
-
-               cout << "MODO MANUAL ACTIVADO (OPCIONES: 1, 2, 3, Q)" << endl;
+               else cout << "MODO MANUAL YA ACTIVADO" << endl;
             }
-            else cout << "MODO MANUAL YA ACTIVADO" << endl;
+            else cout << "Letra incorrecta" << endl;
          }
-
-         else
-            cout << "Letra incorrecta" << endl;
+         else cout << "Letra incorrecta" << endl;
          break;
 
       /////////////////
@@ -579,6 +580,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       /////////////////
 
+      // AUMENTAR //
       case '+':
          if (modoMenu != VISUALIZACION){
             if (animacion){
@@ -610,6 +612,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          else cout << "Letra incorrecta" << endl;
          break;
 
+      // DISMINUIR //
       case '-':
          if (modoMenu != VISUALIZACION){
             if (animacion){
@@ -638,6 +641,56 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             }
          }
 
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      /////////////////
+
+      // CUBO //
+      case 'C':
+         if (modoMenu == OBJETO){
+            if (obj == CUBO){
+               obj = NINGUNO;
+               cout << "OBJETO: CUBO DESACTIVADO" << endl;
+            }
+            else{
+               obj = CUBO;
+               cout << "OBJETO: CUBO ACTIVADO" << endl;
+            }
+         }
+
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // ESFERA //
+      case 'E':
+         if (modoMenu == OBJETO){
+            if (obj == ESFERA){
+               obj = NINGUNO;
+               cout << "OBJETO: ESFERA DESACTIVADA" << endl;
+            }
+            else{
+               obj = ESFERA;
+               cout << "OBJETO: ESFERA ACTIVADA" << endl;
+            }
+         }
+         
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // JERARQUICO //
+      case 'J':
+         if (modoMenu == OBJETO){
+            if (obj == JERARQUICO){
+               obj = NINGUNO;
+               cout << "OBJETO: MODELO JERARQUICO DESACTIVADO" << endl;
+            }
+            else{
+               obj = JERARQUICO;
+               cout << "OBJETO: MODELO JERARQUICO ACTIVADO" << endl;
+            }
+         }
+         
          else cout << "Letra incorrecta" << endl;
          break;
    }

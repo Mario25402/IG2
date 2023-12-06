@@ -12,6 +12,7 @@
 
 #include "auxiliar.h"
 #include "material.h"
+#include "textura.h"
 
 // *****************************************************************************
 //
@@ -36,6 +37,7 @@ protected:
    std::vector<Tupla3i> f;  // una terna de 3 enteros por cada cara o triángulo
    std::vector<Tupla3f> c;  // tabla de colores
    std::vector<Tupla3f> nv; // tabla de normales de vértices
+   std::vector<Tupla2f> ct; // tabla de coordenadas de textura
 
 private:
    GLuint id_vbo_ver = 0;  // variables que controlan
@@ -45,6 +47,8 @@ private:
    bool oldPuntos = false;    // variables que controlan que no
    bool oldAlambre = false;   // se rellenen de nuevo 
    bool oldSolido = false;    // los colores innecesariamente
+
+   Textura *textura = nullptr;
 
    // función que crea un VBO
    GLuint CrearVBO(GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);

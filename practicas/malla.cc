@@ -11,6 +11,18 @@
 
 void Malla3D::draw(bool puntos, bool alambre, bool solido)
 {
+   // Texturas //
+   
+   if (textura != nullptr){
+      ct.resize(v.size());
+      for (int i = 0; i < ct.size(); i++)
+         ct[i] = Tupla2f(v[i][0], v[i][1] - v.front()[1] / (v.back()[1] - v.front()[1]));
+
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
+      textura->activar();
+   }
+
    // Modo de visualización //
 
    setColor(puntos, alambre, solido);

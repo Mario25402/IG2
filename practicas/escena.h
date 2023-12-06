@@ -14,8 +14,8 @@
 #include "luzDireccional.h"
 #include "modelo_jerarquico.h"
 
-typedef enum {NADA, VISUALIZACION} menu;
-typedef enum {JERARQUICO, NINGUNO} objeto;
+typedef enum {NADA, OBJETO, VISUALIZACION} menu;
+typedef enum {JERARQUICO, ESFERA, CUBO, NINGUNO} objeto;
 //typedef enum {PLY1, PLY2, PLY3, NONE} objPly;
 typedef enum {BARRA, ASIENTO, ATRACCION, NONE} movimiento;
 
@@ -44,7 +44,7 @@ private:
 
     // Selección de opciones
     menu modoMenu = NADA;
-    objeto obj = JERARQUICO;
+    objeto obj = NINGUNO;
     //objPly objPlySel = NONE;
     movimiento move = NONE;
 
@@ -52,11 +52,11 @@ private:
 
     // Objetos de la escena, importante inicializarlos a nullptr
     Ejes ejes;
-    /*Cubo *cubo = nullptr;
-    PiramidePentagonal *piramide = nullptr;
-
-    Cilindro *cilindro = nullptr;
+    Cubo *cubo = nullptr;
     Esfera *esfera = nullptr;
+
+    /*PiramidePentagonal *piramide = nullptr;
+    Cilindro *cilindro = nullptr;
     Cono *cono = nullptr;    
 
     ObjRevolucion *ply1 = nullptr;
