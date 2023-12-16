@@ -19,13 +19,18 @@ class ObjRevolucion : public Malla3D
 {
    public:
     ObjRevolucion();
-    ObjRevolucion(const std::string & archivo, int num_instancias) ;
-    ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias) ;
+    ObjRevolucion(const std::string & archivo, int num_instancias, bool textura = false) ;
+    ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool textura = false) ;
 
     float centrar();
+
 protected:
     std::vector<Tupla3f> perfil;
-    void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias);
+    void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool textura = false);
+    void calcularTexturas(float M, float N);
+
+private:
+    std::vector<float> d;
 } ;
 
 

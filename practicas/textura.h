@@ -9,17 +9,19 @@ using namespace std;
 
 class Textura{
     private:
-        GLuint textura_id;
+        bool cargada;
         int width, height;
-
-        jpg::Imagen *pimg;
         unsigned char *data;
+
+        GLuint textura_id;
+        jpg::Imagen *pimg;
 
     public:
         Textura(string archivo);
 
         void activar();
         void desactivar();
+        void setId(int id);
 };
 
 #endif

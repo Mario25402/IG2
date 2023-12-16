@@ -11,21 +11,32 @@
 
 void Malla3D::draw(bool puntos, bool alambre, bool solido)
 {
-   // Texturas //
-   
-   if (textura != nullptr){
-      ct.resize(v.size());
-      for (int i = 0; i < ct.size(); i++)
-         ct[i] = Tupla2f(v[i][0], v[i][1] - v.front()[1] / (v.back()[1] - v.front()[1]));
-
-      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-      glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
-      textura->activar();
-   }
-
    // Modo de visualización //
 
    setColor(puntos, alambre, solido);
+
+   // Texturas //
+
+   if (textura != nullptr){
+      if (id_vbo_t == 0){
+         id_vbo_t = CrearVBO(GL_ARRAY_BUFFER, 2 * ct.size() * sizeof(float), ct.data());
+         textura->setId(id_vbo_t);
+      }
+
+      if (id_vbo_t != 0){
+         // activar buffer: VBO de texturas
+         glBindTexture ( GL_ARRAY_BUFFER , id_vbo_t );
+         // usar como buffer de texturas el actualmente activo
+         glTexCoordPointer(2, GL_FLOAT, 0, ct.data());
+         // deactivar buffer: VBO de texturas.
+         glBindBuffer ( GL_ARRAY_BUFFER , 0 );
+         // habilitar el uso de tabla de texturas
+         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+         textura->activar();
+      }
+   }
+   else ct.resize(0);
 
    // Colores //
 
@@ -119,7 +130,7 @@ void Malla3D::setColor(bool puntos, bool alambre, bool solido)
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
       for (int i = 0; i < v.size(); i++)
-         c[i] = Tupla3f(0.0f, 0.5f, 0.5f);
+         c[i] = Tupla3f(1, 1, 1); //c[i] = Tupla3f(0.0f, 0.5f, 0.5f);
 
       id_vbo_c = 0;
    }
@@ -160,7 +171,14 @@ void Malla3D::calcularNormales()
 
 // ************************************************************************* //
 
-void Malla3D::setMaterial(Material *mat)
+void Malla3D::setMaterial(Material *mat){ mat->aplicar();}
+
+// ************************************************************************* //
+
+void Malla3D::setTextura(string archivo)
 {
-   mat->aplicar();
+   if (textura != nullptr)
+      delete textura;
+
+   textura = new Textura(archivo);
 }

@@ -55,15 +55,6 @@ private:
     Cubo *cubo = nullptr;
     Esfera *esfera = nullptr;
 
-    /*PiramidePentagonal *piramide = nullptr;
-    Cilindro *cilindro = nullptr;
-    Cono *cono = nullptr;    
-
-    ObjRevolucion *ply1 = nullptr;
-    ObjPLY *ply2 = nullptr;
-    ObjPLY *ply3 = nullptr;
-    ObjRevolucion *rev = nullptr;*/
-
     ModeloJerarquico *modelo = nullptr;
 
     // Objetos de iluminación
@@ -97,6 +88,10 @@ private:
     bool luz1 = false;
     bool luz2 = false;
 
+    // Variables de poscion de la luz 1
+    float angulo = 0;
+    float x, y, z;
+
     // Variables de moviemiento de la animación
     bool animacion = false;
     bool manual = false;
@@ -128,6 +123,7 @@ public:
 
     // Animación
     void animarModeloJerarquico();
+    void animarLuzPosicional();
 
     // Interacción con la escena
     bool teclaPulsada(unsigned char Tecla1, int x, int y);

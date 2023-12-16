@@ -32,6 +32,9 @@ public:
    // función que calcula las normales del objeto
    void calcularNormales();
 
+   // función que fija la textura del objeto
+   void setTextura(string archivo);
+
 protected:
    std::vector<Tupla3f> v;  // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f;  // una terna de 3 enteros por cada cara o triángulo
@@ -39,16 +42,18 @@ protected:
    std::vector<Tupla3f> nv; // tabla de normales de vértices
    std::vector<Tupla2f> ct; // tabla de coordenadas de textura
 
+   Textura *textura = nullptr;
+
 private:
    GLuint id_vbo_ver = 0;  // variables que controlan
    GLuint id_vbo_tri = 0;  // si un VBO ha sido creado
    GLuint id_vbo_c   = 0;  // o no, además de identificarlo
+   GLuint id_vbo_t   = 0;
 
    bool oldPuntos = false;    // variables que controlan que no
    bool oldAlambre = false;   // se rellenen de nuevo 
    bool oldSolido = false;    // los colores innecesariamente
-
-   Textura *textura = nullptr;
+   bool tx_done = false;
 
    // función que crea un VBO
    GLuint CrearVBO(GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);

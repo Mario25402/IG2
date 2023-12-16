@@ -10,7 +10,8 @@ Esfera::Esfera (int num_vert_perfil, int num_instancias_perf, float r){
         perfil[i] = Tupla3f(radio * cos(2*M_PI*i / (num_vert_perfil-1)), radio * sin(2*M_PI*i / (num_vert_perfil-1)), 0);
     }
 
-    crearMalla(perfil, num_instancias_perf);
+    textura = new Textura("../texturas/text-mundo.jpg");
+    crearMalla(perfil, num_instancias_perf, true);
     calcularNormales();
 }
 

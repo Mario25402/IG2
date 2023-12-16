@@ -8,3 +8,7 @@ LuzPosicional::LuzPosicional(Tupla3f direccion, GLenum idLuz, Tupla4f colorAmbie
     this->colorEspecular = colorEspecular;
     this->posicion = Tupla4f(direccion[0], direccion[1], direccion[2], 1);
 }
+
+void LuzPosicional::setPosicion(Tupla3f direccion){
+    this->posicion = Tupla4f(direccion[0], direccion[1], direccion[2], 1);
+}

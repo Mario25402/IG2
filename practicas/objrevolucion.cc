@@ -16,7 +16,7 @@
 
 ObjRevolucion::ObjRevolucion() {}
 
-ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias)
+ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bool textura)
 {
    // leer datos del archivo PLY
    ply::read_vertices(archivo, v);
@@ -89,7 +89,7 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias)
 // *****************************************************************************
 // objeto de revolución obtenido a partir de un perfil (en un vector de puntos)
 
-ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias) 
+ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool textura) 
 {
    // rellenar el vector de vertices
    for (int i = 0; i < archivo.size(); i++)
@@ -161,7 +161,7 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias)
 // *****************************************************************************
 // crea la malla de revolución dado un perfil
 
-void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias) 
+void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool textura) 
 {
    int N = num_instancias;
    int M = perfil_original.size();
@@ -171,7 +171,9 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
       for (int j = 0; j < M; j++){
          float x = perfil_original[j][0] * cos(2.0f*M_PI*i/N) + 
                    perfil_original[j][2] * sin(2.0f*M_PI*i/N);
+
          float y = perfil_original[j][1];
+
          float z = perfil_original[j][0] * (-1 * sin(2.0f*M_PI*i/N)) + 
                    perfil_original[j][2] * cos(2.0f*M_PI*i/N);
 
@@ -181,6 +183,7 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
 
    c.resize(v.size());
    f.clear();
+
    for (int i = 0; i < N; i++){
       for (int j = 0; j < M-1; j++){
          int a = M * i + j;
@@ -190,7 +193,31 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
          f.push_back(Tupla3i(a,b+1,a+1)); //f.push_back(Tupla3i(a, a+1, b+1));
       }
    }
+
+   if (textura){
+      for (int i = 0; i < M; i++)
+         v.push_back(perfil_original[i]);
+
+      d.push_back(0);
+
+      // d[j+1] = d[j] + |p[j+1] - p[j]| -> sqrt((x2 - x1)² + (y2 - y1)² + (z2 - z1)²)
+      for (int j = 1; j < M; j++){
+         float dst = (abs(sqrt(pow(v[j][0] - v[j-1][0], 2) + 
+                               pow(v[j][1] - v[j-1][1], 2) + 
+                               pow(v[j][2] - v[j-1][2], 2))));
+
+         d.push_back(d[j-1] + dst);
+      }
+
+      calcularTexturas(perfil_original.size(), num_instancias + 1);
+   }
 }
+
+/*// Duplicar primer perfil
+         if (textura){
+            if (i+1 == N)
+               v.push_back(v[0]);
+         }*/
 
 // *****************************************************************************
 
@@ -204,4 +231,22 @@ float ObjRevolucion::centrar()
    }
 
    return min;
+}
+
+// *****************************************************************************
+
+void ObjRevolucion::calcularTexturas(float M, float N)
+{
+   // M = vertices por repeticion
+   // N = numero de repeticiones
+
+   // V(i,j) = T(Si, Tj) [0,1]
+   for (float i = 0; i < M; i++){
+      for (float j = 0; j < N; j++){
+         float s = i/(N-1);
+         float t = d[j]/d[M-1];
+
+         ct.push_back(Tupla2f(s,t));
+      }
+   }
 }

@@ -6,7 +6,6 @@ Cubo::Cubo(float lado)
 {
    // inicializar la tabla de vértices
    v.resize(8);
-   c.resize(v.size());
 
    // Vertices inferiores
    v[0] = Tupla3f(-lado/2.0f, 0, lado/2.0f);
@@ -49,6 +48,33 @@ Cubo::Cubo(float lado)
    // Superior
    f[10] = Tupla3i(4,5,6);
    f[11] = Tupla3i(4,6,7);
+
+   /********************************************/
+
+   c.resize(v.size());
+   c[0] = Tupla3f(1,1,1);
+   c[1] = Tupla3f(1,1,1);
+   c[2] = Tupla3f(1,1,1);
+   c[3] = Tupla3f(1,1,1);
+
+   c[4] = Tupla3f(1,1,1);
+   c[5] = Tupla3f(1,1,1);
+   c[6] = Tupla3f(1,1,1);
+   c[7] = Tupla3f(1,1,1);
+
+   /********************************************/
+
+   // Hacer inversion horizontal de coordenadas
+   ct.resize(v.size());
+   ct[0] = Tupla2f(0,1);
+   ct[1] = Tupla2f(1,1);
+   ct[2] = Tupla2f(0,1);
+   ct[3] = Tupla2f(1,1);
+
+   ct[4] = Tupla2f(0,0);
+   ct[5] = Tupla2f(1,0);
+   ct[6] = Tupla2f(0,0);
+   ct[7] = Tupla2f(1,0);
 
    /********************************************/
 

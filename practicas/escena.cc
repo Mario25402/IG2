@@ -47,15 +47,10 @@ void Escena::init_objetos()
 {
    cubo = new Cubo(50);
    esfera = new Esfera(20, 20, 50);
-   /*piramide = new PiramidePentagonal(50,50);
-   cilindro = new Cilindro(4, 20, 100, 50);
-   cono = new Cono(3, 20, 100, 50);
-
-   ply1 = new ObjRevolucion("../plys_ejemplo/copa.ply", 20);
-   ply2 = new ObjPLY("../plys_ejemplo/big_dodge.ply");
-   ply3 = new ObjPLY("../plys_ejemplo/beethoven.ply");*/
-
    modelo = new ModeloJerarquico();
+
+   cubo->setTextura("../texturas/text-mundo.jpg");
+   esfera->setTextura("../texturas/text-mundo.jpg");
 }
 
 void Escena::init_luces()
@@ -63,7 +58,11 @@ void Escena::init_luces()
    angulo_alfa = 0;
    angulo_beta = 0;
 
-   luzPos = new LuzPosicional({0,50,0}, GL_LIGHT1, {0.0,0.0,1,1}, {0,0,1,1}, {0,0,1,1});
+   x = 0;
+   y = 0;
+   z = 0;
+
+   luzPos = new LuzPosicional({x,y,z}, GL_LIGHT1, {0.0,0.0,1,1}, {0,0,1,1}, {0,0,1,1});
    luzDir = new LuzDireccional({angulo_alfa,angulo_beta}, GL_LIGHT2, {0.2,0.2,0.2,1}, {0.4,0.4,0.4,1}, {0.4,0.4,0.4,1});
 }
 
@@ -109,136 +108,22 @@ void Escena::draw_objects()
    // Si algún modo esta activo, dibujar el objeto correspondiente
    if (puntos or alambre or solido){
       if (obj == CUBO){
-         cubo->setMaterial(matBlanco);
+         glMatrixMode(GL_MODELVIEW);
+         glPushMatrix();
+         glScalef(3, 2, 0);
+
          cubo->draw(puntos, false, false);
          cubo->draw(false, alambre, false);
          cubo->draw(false, false, solido);
-      }
-      /*   
-      else if (obj == PIRAMIDE){
-         piramide->setMaterial(matBlanco);
-         piramide->draw(puntos, false, false);
-         piramide->draw(false, alambre, false);
-         piramide->draw(false, false, solido);
+         glPopMatrix();
       }
 
-      else if (obj == PLY){
-         glMatrixMode(GL_MODELVIEW);
-         glPushMatrix();
-
-         if (objPlySel == PLY1){
-            glTranslatef(0, -15 * ply1->centrar(), 0);
-            glScalef(15, 15, 15);
-
-            ply1->setMaterial(matBlanco);
-            ply1->draw(puntos, false, false);
-            ply1->draw(false, alambre, false);
-            ply1->draw(false, false, solido);
-         }
-
-         else if (objPlySel == PLY2){
-            glTranslatef(0, -10 * ply2->centrar(), 0);
-            glScalef(10, 10, 10);
-
-            ply1->setMaterial(matBlanco);
-            ply2->draw(puntos, false, false);
-            ply2->draw(false, alambre, false);
-            ply2->draw(false, false, solido);
-         }
-
-         else if (objPlySel == PLY3){
-            glTranslatef(0, -10 * ply3->centrar(), 0);
-            glScalef(10, 10, 10);
-
-            ply3->setMaterial(matBlanco);
-            ply3->draw(puntos, false, false);
-            ply3->draw(false, alambre, false);
-            ply3->draw(false, false, solido);
-         }
-      }
-
-      else if (obj == CILINDRO){
-         cilindro->setMaterial(bronce);
-         cilindro->draw(puntos, false, false);
-         cilindro->draw(false, alambre, false);
-         cilindro->draw(false, false, solido);
-      }
-      */
       else if (obj == ESFERA){
          esfera->setMaterial(matBlanco);
          esfera->draw(puntos, false, false);
          esfera->draw(false, alambre, false);
          esfera->draw(false, false, solido);
       }
-      /*
-      else if (obj == CONO){
-         cono->setMaterial(matBlanco);
-         cono->draw(puntos, false, false);
-         cono->draw(false, alambre, false);
-         cono->draw(false, false, solido);
-      }
-
-      else if (obj == MULTIPLE){
-         // Cilindro
-         glMatrixMode(GL_MODELVIEW);
-         glPushMatrix();
-
-         glTranslatef(0, 0, -75);
-         cilindro->setMaterial(bronce);
-         cilindro->draw(puntos, false, false);
-         cilindro->draw(false, alambre, false);
-         cilindro->draw(false, false, solido);
-
-         glPopMatrix();
-
-         // Cono
-         glMatrixMode(GL_MODELVIEW);
-         glPushMatrix();
-
-         glTranslatef(-75, 0, 75);
-         cono->setMaterial(oro);
-         cono->draw(puntos, false, false);
-         cono->draw(false, alambre, false);
-         cono->draw(false, false, solido);
-
-         glPopMatrix();
-
-         // Esfera
-         glMatrixMode(GL_MODELVIEW);
-         glPushMatrix();
-
-         glTranslatef(75, esfera->getRadio() , 75); 
-         esfera->setMaterial(perla);
-         esfera->draw(puntos, false, false);
-         esfera->draw(false, alambre, false);
-         esfera->draw(false, false, solido);
-
-         glPopMatrix();
-      }
-
-      else if (obj == VECTOR){
-         glMatrixMode(GL_MODELVIEW);
-         glPushMatrix();
-
-         glTranslatef(-75, -50 * rev->centrar(), 0);
-         glScalef(50, 50, 50);
-         rev->setMaterial(matBlanco);
-         rev->draw(puntos, false, false);
-         rev->draw(false, alambre, false);
-         rev->draw(false, false, solido);
-
-         glPopMatrix();
-         glPushMatrix();
-
-         glTranslatef(75, -50 * rev->centrar(), 0);
-         glScalef(50, 50, 50);
-         rev->setMaterial(matNegro);
-         rev->draw(puntos, false, false);
-         rev->draw(false, alambre, false);
-         rev->draw(false, false, solido);
-
-         glPopMatrix();
-      }*/
 
       else if (obj == JERARQUICO){
          glMatrixMode(GL_MODELVIEW);
@@ -257,11 +142,31 @@ void Escena::animarModeloJerarquico()
       modelo->animar(velAnimacion);
 }
 
+void Escena::animarLuzPosicional()
+{
+   if (animacion){
+      if (iluminado and luz1){
+         x = 50 * cos(angulo);
+         z = 50 * sin(angulo);
+
+         luzPos->setPosicion(Tupla3f(x, 50, z));
+
+         angulo++;
+
+         if (angulo >= 2*M_PI)
+            angulo -= 2*M_PI;
+      }
+   }
+}
+
 // Dibujado de luces
 void Escena::draw_lights()
 {
    if (iluminado){
       glEnable(GL_LIGHTING);
+
+      cubo->setMaterial(matBlanco);
+      esfera->setMaterial(matBlanco);
 
       if (luz1) luzPos->activar();
       else luzPos->desactivar();
@@ -312,7 +217,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // SALIR //
       case 'Q':
          if (modoMenu != NADA){
-            cout << "\nSELECCIÓN DE MENÚ (OPCIONES: V, M, A, Q)" << endl;
+            cout << "\nSELECCIÓN DE MENÚ (OPCIONES: V, M, A, O, Q)" << endl;
             modoMenu = NADA;
          }         
          else{
@@ -438,7 +343,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
             //modelo->setVelocidad(0, 0, 0);
             modelo->animar(velAnimacion);
-            
+                        
             if (animacion)
                cout << "ANIMACIÓN ACTIVADA" << endl;
             else
@@ -645,6 +550,15 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break;
 
       /////////////////
+
+      // OBJETO //
+      case 'O':
+         if (modoMenu == NADA){
+            cout << "\nSELECCIÓN DE OBJETO (OPCIONES: C, E, J, Q)" << endl;
+            modoMenu = OBJETO;
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
 
       // CUBO //
       case 'C':
