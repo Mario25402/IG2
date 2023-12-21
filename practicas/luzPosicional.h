@@ -6,10 +6,13 @@
 
 class LuzPosicional : public Luz
 {
-public:
-    LuzPosicional(Tupla3f direccion, GLenum idLuz, Tupla4f colorAmbiente, Tupla4f colorDifuso, Tupla4f colorEspecular);
+private:
+    float angulo;
     
-    void setPosicion(Tupla3f direccion);
+public:
+    LuzPosicional(Tupla3f posicion, GLenum idLuz, Tupla4f colorAmbiente, Tupla4f colorDifuso, Tupla4f colorEspecular);
+    
+    void animarPosicion();
 };
 
 #endif

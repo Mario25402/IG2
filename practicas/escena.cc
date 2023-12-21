@@ -26,6 +26,29 @@ Escena::Escena()
 }
 
 //**************************************************************************
+// funciones de animacion de cualquier tipo
+//**************************************************************************
+
+void Escena::animarModeloJerarquico()
+{
+   if (animacion)
+      modelo->animar(velAnimacion);
+}
+
+void Escena::animarLuzPosicional()
+{
+   if (animacion and iluminado and luz1){
+      luzPos->animarPosicion();
+   }
+}
+
+void Escena::animarLuzDireccional(){
+   if (animacion and iluminado and luz2){
+      luzDir->animarColores();
+   }
+}
+
+//**************************************************************************
 // inicialización de la escena (se ejecuta cuando ya se ha creado la ventana, por
 // tanto sí puede ejecutar ordenes de OpenGL)
 // Principalmemnte, inicializa OpenGL y la transf. de vista y proyección
@@ -45,12 +68,12 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 void Escena::init_objetos()
 {
-   cubo = new Cubo(50);
+   cuadro = new Cuadro(100);
    esfera = new Esfera(20, 20, 50);
    modelo = new ModeloJerarquico();
 
-   cubo->setTextura("../texturas/text-mundo.jpg");
-   esfera->setTextura("../texturas/text-mundo.jpg");
+   cuadro->setTextura("../texturas/text-mundo.jpg");
+   //esfera->setTextura("../texturas/text-mundo.jpg");
 }
 
 void Escena::init_luces()
@@ -58,22 +81,13 @@ void Escena::init_luces()
    angulo_alfa = 0;
    angulo_beta = 0;
 
-   x = 0;
-   y = 0;
-   z = 0;
-
-   luzPos = new LuzPosicional({x,y,z}, GL_LIGHT1, {0.0,0.0,1,1}, {0,0,1,1}, {0,0,1,1});
-   luzDir = new LuzDireccional({angulo_alfa,angulo_beta}, GL_LIGHT2, {0.2,0.2,0.2,1}, {0.4,0.4,0.4,1}, {0.4,0.4,0.4,1});
+   luzPos = new LuzPosicional({100,0,0}, GL_LIGHT1, {0.0,0.0,1,1}, {0,0,1,1}, {0,0,1,1});
+   luzDir = new LuzDireccional({angulo_alfa,angulo_beta}, GL_LIGHT2, colorAmbiente, colorDifuso, colorEspecular);
 }
 
 void Escena::init_materiales()
 {
-   bronce = new Material({0.2125,0.1275,0.054,1}, {0.714,0.4284,0.18144,1}, {0.393548,0.271906,0.166721,1}, 25.6);
-   oro = new Material({0.329412,0.223529,0.027451,1}, {0.780392,0.568627,0.113725,1}, {0.992157,0.941176,0.807843,1}, 27.8974);
-   perla = new Material({0.25,0.20725,0.20725,0.922}, {1,0.829,0.829,0.922}, {0.296648,0.296648,0.296648,0.922}, 11.264);
-
    matBlanco = new Material({0.2,0.2,0.2,1}, {0.9,0.9,0.9,1}, {0,0,0,0}, 10);
-   matNegro = new Material({0.2,0.2,0.2,1}, {0.2,0.2,0.2,1}, {0.9,0.9,0.9,0.9}, 90);
 }
 
 // **************************************************************************
@@ -88,9 +102,12 @@ void Escena::dibujar()
    /**************************************************************************/
    // EVALUACIÓN DE VARIABLES
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-   glEnable(GL_CULL_FACE);                               // Ocultar elementos no visiles
    glShadeModel(GL_SMOOTH);                              // Sombreado suave
    glEnable(GL_NORMALIZE);                               // Normalizar normales
+
+   // Ocultar elementos no visiles
+   if (obj == CUADRO) glDisable(GL_CULL_FACE);  // El cuadro al ser una superficie plana, si
+   else glEnable(GL_CULL_FACE);                 // no se desactiva solo se vería una cara frontal
 
    /**************************************************************************/
    // ESCENA
@@ -107,14 +124,13 @@ void Escena::draw_objects()
 {
    // Si algún modo esta activo, dibujar el objeto correspondiente
    if (puntos or alambre or solido){
-      if (obj == CUBO){
+      if (obj == CUADRO){
          glMatrixMode(GL_MODELVIEW);
          glPushMatrix();
-         glScalef(3, 2, 0);
-
-         cubo->draw(puntos, false, false);
-         cubo->draw(false, alambre, false);
-         cubo->draw(false, false, solido);
+         cuadro->setMaterial(matBlanco);
+         cuadro->draw(puntos, false, false);
+         cuadro->draw(false, alambre, false);
+         cuadro->draw(false, false, solido);
          glPopMatrix();
       }
 
@@ -129,32 +145,8 @@ void Escena::draw_objects()
          glMatrixMode(GL_MODELVIEW);
          glPushMatrix();
             glScalef(1, 0.5, 0.5);
-
             modelo->draw(puntos, alambre, solido);
          glPopMatrix();
-      }
-   }
-}
-
-void Escena::animarModeloJerarquico()
-{
-   if (animacion)
-      modelo->animar(velAnimacion);
-}
-
-void Escena::animarLuzPosicional()
-{
-   if (animacion){
-      if (iluminado and luz1){
-         x = 50 * cos(angulo);
-         z = 50 * sin(angulo);
-
-         luzPos->setPosicion(Tupla3f(x, 50, z));
-
-         angulo++;
-
-         if (angulo >= 2*M_PI)
-            angulo -= 2*M_PI;
       }
    }
 }
@@ -341,8 +333,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                cout << "MODO MANUAL DESACTIVADO" << endl;
             }
 
-            //modelo->setVelocidad(0, 0, 0);
-            modelo->animar(velAnimacion);
+            //modelo->animar(velAnimacion);
                         
             if (animacion)
                cout << "ANIMACIÓN ACTIVADA" << endl;
@@ -563,13 +554,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // CUBO //
       case 'C':
          if (modoMenu == OBJETO){
-            if (obj == CUBO){
+            if (obj == CUADRO){
                obj = NINGUNO;
-               cout << "OBJETO: CUBO DESACTIVADO" << endl;
+               cout << "OBJETO: CUADRO DESACTIVADO" << endl;
             }
             else{
-               obj = CUBO;
-               cout << "OBJETO: CUBO ACTIVADO" << endl;
+               obj = CUADRO;
+               cout << "OBJETO: CUADRO ACTIVADO" << endl;
             }
          }
 

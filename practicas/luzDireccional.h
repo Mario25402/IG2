@@ -10,12 +10,14 @@ private:
     int alfa;
     int beta;
 
+    void calcularPosicion(int alfa, int beta);
+
 public:
     LuzDireccional(Tupla2f direccion, GLenum idLuz, Tupla4f colorAmbiente, Tupla4f colorDifuso, Tupla4f colorEspecular);
     
+    void animarColores();
     void setAnguloAlfa(int angulo);
     void setAnguloBeta(int angulo);
-    void calcularPosicion(int alfa, int beta);
 };
 
 #endif

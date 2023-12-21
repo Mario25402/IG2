@@ -13,10 +13,10 @@
 #include "luzPosicional.h"
 #include "luzDireccional.h"
 #include "modelo_jerarquico.h"
+#include "cuadro.h"
 
 typedef enum {NADA, OBJETO, VISUALIZACION} menu;
-typedef enum {JERARQUICO, ESFERA, CUBO, NINGUNO} objeto;
-//typedef enum {PLY1, PLY2, PLY3, NONE} objPly;
+typedef enum {JERARQUICO, ESFERA, CUADRO, NINGUNO} objeto;
 typedef enum {BARRA, ASIENTO, ATRACCION, NONE} movimiento;
 
 class Escena
@@ -54,6 +54,7 @@ private:
     Ejes ejes;
     Cubo *cubo = nullptr;
     Esfera *esfera = nullptr;
+    Cuadro *cuadro = nullptr;
 
     ModeloJerarquico *modelo = nullptr;
 
@@ -62,12 +63,7 @@ private:
     LuzDireccional *luzDir = nullptr;
 
     // Variables relacionadas con el material
-    Material *bronce = nullptr;
-    Material *oro = nullptr;
-    Material *perla = nullptr;
-
     Material *matBlanco = nullptr;
-    Material *matNegro = nullptr;
 
     /////       
 
@@ -90,7 +86,12 @@ private:
 
     // Variables de poscion de la luz 1
     float angulo = 0;
-    float x, y, z;
+    float x = 50, y, z;
+
+    // Componentes de color de la luz 2
+    Tupla4f colorAmbiente = {0.2,0.2,0.2,1};
+    Tupla4f colorDifuso = {0.4,0.4,0.4,1};
+    Tupla4f colorEspecular = {0.4,0.4,0.4,1};
 
     // Variables de moviemiento de la animación
     bool animacion = false;
@@ -124,6 +125,7 @@ public:
     // Animación
     void animarModeloJerarquico();
     void animarLuzPosicional();
+    void animarLuzDireccional();
 
     // Interacción con la escena
     bool teclaPulsada(unsigned char Tecla1, int x, int y);

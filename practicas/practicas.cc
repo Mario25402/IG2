@@ -94,9 +94,10 @@ void special_keys( int tecla, int x, int y )
 
 void idle()
 {
-   if ( escena!= nullptr ){
+   if ( escena != nullptr ){
       escena->animarModeloJerarquico();
       escena->animarLuzPosicional();
+      escena->animarLuzDireccional();
    }
       
    glutPostRedisplay();
