@@ -36,7 +36,10 @@ void Malla3D::draw(bool puntos, bool alambre, bool solido)
          textura->activar();
       }
    }
-   else ct.resize(0);
+   else{
+      ct.resize(0);
+      glDisable(GL_TEXTURE_2D);
+   }
 
    // Colores //
 

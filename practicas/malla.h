@@ -53,7 +53,6 @@ private:
    bool oldPuntos = false;    // variables que controlan que no
    bool oldAlambre = false;   // se rellenen de nuevo 
    bool oldSolido = false;    // los colores innecesariamente
-   bool tx_done = false;
 
    // función que crea un VBO
    GLuint CrearVBO(GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);

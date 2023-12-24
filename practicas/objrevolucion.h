@@ -26,11 +26,12 @@ class ObjRevolucion : public Malla3D
 
 protected:
     std::vector<Tupla3f> perfil;
-    void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool textura = false);
-    void calcularTexturas(float M, float N);
 
-private:
-    std::vector<float> d;
+    void calcularTexturas();
+    void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool textura = false);
+
+//private:
+    //std::vector<float> d;
 } ;
 
 

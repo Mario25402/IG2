@@ -26,16 +26,6 @@ void Textura::activar(){
 
 /********************************************/
 
-void Textura::desactivar(){
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDeleteTextures(1, &textura_id);
-
-    if (glIsEnabled(GL_TEXTURE_2D))
-        glDisable(GL_TEXTURE_2D);
-}
-
-/********************************************/
-
 void Textura::setId(int id){
     textura_id = id;
 

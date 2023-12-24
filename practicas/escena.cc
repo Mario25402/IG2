@@ -73,7 +73,7 @@ void Escena::init_objetos()
    modelo = new ModeloJerarquico();
 
    cuadro->setTextura("../texturas/text-mundo.jpg");
-   //esfera->setTextura("../texturas/text-mundo.jpg");
+   esfera->setTextura("../texturas/text-madera.jpg");
 }
 
 void Escena::init_luces()
@@ -127,15 +127,13 @@ void Escena::draw_objects()
       if (obj == CUADRO){
          glMatrixMode(GL_MODELVIEW);
          glPushMatrix();
-         cuadro->setMaterial(matBlanco);
-         cuadro->draw(puntos, false, false);
-         cuadro->draw(false, alambre, false);
-         cuadro->draw(false, false, solido);
+            cuadro->draw(puntos, false, false);
+            cuadro->draw(false, alambre, false);
+            cuadro->draw(false, false, solido);
          glPopMatrix();
       }
 
       else if (obj == ESFERA){
-         esfera->setMaterial(matBlanco);
          esfera->draw(puntos, false, false);
          esfera->draw(false, alambre, false);
          esfera->draw(false, false, solido);
@@ -157,7 +155,7 @@ void Escena::draw_lights()
    if (iluminado){
       glEnable(GL_LIGHTING);
 
-      cubo->setMaterial(matBlanco);
+      cuadro->setMaterial(matBlanco);
       esfera->setMaterial(matBlanco);
 
       if (luz1) luzPos->activar();
