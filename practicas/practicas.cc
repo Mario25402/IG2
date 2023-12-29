@@ -89,13 +89,35 @@ void special_keys( int tecla, int x, int y )
 
 //***************************************************************************
 
+void clickRaton( int boton, int estado, int x, int y )
+{
+   if ( escena != nullptr )
+      escena->clickRaton( boton, estado, x, y );
+   glutPostRedisplay();
+}
+
+//***************************************************************************
+
+void ratonMovido( int x, int y )
+{
+   if ( escena != nullptr )
+      escena->ratonMovido( x, y );
+   glutPostRedisplay();
+}
+
+/*void mouse( int wheel, int direction, int x, int y )
+{
+   if ( escena != nullptr )
+      escena->mouse(wheel, direction, x, y );
+   glutPostRedisplay();
+}*/
 
 //***************************************************************************
 
 void idle()
 {
    if ( escena != nullptr ){
-      escena->animarModeloJerarquico();
+      //escena->animarModeloJerarquico();
       escena->animarLuzPosicional();
       escena->animarLuzDireccional();
    }
@@ -138,7 +160,6 @@ int main( int argc, char **argv )
    glutInitWindowSize(UI_window_width,UI_window_height);
 
    // llamada para crear la ventana, indicando el titulo
-   // SUSTITUIR EL NOMBRE DEL ALUMNO
    glutCreateWindow("Practicas IG: Mario Pina");
 
    // asignación de la funcion llamada "dibujar" al evento de dibujo
@@ -155,6 +176,12 @@ int main( int argc, char **argv )
 
    // asignación de la funcion llamada "idle" al evento correspondiente
    glutIdleFunc( idle );
+
+   // eventos ratón
+   glutMouseFunc( clickRaton );
+
+   // eventos movimiento ratón
+   glutMotionFunc( ratonMovido );
 
    // inicialización de librería GLEW (solo en Linux)
    #ifdef LINUX

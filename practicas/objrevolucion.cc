@@ -35,14 +35,14 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 
    // Comprobar si hay polo sur
    polo_sur = v.front();
-   tapa_inf = (polo_sur[0] == 0.0f and polo_sur[2] == 0.0f);
+   tapa_inf = (polo_sur[0] <= 0.000000001f and polo_sur[2] <= 0.000000001f);
 
    // eliminar polo sur
    if (tapa_inf) v.erase(v.begin());
 
    // Comprobar si hay polo norte
    polo_norte = v.back();
-   tapa_sup = (polo_norte[0] == 0.0f and polo_norte[2] == 0.0f);
+   tapa_sup = (polo_norte[0] <= 0.000000001f and polo_norte[2] <= 0.000000001f);
 
    // eliminar polo norte
    if (tapa_sup) v.pop_back();
@@ -108,14 +108,14 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
 
    // Comprobar si hay polo sur
    polo_sur = v.front();
-   tapa_inf = (polo_sur[0] == 0.0f and polo_sur[2] == 0.0f);
+   tapa_inf = (polo_sur[0] <= 0.000000001f and polo_sur[2] <= 0.000000001f);
 
    // eliminar polo sur
    if (tapa_inf) v.erase(v.begin());
 
    // Comprobar si hay polo norte
    polo_norte = v.back();
-   tapa_sup = (polo_norte[0] == 0.0f and polo_norte[2] == 0.0f);
+   tapa_sup = (polo_norte[0] <= 0.000000001f and polo_norte[2] <= 0.000000001f);
 
    // eliminar polo norte
    if (tapa_sup) v.pop_back();
@@ -194,21 +194,8 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
         }
     }
 
-    if (textura){
-        /*d.clear();
-        d.push_back(0);
-
-        // d[j+1] = d[j] + |p[j+1] - p[j]| -> sqrt((x2 - x1)² + (y2 - y1)² + (z2 - z1)²)
-        for (int j = 1; j < M; j++){
-            float dst = (abs(sqrt(pow(v[j][0] - v[j-1][0], 2) + 
-                                  pow(v[j][1] - v[j-1][1], 2) + 
-                                  pow(v[j][2] - v[j-1][2], 2))));
-
-            d.push_back(d[j-1] + dst);
-        }*/
-
-        calcularTexturas();
-    }
+    if (textura) calcularTexturas();
+    
 }
 
 // *****************************************************************************

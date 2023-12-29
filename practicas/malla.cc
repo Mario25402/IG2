@@ -93,6 +93,10 @@ void Malla3D::draw(bool puntos, bool alambre, bool solido)
 
 // ************************************************************************* //
 
+void Malla3D::setSeleccionado(bool sel){ seleccionado = sel; }
+
+// ************************************************************************* //
+
 GLuint Malla3D::CrearVBO (GLuint tipo_vbo, GLuint tam, GLvoid * puntero_ram)
 {
    GLuint id_vbo ; // resultado: identificador de VBO
@@ -132,8 +136,12 @@ void Malla3D::setColor(bool puntos, bool alambre, bool solido)
    if (solido and !oldSolido){
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-      for (int i = 0; i < v.size(); i++)
-         c[i] = Tupla3f(1, 1, 1); //c[i] = Tupla3f(0.0f, 0.5f, 0.5f);
+      for (int i = 0; i < v.size(); i++){
+         if (!seleccionado)
+            c[i] = Tupla3f(1, 1, 1);
+         else
+            c[i] = Tupla3f(1, 0, 0);
+      }
 
       id_vbo_c = 0;
    }

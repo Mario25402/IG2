@@ -14,9 +14,9 @@
 #include "luzDireccional.h"
 #include "modelo_jerarquico.h"
 #include "cuadro.h"
+#include "camara.h"
 
-typedef enum {NADA, OBJETO, VISUALIZACION} menu;
-typedef enum {JERARQUICO, ESFERA, CUADRO, NINGUNO} objeto;
+typedef enum {NADA, VISUALIZACION, CAMARA} menu;
 typedef enum {BARRA, ASIENTO, ATRACCION, NONE} movimiento;
 
 class Escena
@@ -44,17 +44,18 @@ private:
 
     // Selección de opciones
     menu modoMenu = NADA;
-    objeto obj = NINGUNO;
-    //objPly objPlySel = NONE;
     movimiento move = NONE;
 
     /////
 
+    // Variables de la camara
+    Camara *camaras[3] = {nullptr};
+
     // Objetos de la escena, importante inicializarlos a nullptr
     Ejes ejes;
-    Cubo *cubo = nullptr;
-    Esfera *esfera = nullptr;
-    Cuadro *cuadro = nullptr;
+    Esfera *esfera0 = nullptr;
+    Esfera *esfera1 = nullptr;
+    Esfera *esfera2 = nullptr;
 
     ModeloJerarquico *modelo = nullptr;
 
@@ -84,10 +85,6 @@ private:
     bool luz1 = false;
     bool luz2 = false;
 
-    // Variables de poscion de la luz 1
-    float angulo = 0;
-    float x = 50, y, z;
-
     // Componentes de color de la luz 2
     Tupla4f colorAmbiente = {0.2,0.2,0.2,1};
     Tupla4f colorDifuso = {0.4,0.4,0.4,1};
@@ -103,8 +100,14 @@ private:
     float velAsiento = 0.0f;
     float velAtraccion = 0.0f;
 
+    // Variables de selección y camara
+    int activa = 0;
+    int seleccionado = 0;
+    int xant = 0, yant = 0, zant = 0;
+
     /////
 
+    void init_camaras();
     void init_objetos();
     void init_luces();
     void init_materiales();
@@ -112,7 +115,6 @@ private:
     void draw_objects();
     void draw_axis();
     void draw_lights();
-    
 
 public:
     Escena();
@@ -121,15 +123,24 @@ public:
 
     // Dibujar
     void dibujar();
+    void dibujarSeleccion(int selected);
 
     // Animación
     void animarModeloJerarquico();
     void animarLuzPosicional();
     void animarLuzDireccional();
 
-    // Interacción con la escena
+    // Interacción con la escena por teclado
     bool teclaPulsada(unsigned char Tecla1, int x, int y);
     void teclaEspecial(int Tecla1, int x, int y);
+
+    // Interacción con la escena por ratón
+    void clickRaton(int boton, int estado, int x, int y);
+    void ratonMovido(int x, int y);
+    
+    void pick(int x, int y);
+    void procesarHits(GLint hits, GLuint buffer[]);
+
 };
 
 #endif

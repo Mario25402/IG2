@@ -62,18 +62,31 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	Width  = UI_window_width/10;
 	Height = UI_window_height/10;
 
-   change_projection( float(UI_window_width)/float(UI_window_height) );
-	glViewport( 0, 0, UI_window_width, UI_window_height );
+   init_camaras();
+   camaras[activa]->setProyeccion(UI_window_width, UI_window_height);
+   //change_projection( float(UI_window_width)/float(UI_window_height) );
+	//glViewport( 0, 0, UI_window_width, UI_window_height );
+}
+
+void Escena::init_camaras(){
+   camaras[0] = new Camara({0,50,150}, {0,0,0}, {0,1,0}, 0,
+   -Width, Width, -Height, Height, 50.0, 2000.0);
+
+   camaras[1] = new Camara({0,50,-200}, {0,0,0}, {0,1,0}, 0,
+   -Width, Width, -Height, Height, Front_plane, Back_plane);
+
+   camaras[2] = new Camara({0,50,150}, {0,0,0}, {0,1,0}, 1,
+   -Width, Width, -Height, Height, Front_plane, Back_plane);
 }
 
 void Escena::init_objetos()
 {
-   cuadro = new Cuadro(100);
-   esfera = new Esfera(20, 20, 50);
-   modelo = new ModeloJerarquico();
+   esfera0 = new Esfera(20, 20, 50);
+   esfera1 = new Esfera(20, 20, 50);
+   esfera2 = new Esfera(20, 20, 50);
 
-   cuadro->setTextura("../texturas/text-mundo.jpg");
-   esfera->setTextura("../texturas/text-madera.jpg");
+   esfera0->setTextura("../texturas/text-madera.jpg");
+   esfera1->setTextura("../texturas/text-mundo.jpg");
 }
 
 void Escena::init_luces()
@@ -102,12 +115,10 @@ void Escena::dibujar()
    /**************************************************************************/
    // EVALUACIÓN DE VARIABLES
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
-   glShadeModel(GL_SMOOTH);                              // Sombreado suave
-   glEnable(GL_NORMALIZE);                               // Normalizar normales
-
-   // Ocultar elementos no visiles
-   if (obj == CUADRO) glDisable(GL_CULL_FACE);  // El cuadro al ser una superficie plana, si
-   else glEnable(GL_CULL_FACE);                 // no se desactiva solo se vería una cara frontal
+   glShadeModel(GL_SMOOTH);   // Sombreado suave
+   glEnable(GL_NORMALIZE);    // Normalizar normales
+   glEnable(GL_CULL_FACE);    // Ocultar elementos no visiles
+   
 
    /**************************************************************************/
    // ESCENA
@@ -119,33 +130,39 @@ void Escena::dibujar()
 }
 
 // Dibujado de Objetos
-
 void Escena::draw_objects()
 {
-   // Si algún modo esta activo, dibujar el objeto correspondiente
    if (puntos or alambre or solido){
-      if (obj == CUADRO){
-         glMatrixMode(GL_MODELVIEW);
-         glPushMatrix();
-            cuadro->draw(puntos, false, false);
-            cuadro->draw(false, alambre, false);
-            cuadro->draw(false, false, solido);
-         glPopMatrix();
-      }
+      glMatrixMode(GL_MODELVIEW);
+      glPushMatrix();
+      glTranslatef(0,0,-100);
+         glLoadName(1);
+         glPushName(1);
+         esfera0->draw(puntos, false, false);
+         esfera0->draw(false, alambre, false);
+         esfera0->draw(false, false, solido);
+         glPopName();
+      glPopMatrix();
 
-      else if (obj == ESFERA){
-         esfera->draw(puntos, false, false);
-         esfera->draw(false, alambre, false);
-         esfera->draw(false, false, solido);
-      }
+      glPushMatrix();
+      glTranslatef(100,0,0);
+         glLoadName(2);
+         glPushName(2);
+         esfera1->draw(puntos, false, false);
+         esfera1->draw(false, alambre, false);
+         esfera1->draw(false, false, solido);
+         glPopName();
+      glPopMatrix();
 
-      else if (obj == JERARQUICO){
-         glMatrixMode(GL_MODELVIEW);
-         glPushMatrix();
-            glScalef(1, 0.5, 0.5);
-            modelo->draw(puntos, alambre, solido);
-         glPopMatrix();
-      }
+      glPushMatrix();
+      glTranslatef(-100,0,0);
+         glLoadName(3);
+         glPushName(3);
+         esfera2->draw(puntos, false, false);
+         esfera2->draw(false, alambre, false);
+         esfera2->draw(false, false, solido);
+         glPopName();
+      glPopMatrix();
    }
 }
 
@@ -155,8 +172,9 @@ void Escena::draw_lights()
    if (iluminado){
       glEnable(GL_LIGHTING);
 
-      cuadro->setMaterial(matBlanco);
-      esfera->setMaterial(matBlanco);
+      esfera0->setMaterial(matBlanco);
+      esfera1->setMaterial(matBlanco);
+      esfera2->setMaterial(matBlanco);
 
       if (luz1) luzPos->activar();
       else luzPos->desactivar();
@@ -183,6 +201,98 @@ void Escena::draw_axis()
    else ejes.draw();
 }
 
+void Escena::dibujarSeleccion(int selected){
+
+   switch (selected){
+      case 0:
+         esfera0->setSeleccionado(false);
+         esfera1->setSeleccionado(false);
+         esfera2->setSeleccionado(false);
+
+         camaras[activa]->setObjetivo(camaras[activa]->getEye(), {0,0,0});
+         break;
+
+      case 1:
+         esfera0->setSeleccionado(true);
+         esfera1->setSeleccionado(false);
+         esfera2->setSeleccionado(false);
+
+         camaras[activa]->setObjetivo({0,0,50}, {0,0,100});
+         break;
+      
+      case 2:
+         esfera0->setSeleccionado(false);
+         esfera1->setSeleccionado(true);
+         esfera2->setSeleccionado(false);
+
+         camaras[activa]->setObjetivo({50,0,100}, {100,0,0});
+         break;
+
+      case 3:
+         esfera0->setSeleccionado(false);
+         esfera1->setSeleccionado(false);
+         esfera2->setSeleccionado(true);
+
+         camaras[activa]->setObjetivo({-50,0,100}, {-100,0,0});
+         break;
+   }
+
+   camaras[activa]->setObserver();
+}
+
+void Escena::pick(int x, int y){
+   GLuint buffer[1024];
+   GLint hits, viewport[4];
+
+   glGetIntegerv(GL_VIEWPORT, viewport);
+   glSelectBuffer(1024, buffer);
+   glRenderMode(GL_SELECT);
+
+   glInitNames();
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   gluPickMatrix(x,viewport[3]-y,5.0,5.0,viewport);
+   glFrustum(-Width, Width, -Height, Height, Front_plane, Back_plane);
+   dibujar();
+
+   hits = glRenderMode(GL_RENDER);
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   glFrustum(-Width, Width, -Height, Height, Front_plane, Back_plane);
+   
+   if (hits != 0)
+      procesarHits(hits, buffer);
+
+   else{
+      seleccionado = 0;
+      dibujarSeleccion(seleccionado);
+   }
+}
+
+void Escena::procesarHits(GLint hits, GLuint buffer[]){
+   GLuint names, minZ, numberOfNames;
+   GLuint *ptr, *ptrNames;
+
+   ptr = (GLuint *) buffer;
+   minZ = 0xffffffff;
+
+   for (unsigned int i = 0; i < hits; i++){
+      names = *ptr;
+      ptr++;
+
+      if (*ptr < minZ){
+         numberOfNames = names;
+         minZ = *ptr;
+         ptrNames = ptr+2;
+      }
+
+      ptr += names+2;
+   }
+
+   seleccionado = *ptrNames;
+   dibujarSeleccion(seleccionado);
+}
+
 //**************************************************************************
 //
 // función que se invoca cuando se pulsa una tecla
@@ -194,7 +304,9 @@ void Escena::draw_axis()
 bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 {
    using namespace std ;
-   cout << "Tecla pulsada: '" << tecla << "'" << endl;
+
+   if (tecla != 88 and tecla != 90 and tecla != 120 and tecla != 122) // X, Z, x, z
+      cout << "Tecla pulsada: '" << tecla << "'" << endl;             // en ascii
 
    bool salir = false;
 
@@ -204,10 +316,23 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          cout << "Letra incorrecta" << endl;
          break;
 
+      case 'Z':
+         camaras[activa]->mover(0,0,1);
+         break;
+      case 'X':
+         camaras[activa]->mover(0,0,-1);
+         break;
+
       // SALIR //
       case 'Q':
-         if (modoMenu != NADA){
-            cout << "\nSELECCIÓN DE MENÚ (OPCIONES: V, M, A, O, Q)" << endl;
+         if (seleccionado != 0){
+            cout << "\nOBJETO DESELECCIONADO" << endl; 
+            seleccionado = 0;
+            dibujarSeleccion(seleccionado);
+         }
+
+         else if (modoMenu != NADA){
+            cout << "\nSELECCIÓN DE MENÚ (OPCIONES: V, M, A, C, Q)" << endl;
             modoMenu = NADA;
          }         
          else{
@@ -223,20 +348,17 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // MANUAL //
       case 'M':
          if (modoMenu != VISUALIZACION){
-            if (obj == JERARQUICO){
-               if (!manual){
-                  manual = true;
-                  
-                  if (animacion){
-                     animacion = false;
-                     cout << "ANIMACIÓN DESACTIVADA" << endl;
-                  }
-
-                  cout << "MODO MANUAL ACTIVADO (OPCIONES: 1, 2, 3, Q)" << endl;
+            if (!manual){
+               manual = true;
+               
+               if (animacion){
+                  animacion = false;
+                  cout << "ANIMACIÓN DESACTIVADA" << endl;
                }
-               else cout << "MODO MANUAL YA ACTIVADO" << endl;
+
+               cout << "MODO MANUAL ACTIVADO (OPCIONES: 1, 2, 3, Q)" << endl;
             }
-            else cout << "Letra incorrecta" << endl;
+            else cout << "MODO MANUAL YA ACTIVADO" << endl;
          }
          else cout << "Letra incorrecta" << endl;
          break;
@@ -394,7 +516,15 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       /////////////////
 
-      // LUZ 1 o 1º Grado Libertad//
+      case '0':
+         if (modoMenu == CAMARA){
+            activa = 0;
+            cout << "CÁMARA 0 ACTIVADA" << endl;
+         }
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      // LUZ 1 o 1º Grado Libertad o CAMARA 1//
       case '1':
          if (modoMenu == VISUALIZACION){
             if (iluminado){
@@ -408,6 +538,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                }
             }
             else cout << "Letra incorrecta" << endl;
+         }
+
+         else if (modoMenu == CAMARA){
+            activa = 1;
+            cout << "CÁMARA 1 ACTIVADA" << endl;
          }
 
          else{
@@ -424,7 +559,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
          break;
 
-      // LUZ 2 o 2º Grado Libertad//
+      // LUZ 2 o 2º Grado Libertad o CAMARA 2//
       case '2':
          if (modoMenu == VISUALIZACION){
             if (iluminado){
@@ -438,6 +573,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                }
             }
             else cout << "Letra incorrecta" << endl;
+         }
+
+         else if (modoMenu == CAMARA){
+            activa = 2;
+            cout << "CÁMARA 2 ACTIVADA" << endl;
          }
 
          else{
@@ -540,60 +680,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       /////////////////
 
-      // OBJETO //
-      case 'O':
-         if (modoMenu == NADA){
-            cout << "\nSELECCIÓN DE OBJETO (OPCIONES: C, E, J, Q)" << endl;
-            modoMenu = OBJETO;
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // CUBO //
+      // SELECCION DE CAMARAS //
       case 'C':
-         if (modoMenu == OBJETO){
-            if (obj == CUADRO){
-               obj = NINGUNO;
-               cout << "OBJETO: CUADRO DESACTIVADO" << endl;
-            }
-            else{
-               obj = CUADRO;
-               cout << "OBJETO: CUADRO ACTIVADO" << endl;
-            }
+         if (modoMenu == NADA){
+            cout << "\nSELECCIÓN DE CÁMARA (OPCIONES: 0, 1, 2, Q)" << endl;
+            modoMenu = CAMARA;
          }
 
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // ESFERA //
-      case 'E':
-         if (modoMenu == OBJETO){
-            if (obj == ESFERA){
-               obj = NINGUNO;
-               cout << "OBJETO: ESFERA DESACTIVADA" << endl;
-            }
-            else{
-               obj = ESFERA;
-               cout << "OBJETO: ESFERA ACTIVADA" << endl;
-            }
-         }
-         
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // JERARQUICO //
-      case 'J':
-         if (modoMenu == OBJETO){
-            if (obj == JERARQUICO){
-               obj = NINGUNO;
-               cout << "OBJETO: MODELO JERARQUICO DESACTIVADO" << endl;
-            }
-            else{
-               obj = JERARQUICO;
-               cout << "OBJETO: MODELO JERARQUICO ACTIVADO" << endl;
-            }
-         }
-         
          else cout << "Letra incorrecta" << endl;
          break;
    }
@@ -607,26 +700,63 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
    switch ( Tecla1 )
    {
 	   case GLUT_KEY_LEFT:
-         Observer_angle_y-- ;
+         camaras[activa]->mover(-1,0,0); //Observer_angle_y-- ;
          break;
 	   case GLUT_KEY_RIGHT:
-         Observer_angle_y++ ;
+         camaras[activa]->mover(1,0,0); //Observer_angle_y++ ;
          break;
 	   case GLUT_KEY_UP:
-         Observer_angle_x-- ;
+         camaras[activa]->mover(0,-1,0); //Observer_angle_x-- ;
          break;
 	   case GLUT_KEY_DOWN:
-         Observer_angle_x++ ;
+         camaras[activa]->mover(0,1,0); //Observer_angle_x++ ;
          break;
 	   case GLUT_KEY_PAGE_UP:
-         Observer_distance *=1.2 ;
+         camaras[activa]->zoom(1.2, Width*10, Height*10); //Observer_distance *=1.2 ;
          break;
 	   case GLUT_KEY_PAGE_DOWN:
-         Observer_distance /= 1.2 ;
+         camaras[activa]->zoom(-1.2, Width*10, Height*10); //Observer_distance /= 1.2 ;
          break;
 	}
 
 	//std::cout << Observer_distance << std::endl;
+}
+
+//**************************************************************************
+void Escena::clickRaton( int boton, int estado, int x, int y )
+{
+   if ( boton == GLUT_RIGHT_BUTTON ){
+      if ( estado == GLUT_DOWN ){
+         if (seleccionado != 0){
+            camaras[activa]->setEstadoRaton(EXAMINAR);
+            cout << "EXAMINAR" << endl;
+         }
+         else{ 
+            camaras[activa]->setEstadoRaton(PRIMERA_PERSONA);
+            cout << "PRIMERA PERSONA" << endl;
+         }
+
+         xant = x;
+         yant = y;
+      }
+   }
+   else if (boton == GLUT_LEFT_BUTTON){
+      camaras[activa]->setEstadoRaton(PRIMERA_PERSONA);
+      pick(x,y);
+   }
+}
+
+//**************************************************************************
+
+void Escena::ratonMovido( int x, int y )
+{
+   if (camaras[activa]->getEstadoRaton() != INACTIVO or seleccionado == -1){
+      // el movimiento depende del estado del raton
+      camaras[activa]->mover(x-xant, y-yant, 0);
+
+      xant = x;
+      yant = y;
+   }
 }
 
 //**************************************************************************
@@ -651,8 +781,9 @@ void Escena::redimensionar( int newWidth, int newHeight )
 {
    Width  = newWidth/10;
    Height = newHeight/10;
-   change_projection( float(newHeight)/float(newWidth) );
-   glViewport( 0, 0, newWidth, newHeight );
+   camaras[activa]->setProyeccion(newHeight, newWidth);
+   //change_projection( float(newHeight)/float(newWidth) );
+   //glViewport( 0, 0, newWidth, newHeight );
 }
 
 //**************************************************************************
@@ -661,10 +792,7 @@ void Escena::redimensionar( int newWidth, int newHeight )
 
 void Escena::change_observer()
 {
-   // posicion del observador
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
-   glTranslatef( 0.0, 0.0, -Observer_distance );
-   glRotatef( Observer_angle_y, 0.0 ,1.0, 0.0 );
-   glRotatef( Observer_angle_x, 1.0, 0.0, 0.0 );
+   camaras[activa]->setObserver();
 }
