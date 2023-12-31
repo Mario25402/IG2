@@ -104,6 +104,7 @@ private:
     int activa = 0;
     int seleccionado = 0;
     int xant = 0, yant = 0, zant = 0;
+    bool clickDer = false;
 
     /////
 

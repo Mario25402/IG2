@@ -26,10 +26,8 @@ public:
     void setObserver();
     void setProyeccion(float width, float height);
     void setObjetivo(Tupla3f eye, Tupla3f at);
+    void setAt(Tupla3f at);
     void setEstadoRaton(estadoRaton estado);
-
-    estadoRaton getEstadoRaton();
-    Tupla3f getEye();
 
     void mover(float x, float y, float z);
     void zoom(float factor, float width, float height);

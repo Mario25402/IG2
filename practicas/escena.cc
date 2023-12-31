@@ -69,6 +69,9 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 }
 
 void Escena::init_camaras(){
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
+
    camaras[0] = new Camara({0,50,150}, {0,0,0}, {0,1,0}, 0,
    -Width, Width, -Height, Height, 50.0, 2000.0);
 
@@ -135,7 +138,7 @@ void Escena::draw_objects()
    if (puntos or alambre or solido){
       glMatrixMode(GL_MODELVIEW);
       glPushMatrix();
-      glTranslatef(0,0,-100);
+      glTranslatef(0,100,0);
          glLoadName(1);
          glPushName(1);
          esfera0->draw(puntos, false, false);
@@ -209,7 +212,8 @@ void Escena::dibujarSeleccion(int selected){
          esfera1->setSeleccionado(false);
          esfera2->setSeleccionado(false);
 
-         camaras[activa]->setObjetivo(camaras[activa]->getEye(), {0,0,0});
+         camaras[activa]->setAt({0,0,0});
+         camaras[activa]->setEstadoRaton(PRIMERA_PERSONA);
          break;
 
       case 1:
@@ -217,7 +221,7 @@ void Escena::dibujarSeleccion(int selected){
          esfera1->setSeleccionado(false);
          esfera2->setSeleccionado(false);
 
-         camaras[activa]->setObjetivo({0,0,50}, {0,0,100});
+         camaras[activa]->setObjetivo({0,100,100}, {0,100,0});
          break;
       
       case 2:
@@ -233,11 +237,9 @@ void Escena::dibujarSeleccion(int selected){
          esfera1->setSeleccionado(false);
          esfera2->setSeleccionado(true);
 
-         camaras[activa]->setObjetivo({-50,0,100}, {-100,0,0});
+         camaras[activa]->setObjetivo({-100,0,100}, {-100,0,0});
          break;
    }
-
-   camaras[activa]->setObserver();
 }
 
 void Escena::pick(int x, int y){
@@ -266,6 +268,7 @@ void Escena::pick(int x, int y){
    else{
       seleccionado = 0;
       dibujarSeleccion(seleccionado);
+      camaras[activa]->setEstadoRaton(PRIMERA_PERSONA);
    }
 }
 
@@ -291,6 +294,7 @@ void Escena::procesarHits(GLint hits, GLuint buffer[]){
 
    seleccionado = *ptrNames;
    dibujarSeleccion(seleccionado);
+   camaras[activa]->setEstadoRaton(EXAMINAR);
 }
 
 //**************************************************************************
@@ -316,11 +320,15 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          cout << "Letra incorrecta" << endl;
          break;
 
-      case 'Z':
-         camaras[activa]->mover(0,0,1);
+      case 'Z': // Eje Z++
+         camaras[activa]->mover(0,0,++Observer_distance);
          break;
-      case 'X':
-         camaras[activa]->mover(0,0,-1);
+      case 'X': // Eje Z--
+         camaras[activa]->mover(0,0,--Observer_distance);
+         break;
+
+      case 'R': // Reset Camara
+         camaras[activa]->setObjetivo({0,50,150}, {0,0,0});
          break;
 
       // SALIR //
@@ -329,39 +337,22 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             cout << "\nOBJETO DESELECCIONADO" << endl; 
             seleccionado = 0;
             dibujarSeleccion(seleccionado);
+            camaras[activa]->setObjetivo({0,50,150}, {0,0,0});
          }
 
          else if (modoMenu != NADA){
-            cout << "\nSELECCIÓN DE MENÚ (OPCIONES: V, M, A, C, Q)" << endl;
+            cout << "\nSELECCIÓN DE MENÚ (OPCIONES: V, A, C, Q)" << endl;
             modoMenu = NADA;
          }         
          else{
-            if (manual){
-               manual = false;
-               cout << "MODO MANUAL DESACTIVADO" << endl;
+            if (animacion){
+               animacion = false;
+               cout << "ANIMACIÓN DESACTIVADA" << endl;
             }
             else salir=true;
          }
 
          break ;
-
-      // MANUAL //
-      case 'M':
-         if (modoMenu != VISUALIZACION){
-            if (!manual){
-               manual = true;
-               
-               if (animacion){
-                  animacion = false;
-                  cout << "ANIMACIÓN DESACTIVADA" << endl;
-               }
-
-               cout << "MODO MANUAL ACTIVADO (OPCIONES: 1, 2, 3, Q)" << endl;
-            }
-            else cout << "MODO MANUAL YA ACTIVADO" << endl;
-         }
-         else cout << "Letra incorrecta" << endl;
-         break;
 
       /////////////////
 
@@ -524,7 +515,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          else cout << "Letra incorrecta" << endl;
          break;
 
-      // LUZ 1 o 1º Grado Libertad o CAMARA 1//
+      // LUZ 1 o CAMARA 1//
       case '1':
          if (modoMenu == VISUALIZACION){
             if (iluminado){
@@ -544,22 +535,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             activa = 1;
             cout << "CÁMARA 1 ACTIVADA" << endl;
          }
-
-         else{
-            if (manual){
-               if (move == BARRA){
-                  move = NONE;
-                  cout << "1er Grado de Libertad, BARRA DESACTIVADA" << endl;
-               }
-               else{
-                  move = BARRA;
-                  cout << "1er Grado de Libertad, BARRA ACTIVADA" << endl;
-               }
-            }
-         }
          break;
 
-      // LUZ 2 o 2º Grado Libertad o CAMARA 2//
+      // LUZ 2 o CAMARA 2//
       case '2':
          if (modoMenu == VISUALIZACION){
             if (iluminado){
@@ -579,103 +557,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             activa = 2;
             cout << "CÁMARA 2 ACTIVADA" << endl;
          }
-
-         else{
-            if (manual){
-               if (move == ASIENTO){
-                  move = NONE;
-                  cout << "2º Grado de Libertad, ASIENTO DESACTIVADO" << endl;
-               }
-               else{
-                  move = ASIENTO;
-                  cout << "2º Grado de Libertad, ASIENTO ACTIVADO" << endl;
-               }
-            }
-         }
-         break;
-
-      // 3er Grado Libertad //
-      case '3':
-         if (modoMenu != VISUALIZACION){
-            if (manual){
-               if (move == ATRACCION){
-                  move = NONE;
-                  cout << "3er Grado de Libertad, ATRACCION DESACTIVADA" << endl;
-               }
-               else{
-                  move = ATRACCION;
-                  cout << "3er Grado de Libertad, ATRACCION ACTIVADA" << endl;
-               }
-            }
-         }
-
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      /////////////////
-
-      // AUMENTAR //
-      case '+':
-         if (modoMenu != VISUALIZACION){
-            if (animacion){
-               if (velAnimacion <= 2.0) velAnimacion += 0.1;
-               cout << "VELOCIDAD DE ANIMACIÓN: " << velAnimacion << endl;
-               modelo->animar(velAnimacion);
-            }
-
-            if (manual){
-               if (move == BARRA){
-                  if (velBarra <= 0.0) velBarra += 0.1;
-                  cout << "TRASLACIÓN DE LA BARRA: " << velBarra << endl;
-               }
-               else if (move == ASIENTO){
-                  velAsiento = ((int)(velAsiento + 1) % 360);
-                  cout << "ROTACIÓN DE LA ASIENTO: " << velAsiento << endl;
-               }
-               else if (move == ATRACCION){
-                  velAtraccion = ((int)(velAtraccion + 1) % 360);
-                  cout << "ROTACIÓN DE LA ATRACCIÓN: " << velAtraccion << endl;
-               }
-               else
-                  cout << "Ningún grado de libertad elegido" << endl;
-
-               modelo->setVelocidad(velBarra, velAsiento, velAtraccion);
-            }
-         }
-
-         else cout << "Letra incorrecta" << endl;
-         break;
-
-      // DISMINUIR //
-      case '-':
-         if (modoMenu != VISUALIZACION){
-            if (animacion){
-               if (velAnimacion >= 0.2) velAnimacion -= 0.1;
-               cout << "VELOCIDAD DE ANIMACIÓN: " << velAnimacion << endl;
-               modelo->animar(velAnimacion);
-            }
-
-            if (manual){
-               if (move == BARRA){
-                  if (velBarra > -20) velBarra -= 0.1;
-                  cout << "TRASLACIÓN DE LA BARRA: " << velBarra << endl;
-               }
-               else if (move == ASIENTO){
-                  velAsiento = ((int)(velAsiento - 1) % 360);
-                  cout << "ROTACIÓN DE LA ASIENTO: " << velAsiento << endl;
-               }
-               else if (move == ATRACCION){
-                  velAtraccion = ((int)(velAtraccion - 1) % 360);
-                  cout << "ROTACIÓN DE LA ATRACCIÓN: " << velAtraccion << endl;
-               }
-               else
-                  cout << "Ningún grado de libertad elegido" << endl;
-
-               modelo->setVelocidad(velBarra, velAsiento, velAtraccion);
-            }
-         }
-
-         else cout << "Letra incorrecta" << endl;
          break;
 
       /////////////////
@@ -700,16 +581,16 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
    switch ( Tecla1 )
    {
 	   case GLUT_KEY_LEFT:
-         camaras[activa]->mover(-1,0,0); //Observer_angle_y-- ;
+         camaras[activa]->mover(--Observer_angle_y,0,0);
          break;
 	   case GLUT_KEY_RIGHT:
-         camaras[activa]->mover(1,0,0); //Observer_angle_y++ ;
+         camaras[activa]->mover(++Observer_angle_y,0,0);
          break;
 	   case GLUT_KEY_UP:
-         camaras[activa]->mover(0,-1,0); //Observer_angle_x-- ;
+         camaras[activa]->mover(0,--Observer_angle_x,0);
          break;
 	   case GLUT_KEY_DOWN:
-         camaras[activa]->mover(0,1,0); //Observer_angle_x++ ;
+         camaras[activa]->mover(0,++Observer_angle_x,0);
          break;
 	   case GLUT_KEY_PAGE_UP:
          camaras[activa]->zoom(1.2, Width*10, Height*10); //Observer_distance *=1.2 ;
@@ -736,11 +617,13 @@ void Escena::clickRaton( int boton, int estado, int x, int y )
             cout << "PRIMERA PERSONA" << endl;
          }
 
+         clickDer = true;
          xant = x;
          yant = y;
       }
    }
    else if (boton == GLUT_LEFT_BUTTON){
+      clickDer = false;
       camaras[activa]->setEstadoRaton(PRIMERA_PERSONA);
       pick(x,y);
    }
@@ -750,9 +633,8 @@ void Escena::clickRaton( int boton, int estado, int x, int y )
 
 void Escena::ratonMovido( int x, int y )
 {
-   if (camaras[activa]->getEstadoRaton() != INACTIVO or seleccionado == -1){
-      // el movimiento depende del estado del raton
-      camaras[activa]->mover(x-xant, y-yant, 0);
+   if (clickDer){
+      camaras[activa]->mover(x-xant, y-yant, 0); // el movimiento depende del estado del raton
 
       xant = x;
       yant = y;

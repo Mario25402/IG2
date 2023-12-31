@@ -47,19 +47,15 @@ void Camara::setProyeccion(float width, float height){
 
 void Camara::setObjetivo(Tupla3f eye, Tupla3f at){
     this->eye = eye;
-    this->at = at;
+    setAt(at);
 }
 
 void Camara::setEstadoRaton(estadoRaton estado){
     this->estado = estado;
 }
 
-estadoRaton Camara::getEstadoRaton(){
-    return this->estado;
-}
-
-Tupla3f Camara::getEye(){
-    return eye;
+void Camara::setAt(Tupla3f at){
+    this->at = at;
 }
 
 void Camara::zoom(float factor, float width, float height){
@@ -87,69 +83,52 @@ void Camara::mover(float x, float y, float z){
     }
 
     else if (estado == EXAMINAR){
-        rotarXExaminar(y); // teclas
-        rotarYExaminar(x); // alternadas
-        rotarZExaminar(z);
+        if (x != 0) rotarXExaminar(x);
+        if (y != 0) rotarYExaminar(y);
+        if (z != 0) rotarZExaminar(z);
     }
-
-    setObserver();
 }
 
 /*****************************************************************************/
 
 void Camara::rotarXPrimeraPersona(float angle){
-    if (-500 <= eye[0] and eye[0] <= 500)
-        eye[0] += angle;
+    eye[0] += angle;
 }
 
 void Camara::rotarYPrimeraPersona(float angle){
-    if (-500 <= eye[1] and eye[1] <= 500)
-        eye[1] += angle;
+    eye[1] += angle;
 }
 
 void Camara::rotarZPrimeraPersona(float angle){
-    if (-500 <= eye[2] and eye[2] <= 500)
-        eye[2] += angle;
+    eye[2] += angle;
 }
 
+/*****************************************************************************/
+
 void Camara::rotarXExaminar(float angle) {
-    // Calcular vector de dirección desde el 'eye' al 'at'
-    float dirX = at[0] - eye[0];
-    float dirY = at[1] - eye[1];
-    float dirZ = at[2] - eye[2];
+    angle /= 50;
+    angle = fmod(angle, 360);
 
-    // Calcular el ángulo en radianes
-    float theta = angle * M_PI / 180.0f;
+    float radio = 100;
 
-    // Rotación en el eje X
-    eye[1] = at[1] + dirY * cos(theta) - dirZ * sin(theta);
-    eye[2] = at[2] + dirY * sin(theta) + dirZ * cos(theta);
+    eye[0] = at[0] + radio * cos(angle);
+    eye[2] = at[2] + radio * sin(angle);
 }
 
 void Camara::rotarYExaminar(float angle) {
-    // Calcular vector de dirección desde el 'eye' al 'at'
-    float dirX = at[0] - eye[0];
-    float dirY = at[1] - eye[1];
-    float dirZ = at[2] - eye[2];
+    angle /= 50;
+    angle = fmod(angle, 360);
 
-    // Calcular el ángulo en radianes
-    float theta = angle * M_PI / 180.0f;
+    float radio = 100;
 
-    // Rotación en el eje Y
-    eye[0] = at[0] + dirX * cos(theta) + dirZ * sin(theta);
-    eye[2] = at[2] - dirX * sin(theta) + dirZ * cos(theta);
+    eye[1] = at[1] + radio * sin(angle);
+    eye[2] = at[2] + radio * cos(angle);
 }
 
 void Camara::rotarZExaminar(float angle) {
-    // Calcular vector de dirección desde el 'eye' al 'at'
-    float dirX = at[0] - eye[0];
-    float dirY = at[1] - eye[1];
-    float dirZ = at[2] - eye[2];
+    angle /= 50;
+    angle = fmod(angle, 360);
 
-    // Calcular el ángulo en radianes
-    float theta = angle * M_PI / 180.0f;
-
-    // Rotación en el eje Z
-    eye[0] = at[0] + dirX * cos(theta) - dirY * sin (theta);
-    eye[1] = at[1] + dirX * sin(theta) + dirY * cos(theta);
+    up[0] = sin(angle);
+    up[1] = cos(angle);
 }
