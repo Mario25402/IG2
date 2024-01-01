@@ -108,7 +108,7 @@ void ratonMovido( int x, int y )
 /*void mouse( int wheel, int direction, int x, int y )
 {
    if ( escena != nullptr )
-      escena->mouse(wheel, direction, x, y );
+      //escena->mouse(wheel, direction, x, y );
    glutPostRedisplay();
 }*/
 
@@ -182,6 +182,8 @@ int main( int argc, char **argv )
 
    // eventos movimiento ratón
    glutMotionFunc( ratonMovido );
+
+   //glutMouseWheelFunc( mouse );
 
    // inicialización de librería GLEW (solo en Linux)
    #ifdef LINUX

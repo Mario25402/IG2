@@ -29,11 +29,11 @@ Escena::Escena()
 // funciones de animacion de cualquier tipo
 //**************************************************************************
 
-void Escena::animarModeloJerarquico()
+/*void Escena::animarModeloJerarquico()
 {
    if (animacion)
       modelo->animar(velAnimacion);
-}
+}*/
 
 void Escena::animarLuzPosicional()
 {
@@ -64,8 +64,6 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
    init_camaras();
    camaras[activa]->setProyeccion(UI_window_width, UI_window_height);
-   //change_projection( float(UI_window_width)/float(UI_window_height) );
-	//glViewport( 0, 0, UI_window_width, UI_window_height );
 }
 
 void Escena::init_camaras(){
@@ -96,9 +94,9 @@ void Escena::init_luces()
 {
    angulo_alfa = 0;
    angulo_beta = 0;
-
+   
    luzPos = new LuzPosicional({100,0,0}, GL_LIGHT1, {0.0,0.0,1,1}, {0,0,1,1}, {0,0,1,1});
-   luzDir = new LuzDireccional({angulo_alfa,angulo_beta}, GL_LIGHT2, colorAmbiente, colorDifuso, colorEspecular);
+   luzDir = new LuzDireccional({angulo_alfa,angulo_beta}, GL_LIGHT2, {0.2,0.2,0.2,1}, {0.4,0.4,0.4,1}, {0.4,0.4,0.4,1});
 }
 
 void Escena::init_materiales()
@@ -132,7 +130,6 @@ void Escena::dibujar()
    draw_objects();
 }
 
-// Dibujado de Objetos
 void Escena::draw_objects()
 {
    if (puntos or alambre or solido){
@@ -169,7 +166,6 @@ void Escena::draw_objects()
    }
 }
 
-// Dibujado de luces
 void Escena::draw_lights()
 {
    if (iluminado){
@@ -192,7 +188,6 @@ void Escena::draw_lights()
    else glDisable(GL_LIGHTING);
 }
 
-// Dibujado de Ejes
 void Escena::draw_axis()
 {
    // Desactivar las luces al dibujar los ejes para que se vean de color
@@ -241,6 +236,8 @@ void Escena::dibujarSeleccion(int selected){
          break;
    }
 }
+
+/*****************************************************************************/
 
 void Escena::pick(int x, int y){
    GLuint buffer[1024];
@@ -298,6 +295,48 @@ void Escena::procesarHits(GLint hits, GLuint buffer[]){
 }
 
 //**************************************************************************
+void Escena::clickRaton( int boton, int estado, int x, int y )
+{
+   if ( boton == GLUT_RIGHT_BUTTON ){
+      if ( estado == GLUT_DOWN ){
+         if (seleccionado != 0){
+            camaras[activa]->setEstadoRaton(EXAMINAR);
+         }
+         else{ 
+            camaras[activa]->setEstadoRaton(PRIMERA_PERSONA);
+         }
+
+         clickDer = true;
+         xant = x;
+         yant = y;
+      }
+   }
+   else if (boton == GLUT_LEFT_BUTTON){
+      static int i = 0; // Conseguimos que solo actue en el press y no en el realese 
+
+      if (i % 2 == 0){
+         clickDer = false;
+         camaras[activa]->setEstadoRaton(PRIMERA_PERSONA);
+         pick(x,y);
+      }
+
+      i++;
+   }
+}
+
+//**************************************************************************
+
+void Escena::ratonMovido( int x, int y )
+{
+   if (clickDer){
+      camaras[activa]->mover(x-xant, y-yant, LIMITE, 1); // el movimiento depende del estado del raton
+
+      xant = x;
+      yant = y;
+   }
+}
+
+//**************************************************************************
 //
 // función que se invoca cuando se pulsa una tecla
 // Devuelve true si se ha pulsado la tecla para terminar el programa (Q),
@@ -321,10 +360,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          break;
 
       case 'Z': // Eje Z++
-         camaras[activa]->mover(0,0,++Observer_distance);
+         camaras[activa]->mover(LIMITE,LIMITE,++Observer_distance, 0);
          break;
       case 'X': // Eje Z--
-         camaras[activa]->mover(0,0,--Observer_distance);
+         camaras[activa]->mover(LIMITE,LIMITE,--Observer_distance, 0);
          break;
 
       case 'R': // Reset Camara
@@ -581,16 +620,16 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
    switch ( Tecla1 )
    {
 	   case GLUT_KEY_LEFT:
-         camaras[activa]->mover(--Observer_angle_y,0,0);
+         camaras[activa]->mover(--Observer_angle_y,LIMITE,LIMITE, 0);
          break;
 	   case GLUT_KEY_RIGHT:
-         camaras[activa]->mover(++Observer_angle_y,0,0);
+         camaras[activa]->mover(++Observer_angle_y,LIMITE,LIMITE, 0);
          break;
 	   case GLUT_KEY_UP:
-         camaras[activa]->mover(0,--Observer_angle_x,0);
+         camaras[activa]->mover(LIMITE,++Observer_angle_x,LIMITE, 0);
          break;
 	   case GLUT_KEY_DOWN:
-         camaras[activa]->mover(0,++Observer_angle_x,0);
+         camaras[activa]->mover(LIMITE,--Observer_angle_x,LIMITE, 0);
          break;
 	   case GLUT_KEY_PAGE_UP:
          camaras[activa]->zoom(1.2, Width*10, Height*10); //Observer_distance *=1.2 ;
@@ -599,46 +638,6 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
          camaras[activa]->zoom(-1.2, Width*10, Height*10); //Observer_distance /= 1.2 ;
          break;
 	}
-
-	//std::cout << Observer_distance << std::endl;
-}
-
-//**************************************************************************
-void Escena::clickRaton( int boton, int estado, int x, int y )
-{
-   if ( boton == GLUT_RIGHT_BUTTON ){
-      if ( estado == GLUT_DOWN ){
-         if (seleccionado != 0){
-            camaras[activa]->setEstadoRaton(EXAMINAR);
-            cout << "EXAMINAR" << endl;
-         }
-         else{ 
-            camaras[activa]->setEstadoRaton(PRIMERA_PERSONA);
-            cout << "PRIMERA PERSONA" << endl;
-         }
-
-         clickDer = true;
-         xant = x;
-         yant = y;
-      }
-   }
-   else if (boton == GLUT_LEFT_BUTTON){
-      clickDer = false;
-      camaras[activa]->setEstadoRaton(PRIMERA_PERSONA);
-      pick(x,y);
-   }
-}
-
-//**************************************************************************
-
-void Escena::ratonMovido( int x, int y )
-{
-   if (clickDer){
-      camaras[activa]->mover(x-xant, y-yant, 0); // el movimiento depende del estado del raton
-
-      xant = x;
-      yant = y;
-   }
 }
 
 //**************************************************************************
@@ -655,6 +654,7 @@ void Escena::change_projection( const float ratio_xy )
    const float wx = float(Height)*ratio_xy ;
    glFrustum( -wx, wx, -Height, Height, Front_plane, Back_plane );
 }
+
 //**************************************************************************
 // Funcion que se invoca cuando cambia el tamaño de la ventana
 //***************************************************************************
@@ -664,8 +664,6 @@ void Escena::redimensionar( int newWidth, int newHeight )
    Width  = newWidth/10;
    Height = newHeight/10;
    camaras[activa]->setProyeccion(newHeight, newWidth);
-   //change_projection( float(newHeight)/float(newWidth) );
-   //glViewport( 0, 0, newWidth, newHeight );
 }
 
 //**************************************************************************

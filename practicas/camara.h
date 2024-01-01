@@ -6,6 +6,8 @@
 typedef enum {PERSPECTIVA, ORTOGONAL} tipoCamara;
 typedef enum {INACTIVO, PRIMERA_PERSONA, EXAMINAR} estadoRaton;
 
+const int LIMITE = 5000;
+
 class Camara{
 private:
     Tupla3f eye;
@@ -19,6 +21,8 @@ private:
     float bottom, top;
     float near, far;
 
+    int anteriorX, anteriorY, anteriorZ;
+
 public:
     Camara(Tupla3f eye, Tupla3f at, Tupla3f up, int tipo, float left,
            float right, float bottom, float top, float near, float far);
@@ -29,16 +33,16 @@ public:
     void setAt(Tupla3f at);
     void setEstadoRaton(estadoRaton estado);
 
-    void mover(float x, float y, float z);
+    void mover(float x, float y, float z, bool raton);
     void zoom(float factor, float width, float height);
 
-    void rotarXExaminar(float angle);
-    void rotarYExaminar(float angle);
-    void rotarZExaminar(float angle);
+    void rotarXExaminar(float angle, bool raton);
+    void rotarYExaminar(float angle, bool raton);
+    void rotarZExaminar(float angle, bool raton);
 
-    void rotarXPrimeraPersona(float angle);
-    void rotarYPrimeraPersona(float angle);
-    void rotarZPrimeraPersona(float angle);
+    void rotarXPrimeraPersona(float angle, bool raton);
+    void rotarYPrimeraPersona(float angle, bool raton);
+    void rotarZPrimeraPersona(float angle, bool raton);
 };
 
 #endif

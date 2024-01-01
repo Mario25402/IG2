@@ -57,8 +57,6 @@ private:
     Esfera *esfera1 = nullptr;
     Esfera *esfera2 = nullptr;
 
-    ModeloJerarquico *modelo = nullptr;
-
     // Objetos de iluminación
     LuzPosicional *luzPos = nullptr;
     LuzDireccional *luzDir = nullptr;
@@ -84,11 +82,6 @@ private:
 
     bool luz1 = false;
     bool luz2 = false;
-
-    // Componentes de color de la luz 2
-    Tupla4f colorAmbiente = {0.2,0.2,0.2,1};
-    Tupla4f colorDifuso = {0.4,0.4,0.4,1};
-    Tupla4f colorEspecular = {0.4,0.4,0.4,1};
 
     // Variables de moviemiento de la animación
     bool animacion = false;
@@ -119,6 +112,7 @@ private:
 
 public:
     Escena();
+    
     void inicializar(int UI_window_width, int UI_window_height);
     void redimensionar(int newWidth, int newHeight);
 
@@ -139,6 +133,7 @@ public:
     void clickRaton(int boton, int estado, int x, int y);
     void ratonMovido(int x, int y);
     
+    // Interacción con la escena por selección
     void pick(int x, int y);
     void procesarHits(GLint hits, GLuint buffer[]);
 
