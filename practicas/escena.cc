@@ -78,6 +78,10 @@ void Escena::init_camaras(){
 
    camaras[2] = new Camara({0,50,150}, {0,0,0}, {0,1,0}, 1,
    -Width, Width, -Height, Height, Front_plane, Back_plane);
+
+   Observer_angle_x = camaras[0]->getEye()[0];
+   Observer_angle_y = camaras[0]->getEye()[1];
+   Observer_distance = camaras[0]->getEye()[2];
 }
 
 void Escena::init_objetos()
@@ -550,6 +554,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          if (modoMenu == CAMARA){
             activa = 0;
             cout << "CÁMARA 0 ACTIVADA" << endl;
+
+            Observer_angle_x = camaras[0]->getEye()[0];
+            Observer_angle_y = camaras[0]->getEye()[1];
+            Observer_distance = camaras[0]->getEye()[2];
          }
          else cout << "Letra incorrecta" << endl;
          break;
@@ -573,6 +581,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          else if (modoMenu == CAMARA){
             activa = 1;
             cout << "CÁMARA 1 ACTIVADA" << endl;
+
+            Observer_angle_x = camaras[1]->getEye()[0];
+            Observer_angle_y = camaras[1]->getEye()[1];
+            Observer_distance = camaras[1]->getEye()[2];
          }
          break;
 
@@ -595,6 +607,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          else if (modoMenu == CAMARA){
             activa = 2;
             cout << "CÁMARA 2 ACTIVADA" << endl;
+
+            Observer_angle_x = camaras[2]->getEye()[0];
+            Observer_angle_y = camaras[2]->getEye()[1];
+            Observer_distance = camaras[2]->getEye()[2];
          }
          break;
 

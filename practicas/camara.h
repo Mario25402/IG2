@@ -33,16 +33,19 @@ public:
     void setAt(Tupla3f at);
     void setEstadoRaton(estadoRaton estado);
 
+    Tupla3f getEye();
+
     void mover(float x, float y, float z, bool raton);
     void zoom(float factor, float width, float height);
 
-    void rotarXExaminar(float angle, bool raton);
-    void rotarYExaminar(float angle, bool raton);
-    void rotarZExaminar(float angle, bool raton);
-
     void rotarXPrimeraPersona(float angle, bool raton);
     void rotarYPrimeraPersona(float angle, bool raton);
-    void rotarZPrimeraPersona(float angle, bool raton);
+    void rotarZPrimeraPersona(float angle);
+
+    void rotarXExaminar(float angle, bool raton);
+    void rotarYExaminar(float angle, bool raton);
+    void rotarZExaminar(float angle);
+
 };
 
 #endif
