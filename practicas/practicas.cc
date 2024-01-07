@@ -105,13 +105,6 @@ void ratonMovido( int x, int y )
    glutPostRedisplay();
 }
 
-/*void mouse( int wheel, int direction, int x, int y )
-{
-   if ( escena != nullptr )
-      //escena->mouse(wheel, direction, x, y );
-   glutPostRedisplay();
-}*/
-
 //***************************************************************************
 
 void idle()

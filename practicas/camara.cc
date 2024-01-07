@@ -4,7 +4,7 @@ Camara::Camara(Tupla3f eye, Tupla3f at, Tupla3f up, int tipo, float left,
                float right, float bottom, float top, float near, float far)
 {
     this->setObjetivo(eye, at);
-    this->up = up;
+    this->setUp(up);
 
     this->tipo = (tipoCamara) tipo;
     estado = PRIMERA_PERSONA;
@@ -61,6 +61,10 @@ void Camara::setEstadoRaton(estadoRaton estado){
 
 void Camara::setAt(Tupla3f at){
     this->at = at;
+}
+
+void Camara::setUp(Tupla3f up){
+    this->up = up;
 }
 
 /*****************************************************************************/

@@ -301,7 +301,7 @@ void Escena::procesarHits(GLint hits, GLuint buffer[]){
 //**************************************************************************
 void Escena::clickRaton( int boton, int estado, int x, int y )
 {
-   if ( boton == GLUT_RIGHT_BUTTON ){
+   if ( boton == GLUT_RIGHT_BUTTON ){ // click derecho
       if ( estado == GLUT_DOWN ){
          if (seleccionado != 0){
             camaras[activa]->setEstadoRaton(EXAMINAR);
@@ -315,7 +315,8 @@ void Escena::clickRaton( int boton, int estado, int x, int y )
          yant = y;
       }
    }
-   else if (boton == GLUT_LEFT_BUTTON){
+
+   else if (boton == GLUT_LEFT_BUTTON){ // click izquierdo
       static int i = 0; // Conseguimos que solo actue en el press y no en el realese 
 
       if (i % 2 == 0){
@@ -326,6 +327,12 @@ void Escena::clickRaton( int boton, int estado, int x, int y )
 
       i++;
    }
+
+   else if (boton == 3) // rueda hacia delante
+      camaras[activa]->zoom(-1.2, Width*10, Height*10);
+   
+   else if(boton == 4) // rueda hacia atrás
+      camaras[activa]->zoom(1.2, Width*10, Height*10);
 }
 
 //**************************************************************************
@@ -372,6 +379,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
       case 'R': // Reset Camara
          camaras[activa]->setObjetivo({0,50,150}, {0,0,0});
+         camaras[activa]->setUp({0,1,0});
          break;
 
       // SALIR //

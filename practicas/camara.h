@@ -31,6 +31,7 @@ public:
     void setProyeccion(float width, float height);
     void setObjetivo(Tupla3f eye, Tupla3f at);
     void setAt(Tupla3f at);
+    void setUp(Tupla3f up);
     void setEstadoRaton(estadoRaton estado);
 
     Tupla3f getEye();

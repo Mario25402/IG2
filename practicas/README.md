@@ -1,45 +1,42 @@
-# Instrucciones de uso del programa
-Al ejecutar la orden make, el makefile compilará todos los archivos y ejecutará el programa, en este momento tendremos 3 opciones:
+# Click derecho
+Si pulsamos y arrastramos, se moverá la cámara en primera persona (esta funcionalidad no está disponible para el modo examinar).
 
-## Opción "O"
-Entramos al modo de selección de objetos, donde disponemos de las siguientes opciones:
-* Las teclas actuan como un interruptor, la primera vez activará y la siguiente desactivará.
+# Click izquierdo
+Seleccionaremos uno de los objetos, la camara se posicionará capturando la atención del seleccionado en modo examinar, es decir, que se movera al rededor del objeto sin perderlo
+de vista.
+Para salir de una selección podemos pulsar el vacio o la letra Q (mantendrá la posicion y orientacion pero se apuntará al 0,0,0).
 
-### Opción "C"
-Seleccionaremos el objeto cubo.
+# Cámara: Primera persona
+Se mueve en el eje X con las flechas de dirección izq-dcha o con el ratón (siempre se apunta al 0,0,0), en el eje Y con las felchas de dirección arriba-abajo o con el ratón y en el eje Z con las teclas Z para el desplazamiento positivo o X para el negativo.
 
-### Opción "P"
-Seleccionaremos el objeto piramide hexagonal truncada.
+# Cámara: Examinar
+A veces tiene ciertos traslados por la dificultad de ajustar los números negativos, la posicion del objeto, de la cámara, el desplazamiento, etc...
 
-### Opción "Y"
-Seleccionaremos un objeto PLY.
+# Separación de modos y cámaras
+Cada cámara es independiente de las otras (es preferible no mezclar cámaras mientras estamos en una selección) pero como el modo define el movimiento, si en el modo examinar volteamos la camara boca abajo, cuando volvamos a la primera persona, seguirá volteada.
 
-#### Opción "1"
-Mostrará una copa.
+# Rueda del ratón
+La rueda del raton realiza zoom in cuando la rotamos de atras hacia alante y zoom out cuando lo hacemos al reves.
 
-#### Opción "2"
-Mostrará un coche antiguo.
+# Teclado
 
-#### Opción "3"
-Mostrará el busto de Beethoven.
+## Opción "R"
+Resetea la camara actual a los parámetros de la cámara 0.
 
-### Opción "E"
-Seleccionaremos el objeto esfera, creada a partil de su perfil revolucionado.
+## Opción "A"
+Modo animación, sirve para las luces, la posicional se mueve y la direccional cambia de color.
 
-### Opción "R"
-Seleccionaremos el objeto cilindro, creada a partil de su perfil revolucionado.
+## Opción "C"
+Selección de cámaras.
 
-### Opción "N"
-Seleccionaremos el objeto cono, creada a partil de su perfil revolucionado.
+### Opción "0"
+Selecciona la cámara 0, viene por defecto selecionada.
 
-### Opción "M"
-Seleccionaremos la visualización de objetos múltiple, veremos una esfera, un cono y un cilindro simultaneamente.
+### Opción "1"
+Selecciona la cámara 1, posicionada por atrás de los objetos.
 
-### Opción "4"
-Mostrará un peón de ajedrez, este ha sido realizado dado su perfil en un vector de puntos que posteriormente ha sido revolucionado.
-
-### Opción "Q"
-Saldremos del modo de selección de objetos.
+### Opción "2"
+Selecciona la cámara 2, misma configuración que la cámara 0, pero ortogonal.
 
 ## Opción "V"
 Entramos al modo de selección de visualización, es decir, cómo veremos el objeto. Aquí disponemos de las siguientes opciones:
