@@ -4,13 +4,13 @@ class Barra{
     private:
         Cilindro *cilindro;
         BarraSuperior *barraSuperior;
-
-        //float rotacion;
-        //bool bajando;
     
     public:
         Barra();
 
         void draw(bool puntos, bool alambre, bool solido);
-        //void animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion);
+
+        void setTextura();
+        void setMaterial(Material *mat);
+        void setSeleccionado(bool seleccionado);
 };

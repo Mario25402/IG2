@@ -29,9 +29,6 @@ protected:
 
     void calcularTexturas();
     void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool textura = false);
-
-//private:
-    //std::vector<float> d;
 } ;
 
 

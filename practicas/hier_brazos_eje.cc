@@ -27,3 +27,18 @@ void BrazosEje::draw(bool puntos, bool alambre, bool solido){
         brazo->draw(puntos, alambre, solido);
     glPopMatrix();
 }
+
+void BrazosEje::setSeleccionado(bool seleccionado){
+    brazo->setSeleccionado(seleccionado);
+    eje->setSeleccionado(seleccionado);
+}
+
+void BrazosEje::setMaterial(Material *mat){
+    brazo->setMaterial(mat);
+    eje->setMaterial(mat);
+}
+
+void BrazosEje::setTextura(){
+    brazo->setTextura();
+    eje->setTextura();
+}

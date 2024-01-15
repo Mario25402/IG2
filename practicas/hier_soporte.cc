@@ -2,7 +2,7 @@
 
 Soporte::Soporte(){
     pie = new Pie();
-    cubo = new Cubo();
+    suelo = new Cuadro(600);
 }
 
 void Soporte::draw(bool puntos, bool alambre, bool solido){
@@ -22,10 +22,25 @@ void Soporte::draw(bool puntos, bool alambre, bool solido){
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-        glScalef(900, 1, 600);
+        glRotatef(270, 1,0,0);
 
-        cubo->draw(puntos, false, false);
-        cubo->draw(false, alambre, false);
-        cubo->draw(false, false, solido);
+        suelo->draw(puntos, false, false);
+        suelo->draw(false, alambre, false);
+        suelo->draw(false, false, solido);
     glPopMatrix();
+}
+
+void Soporte::setSeleccionado(bool seleccionado){
+    pie->setSeleccionado(seleccionado);
+    suelo->setSeleccionado(seleccionado);
+}
+
+void Soporte::setMaterial(Material *mat){
+    pie->setMaterial(mat);
+    suelo->setMaterial(mat);
+}
+
+void Soporte::setTextura(){
+    pie->setTextura();
+    suelo->setTextura("../texturas/ladrillo.jpg");
 }

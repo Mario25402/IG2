@@ -10,6 +10,10 @@ class AsientoGiratorio{
         AsientoGiratorio();
 
         void animar(float velAnimacion);
-        void setVelocidad(float despBarra);
         void draw(bool puntos, bool alambre, bool solido);
+
+        void setTextura();
+        void setMaterial(Material *mat);
+        void setVelocidad(float despBarra);
+        void setSeleccionado(bool seleccionado);
 };

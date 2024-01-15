@@ -44,3 +44,15 @@ void Eje::draw(bool puntos, bool alambre, bool solido){
         cilindro->draw(false, false, solido);
     glPopMatrix();
 }
+
+void Eje::setSeleccionado(bool seleccionado){
+    cilindro->setSeleccionado(seleccionado);
+}
+
+void Eje::setMaterial(Material *mat){
+    cilindro->setMaterial(mat);
+}
+
+void Eje::setTextura(){
+    cilindro->setTextura("../texturas/oxido.jpg");
+}

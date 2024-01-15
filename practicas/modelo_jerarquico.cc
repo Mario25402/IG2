@@ -36,3 +36,18 @@ void ModeloJerarquico::setVelocidad(float despBarra, float rotAsiento, float rot
 
     atraccion->setVelocidad(despBarra, rotAsiento);
 }
+
+void ModeloJerarquico::setSeleccionado(bool seleccionado){
+    atraccion->setSeleccionado(seleccionado);
+    soporte->setSeleccionado(seleccionado);
+}
+
+void ModeloJerarquico::setMaterial(Material *mat){
+    atraccion->setMaterial(mat);
+    soporte->setMaterial(mat);
+}
+
+void ModeloJerarquico::setTextura(){
+    atraccion->setTextura();
+    soporte->setTextura();
+}

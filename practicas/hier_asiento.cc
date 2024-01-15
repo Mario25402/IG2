@@ -5,6 +5,7 @@ Asiento::Asiento(){
     acercando = false;
 
     cubo = new Cubo(50);
+    suelo = new Cuadro(100);
     barra = new Barra();
 }
 
@@ -34,11 +35,11 @@ void Asiento::draw(bool puntos, bool alambre, bool solido){
     // Suelo
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-        glScalef(4, 0.1, 2);
+        glRotatef(270, 1, 0, 0);
 
-        cubo->draw(puntos, false, false);
-        cubo->draw(false, alambre, false);
-        cubo->draw(false, false, solido);
+        suelo->draw(puntos, false, false);
+        suelo->draw(false, alambre, false);
+        suelo->draw(false, false, solido);
     glPopMatrix();
 
     // Barra de Seguridad
@@ -68,4 +69,20 @@ void Asiento::animar(float velAnimacion){
 
 void Asiento::setVelocidad(float despBarra){
     translacion = despBarra;
+}
+
+void Asiento::setSeleccionado(bool seleccionado){
+    cubo->setSeleccionado(seleccionado);
+    barra->setSeleccionado(seleccionado);
+}
+
+void Asiento::setMaterial(Material *mat){
+    cubo->setMaterial(mat);
+    barra->setMaterial(mat);
+}
+
+void Asiento::setTextura(){
+    cubo->setTextura("../texturas/tela.jpg");
+    suelo->setTextura("../texturas/metal.jpg");
+    barra->setTextura();
 }

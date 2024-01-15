@@ -44,3 +44,18 @@ void AsientoGiratorio::animar(float velAnimacion){
 void AsientoGiratorio::setVelocidad(float despBarra){
     asiento->setVelocidad(despBarra);
 }
+
+void AsientoGiratorio::setSeleccionado(bool seleccionado){
+    asiento->setSeleccionado(seleccionado);
+    cilindro->setSeleccionado(seleccionado);
+}
+
+void AsientoGiratorio::setMaterial(Material *mat){
+    asiento->setMaterial(mat);
+    cilindro->setMaterial(mat);
+}
+
+void AsientoGiratorio::setTextura(){
+    asiento->setTextura();
+    cilindro->setTextura("../texturas/oxido.jpg");
+}

@@ -1,12 +1,3 @@
-// #############################################################################
-//
-// Informática Gráfica (Grado Informática)
-//
-// Archivo: cilindro.h
-
-//
-// #############################################################################
-
 #ifndef OBJPLY_H_INCLUDED
 #define OBJPLY_H_INCLUDED
 

@@ -53,3 +53,18 @@ void Brazo::draw(bool puntos, bool alambre, bool solido){
         cilindro->draw(false, false, solido);
     glPopMatrix();
 }
+
+void Brazo::setSeleccionado(bool seleccionado){
+    cubo->setSeleccionado(seleccionado);
+    cilindro->setSeleccionado(seleccionado);
+}
+
+void Brazo::setMaterial(Material *mat){
+    cubo->setMaterial(mat);
+    cilindro->setMaterial(mat);
+}
+
+void Brazo::setTextura(){
+    cubo->setTextura("../texturas/oxido.jpg");
+    cilindro->setTextura("../texturas/oxido.jpg");
+}

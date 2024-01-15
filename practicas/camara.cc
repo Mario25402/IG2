@@ -55,7 +55,7 @@ void Camara::setObjetivo(Tupla3f eye, Tupla3f at){
     setAt(at);
 }
 
-void Camara::setEstadoRaton(estadoRaton estado){
+void Camara::setEstadoCamara(estadoCamara estado){
     this->estado = estado;
 }
 
@@ -71,6 +71,10 @@ void Camara::setUp(Tupla3f up){
 
 Tupla3f Camara::getEye(){
     return eye;
+}
+
+estadoCamara Camara::getEstadoCamara(){
+    return estado;
 }
 
 /*****************************************************************************/
@@ -100,8 +104,8 @@ void Camara::mover(float x, float y, float z, bool raton){
     }
 
     else if (estado == EXAMINAR){
-        if (x != LIMITE) rotarXExaminar(x, raton);
-        if (y != LIMITE) rotarYExaminar(y, raton);
+        if (x != LIMITE) rotarXExaminar(x);
+        if (y != LIMITE) rotarYExaminar(y);
         if (z != LIMITE) rotarZExaminar(z);
     }
 }
@@ -138,32 +142,27 @@ void Camara::rotarZPrimeraPersona(float angle){
 
 /*****************************************************************************/
 
-void Camara::rotarXExaminar(float angle, bool raton) {
-    if (!raton){
-        angle /= 50;
-        angle = fmod(angle, 360);
+void Camara::rotarXExaminar(float angle) {
+    angle /= 50;
+    angle = fmod(angle, 360);
 
-        float radio = 100;
+    float radio = 100;
 
-        eye[0] = at[0] + radio * cos(angle);
-        eye[2] = at[2] + radio * sin(angle);
-    }
+    eye[0] = at[0] + radio * cos(angle);
+    eye[2] = at[2] + radio * sin(angle);
 }
 
-void Camara::rotarYExaminar(float angle, bool raton) {
-    if (!raton){
-        angle /= 50;
-        angle = fmod(angle, 360);
+void Camara::rotarYExaminar(float angle) {
+    angle /= 50;
+    angle = fmod(angle, 360);
 
-        float radio = 100;
+    float radio = 100;
 
-        eye[1] = at[1] + radio * sin(angle);
-        eye[2] = at[2] + radio * cos(angle);
-    }
+    eye[1] = at[1] + radio * sin(angle);
+    eye[2] = at[2] + radio * cos(angle);
 }
 
 void Camara::rotarZExaminar(float angle) {
-    // No se puede cambiar con el raton
     angle /= 50;
     angle = fmod(angle, 360);
 

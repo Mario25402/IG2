@@ -35,3 +35,18 @@ void Atraccion::setVelocidad(float despBarra, float rotAsiento){
 
     asientoGiratorio->setVelocidad(despBarra);
 }
+
+void Atraccion::setSeleccionado(bool seleccionado){
+    brazosEje->setSeleccionado(seleccionado);
+    asientoGiratorio->setSeleccionado(seleccionado);
+}
+
+void Atraccion::setMaterial(Material *mat){
+    brazosEje->setMaterial(mat);
+    asientoGiratorio->setMaterial(mat);
+}
+
+void Atraccion::setTextura(){
+    brazosEje->setTextura();
+    asientoGiratorio->setTextura();
+}

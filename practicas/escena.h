@@ -57,12 +57,22 @@ private:
     Esfera *esfera1 = nullptr;
     Esfera *esfera2 = nullptr;
 
+    ObjPLY *ply = nullptr;
+    ObjRevolucion *peon = nullptr;
+    ObjRevolucion *copa = nullptr;
+
+    Cono *cono = nullptr;
+    Cuadro *cuadro = nullptr;
+    ModeloJerarquico *modelo = nullptr;
+
     // Objetos de iluminación
     LuzPosicional *luzPos = nullptr;
     LuzDireccional *luzDir = nullptr;
 
     // Variables relacionadas con el material
-    Material *matBlanco = nullptr;
+    Material *matCromado = nullptr;
+    Material *matCyan = nullptr;
+    Material *matRojo = nullptr;
 
     /////       
 
@@ -72,7 +82,7 @@ private:
     bool solido = true;
 
     // Variables relacionadas con la iliuminación
-    bool iluminado = false;
+    bool iluminado = true;
 
     bool alfa = false;
     bool beta = false;
@@ -80,12 +90,15 @@ private:
     float angulo_alfa = 0.0f;
     float angulo_beta = 0.0f;
 
-    bool luz1 = false;
-    bool luz2 = false;
+    bool luz1 = true;
+    bool luz2 = true;
 
     // Variables de moviemiento de la animación
-    bool animacion = false;
+    bool animacion = true;
     bool manual = false;
+
+    bool animacionDireccional = true;
+    bool animacionPosicional = true;
 
     // Movimiento
     float velAnimacion = 1.0f;
@@ -96,7 +109,7 @@ private:
     // Variables de selección y camara
     int activa = 0;
     int seleccionado = 0;
-    int xant = 0, yant = 0, zant = 0;
+    int xant = 0, yant = 0;
     bool clickDer = false;
 
     /////
@@ -110,6 +123,10 @@ private:
     void draw_axis();
     void draw_lights();
 
+    void pick(int x, int y);
+    void dibujarSeleccion(int selected);
+    void procesarHits(GLint hits, GLuint buffer[]);
+
 public:
     Escena();
     
@@ -118,7 +135,6 @@ public:
 
     // Dibujar
     void dibujar();
-    void dibujarSeleccion(int selected);
 
     // Animación
     void animarModeloJerarquico();
@@ -132,11 +148,6 @@ public:
     // Interacción con la escena por ratón
     void clickRaton(int boton, int estado, int x, int y);
     void ratonMovido(int x, int y);
-    
-    // Interacción con la escena por selección
-    void pick(int x, int y);
-    void procesarHits(GLint hits, GLuint buffer[]);
-
 };
 
 #endif

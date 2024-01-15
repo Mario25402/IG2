@@ -51,26 +51,17 @@ void Barra::draw(bool puntos, bool alambre, bool solido){
     glPopMatrix();
 }
 
-/*
-void Barra::animar(bool &turnoBarra, bool &turnoAsiento, bool &turnoAtraccion){
-    if (turnoBarra){
-        if (bajando){
-            rotacion -= 0.5;
-
-            if (rotacion <= -45){
-                bajando = false;
-
-                turnoAsiento = true;
-                turnoAtraccion = true;
-                turnoBarra = false;
-            }
-        }
-        else{
-            rotacion += 0.5;
-
-            if (rotacion >= 0)
-                bajando = true;
-        }
-    }
+void Barra::setSeleccionado(bool seleccionado){
+    cilindro->setSeleccionado(seleccionado);
+    barraSuperior->setSeleccionado(seleccionado);
 }
-*/
+
+void Barra::setMaterial(Material *mat){
+    cilindro->setMaterial(mat);
+    barraSuperior->setMaterial(mat);
+}
+
+void Barra::setTextura(){
+    cilindro->setTextura("../texturas/metal.jpg");
+    barraSuperior->setTextura();
+}

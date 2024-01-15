@@ -4,7 +4,7 @@
 #include "auxiliar.h"
 
 typedef enum {PERSPECTIVA, ORTOGONAL} tipoCamara;
-typedef enum {INACTIVO, PRIMERA_PERSONA, EXAMINAR} estadoRaton;
+typedef enum {INACTIVO, PRIMERA_PERSONA, EXAMINAR} estadoCamara;
 
 const int LIMITE = 5000;
 
@@ -15,7 +15,7 @@ private:
     Tupla3f up;
 
     tipoCamara tipo;
-    estadoRaton estado;
+    estadoCamara estado;
 
     float left, right;
     float bottom, top;
@@ -32,9 +32,10 @@ public:
     void setObjetivo(Tupla3f eye, Tupla3f at);
     void setAt(Tupla3f at);
     void setUp(Tupla3f up);
-    void setEstadoRaton(estadoRaton estado);
+    void setEstadoCamara(estadoCamara estado);
 
     Tupla3f getEye();
+    estadoCamara getEstadoCamara();
 
     void mover(float x, float y, float z, bool raton);
     void zoom(float factor, float width, float height);
@@ -43,8 +44,8 @@ public:
     void rotarYPrimeraPersona(float angle, bool raton);
     void rotarZPrimeraPersona(float angle);
 
-    void rotarXExaminar(float angle, bool raton);
-    void rotarYExaminar(float angle, bool raton);
+    void rotarXExaminar(float angle);
+    void rotarYExaminar(float angle);
     void rotarZExaminar(float angle);
 
 };

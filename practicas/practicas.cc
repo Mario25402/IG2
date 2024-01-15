@@ -110,7 +110,7 @@ void ratonMovido( int x, int y )
 void idle()
 {
    if ( escena != nullptr ){
-      //escena->animarModeloJerarquico();
+      escena->animarModeloJerarquico();
       escena->animarLuzPosicional();
       escena->animarLuzDireccional();
    }

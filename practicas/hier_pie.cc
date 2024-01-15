@@ -25,3 +25,18 @@ void Pie::draw(bool puntos, bool alambre, bool solido){
         cubo->draw(false, false, solido);
     glPopMatrix();
 }
+
+void Pie::setSeleccionado(bool seleccionado){
+    cubo->setSeleccionado(seleccionado);
+    piramide->setSeleccionado(seleccionado);
+}
+
+void Pie::setMaterial(Material *mat){
+    cubo->setMaterial(mat);
+    piramide->setMaterial(mat);
+}
+
+void Pie::setTextura(){
+    cubo->setTextura("../texturas/metal.jpg");
+    piramide->setTextura("../texturas/metal.jpg");
+}
