@@ -22,7 +22,7 @@ void Soporte::draw(bool puntos, bool alambre, bool solido){
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-        glRotatef(270, 1,0,0);
+        glRotatef(270, 1, 0, 0);
 
         suelo->draw(puntos, false, false);
         suelo->draw(false, alambre, false);

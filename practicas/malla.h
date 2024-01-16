@@ -52,19 +52,24 @@ private:
    GLuint id_vbo_tri = 0;  // si un VBO ha sido creado
    GLuint id_vbo_c   = 0;  // o no, además de identificarlo
    GLuint id_vbo_t   = 0;
-   GLuint id_vbo_pc  = 0;  // pick color 
 
    bool oldPuntos = false;    // variables que controlan que no
    bool oldAlambre = false;   // se rellenen de nuevo 
    bool oldSolido = false;    // los colores innecesariamente
-
    bool seleccionado = false; // variable que controla si el objeto está seleccionado
+
+   bool primera = true;       // inicializa los colores de cada modo
+   std::vector<Tupla3f> cSolido;
+   std::vector<Tupla3f> cAlambre;
+   std::vector<Tupla3f> cPuntos;
+   std::vector<Tupla3f> cSelected;
 
    // función que crea un VBO
    GLuint CrearVBO(GLuint tipo_vbo, GLuint tam, GLvoid *puntero_ram);
 
    // función que cambia el color de los objetos según el modo de dibujado
    void setColor(bool puntos, bool alambre, bool solido);
+   void init_color();
 };
 
 #endif

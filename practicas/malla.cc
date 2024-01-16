@@ -13,6 +13,7 @@ void Malla3D::draw(bool puntos, bool alambre, bool solido)
 {
    // Modo de visualización //
 
+   if (primera) init_color();
    setColor(puntos, alambre, solido);
 
    // Texturas //
@@ -93,6 +94,19 @@ void Malla3D::draw(bool puntos, bool alambre, bool solido)
 
 // ************************************************************************* //
 
+void Malla3D::init_color(){
+   primera = false;
+
+   for (int i = 0; i < v.size(); i++){
+      cPuntos.push_back(Tupla3f(0.41, 0.41, 0.41));
+      cAlambre.push_back(Tupla3f(0, 0, 0));
+      cSolido.push_back(Tupla3f(1, 1, 1));
+      cSelected.push_back(Tupla3f(1, 0, 0));
+   }
+}
+
+// ************************************************************************* //
+
 void Malla3D::setSeleccionado(bool sel){ seleccionado = sel; }
 
 // ************************************************************************* //
@@ -115,33 +129,27 @@ GLuint Malla3D::CrearVBO (GLuint tipo_vbo, GLuint tam, GLvoid * puntero_ram)
 void Malla3D::setColor(bool puntos, bool alambre, bool solido)
 {
    if (puntos and !oldPuntos){ // Si ha de pintarse como puntos y anteriormente no estaba activado
-      glPointSize(5);
       glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+      glPointSize(5);
       
-      for (int i = 0; i < v.size(); i++)
-         c[i] = Tupla3f(0.41f, 0.41f, 0.41f);
-
+      c = cPuntos;
       id_vbo_c = 0; // actualizar el VBO de colores
    }
    
    if (alambre and !oldAlambre){
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-      for (int i = 0; i < v.size(); i++)
-         c[i] = Tupla3f(0.0f, 0.0f, 0.0f);
-
+      c = cAlambre;
       id_vbo_c = 0;
    }
 
    if (solido and !oldSolido){
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-      for (int i = 0; i < v.size(); i++){
-         if (!seleccionado)
-            c[i] = Tupla3f(1, 1, 1);
-         else
-            c[i] = Tupla3f(1, 0, 0);
-      }
+      if (!seleccionado)
+         c = cSolido;
+      else
+         c = cSelected;
 
       id_vbo_c = 0;
    }

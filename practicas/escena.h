@@ -53,9 +53,6 @@ private:
 
     // Objetos de la escena, importante inicializarlos a nullptr
     Ejes ejes;
-    Esfera *esfera0 = nullptr;
-    Esfera *esfera1 = nullptr;
-    Esfera *esfera2 = nullptr;
 
     ObjPLY *ply = nullptr;
     ObjRevolucion *peon = nullptr;
@@ -63,6 +60,7 @@ private:
 
     Cono *cono = nullptr;
     Cuadro *cuadro = nullptr;
+    Esfera *esfera = nullptr;
     ModeloJerarquico *modelo = nullptr;
 
     // Objetos de iluminación

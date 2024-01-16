@@ -15,10 +15,6 @@ Camara::Camara(Tupla3f eye, Tupla3f at, Tupla3f up, int tipo, float left,
     this->top = top;
     this->near = near;
     this->far = far;
-
-    anteriorX = eye[0];
-    anteriorY = eye[1];
-    anteriorZ = eye[2];
 }
 
 /*****************************************************************************/
@@ -96,10 +92,10 @@ void Camara::zoom(float factor, float width, float height){
     setProyeccion(width, height);
 }
 
-void Camara::mover(float x, float y, float z, bool raton){
+void Camara::mover(float x, float y, float z){
     if (estado == PRIMERA_PERSONA){
-        if (x != LIMITE) rotarXPrimeraPersona(x, raton);
-        if (y != LIMITE) rotarYPrimeraPersona(y, raton);
+        if (x != LIMITE) rotarXPrimeraPersona(x);
+        if (y != LIMITE) rotarYPrimeraPersona(y);
         if (z != LIMITE) rotarZPrimeraPersona(z);
     }
 
@@ -112,32 +108,16 @@ void Camara::mover(float x, float y, float z, bool raton){
 
 /*****************************************************************************/
 
-void Camara::rotarXPrimeraPersona(float angle, bool raton){
-    if (!raton){
-        if (angle > anteriorX) eye[0]++;
-        else eye[0]--;
-    }
-    else eye[0] += angle;
-
-    anteriorX = angle;
+void Camara::rotarXPrimeraPersona(float angle){
+    at[0] += angle;
 }
 
-void Camara::rotarYPrimeraPersona(float angle, bool raton){
-    if (!raton){ // teclas
-        if (angle > anteriorY) eye[1]++;
-        else eye[1]--;
-    }
-    else eye[1] += angle;
-
-    anteriorY = angle;
+void Camara::rotarYPrimeraPersona(float angle){
+    at[1] += angle;
 }
 
 void Camara::rotarZPrimeraPersona(float angle){
-    // No se puede cambiar con el raton
-    if (angle > anteriorZ) eye[2]++;
-    else eye[2]--;
-    
-    anteriorZ = angle;
+    at[2] += angle;
 }
 
 /*****************************************************************************/

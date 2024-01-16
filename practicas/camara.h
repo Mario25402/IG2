@@ -21,8 +21,6 @@ private:
     float bottom, top;
     float near, far;
 
-    int anteriorX, anteriorY, anteriorZ;
-
 public:
     Camara(Tupla3f eye, Tupla3f at, Tupla3f up, int tipo, float left,
            float right, float bottom, float top, float near, float far);
@@ -37,11 +35,11 @@ public:
     Tupla3f getEye();
     estadoCamara getEstadoCamara();
 
-    void mover(float x, float y, float z, bool raton);
+    void mover(float x, float y, float z);
     void zoom(float factor, float width, float height);
 
-    void rotarXPrimeraPersona(float angle, bool raton);
-    void rotarYPrimeraPersona(float angle, bool raton);
+    void rotarXPrimeraPersona(float angle);
+    void rotarYPrimeraPersona(float angle);
     void rotarZPrimeraPersona(float angle);
 
     void rotarXExaminar(float angle);

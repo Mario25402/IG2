@@ -15,8 +15,8 @@ void LuzPosicional::animarPosicion(){
     angulo += 0.01;
     angulo = fmod(angulo, 360);
 
-    float x = (50 * cos(angulo)) + 50;
-    float z = (50 * sin(angulo)) + 50;
+    float x = (200 * cos(angulo)) + 100;
+    float z = (200 * sin(angulo)) + 100;
 
     this->posicion[0] = x;
     this->posicion[2] = z;

@@ -103,9 +103,10 @@ void Escena::init_objetos()
 
    /////
 
-   modelo = new ModeloJerarquico();
-   cono = new Cono(3, 20, 100, 50);
    cuadro = new Cuadro(100);
+   cono = new Cono(3, 20, 100, 50);
+   esfera = new Esfera(20, 20, 50);
+   modelo = new ModeloJerarquico();
 
    ply = new ObjPLY("../plys_ejemplo/beethoven.ply");
    copa = new ObjRevolucion("../plys_ejemplo/copa.ply", 25);
@@ -123,7 +124,7 @@ void Escena::init_luces()
    angulo_beta = 0;
    
    luzPos = new LuzPosicional({100,0,0}, GL_LIGHT1, {0.0,0.0,1,1}, {0,0,1,1}, {0,0,1,1});
-   luzDir = new LuzDireccional({angulo_alfa,angulo_beta}, GL_LIGHT2, {0.2,0.2,0.2,1}, {0.4,0.4,0.4,1}, {0.4,0.4,0.4,1});
+   luzDir = new LuzDireccional({angulo_alfa, angulo_beta}, GL_LIGHT2, {0.2,0.2,0.2,1}, {0.4,0.4,0.4,1}, {0.4,0.4,0.4,1});
 }
 
 void Escena::init_materiales()
@@ -186,7 +187,7 @@ void Escena::draw_objects()
       glPopMatrix();
 
       glPushMatrix();
-      glTranslatef(0,-75,0);
+      glTranslatef(-100,-75,0);
          glLoadName(3);
          glPushName(3);
          cuadro->setMaterial(matCromado);
@@ -229,6 +230,17 @@ void Escena::draw_objects()
          peon->draw(puntos, false, false);
          peon->draw(false, alambre, false);
          peon->draw(false, false, solido);
+         glPopName();
+      glPopMatrix();
+
+      glPushMatrix();
+      glTranslatef(100,-75,0);
+         glLoadName(7);
+         glPushName(7);
+         esfera->setMaterial(matCromado);
+         esfera->draw(puntos, false, false);
+         esfera->draw(false, alambre, false);
+         esfera->draw(false, false, solido);
          glPopName();
       glPopMatrix();
    }
@@ -274,6 +286,7 @@ void Escena::dibujarSeleccion(int selected){
          ply->setSeleccionado(false);
          copa->setSeleccionado(false);
          peon->setSeleccionado(false);
+         esfera->setSeleccionado(false);
 
          camaras[activa]->setAt({0,0,0});
          camaras[activa]->setEstadoCamara(PRIMERA_PERSONA);
@@ -286,6 +299,7 @@ void Escena::dibujarSeleccion(int selected){
          ply->setSeleccionado(false);
          copa->setSeleccionado(false);
          peon->setSeleccionado(false);
+         esfera->setSeleccionado(false);
 
          camaras[activa]->setObjetivo({0,50,100}, {0,50,0});
          break;
@@ -297,8 +311,9 @@ void Escena::dibujarSeleccion(int selected){
          ply->setSeleccionado(false);
          copa->setSeleccionado(false);
          peon->setSeleccionado(false);
+         esfera->setSeleccionado(false);
 
-         camaras[activa]->setObjetivo({-100,50,100}, {-100,0,0});
+         camaras[activa]->setObjetivo({-100,50,150}, {-100,0,0});
          break;
 
       case 3:
@@ -308,8 +323,9 @@ void Escena::dibujarSeleccion(int selected){
          ply->setSeleccionado(false);
          copa->setSeleccionado(false);
          peon->setSeleccionado(false);
+         esfera->setSeleccionado(false);
 
-         camaras[activa]->setObjetivo({0,-25,100}, {0,-75,0});
+         camaras[activa]->setObjetivo({-100,-25,100}, {-100,-75,0});
          break;
 
       case 4:
@@ -319,6 +335,7 @@ void Escena::dibujarSeleccion(int selected){
          ply->setSeleccionado(true);
          copa->setSeleccionado(false);
          peon->setSeleccionado(false);
+         esfera->setSeleccionado(false);
 
          camaras[activa]->setObjetivo({100,50,100}, {100,30,0});
          break;
@@ -330,6 +347,7 @@ void Escena::dibujarSeleccion(int selected){
          ply->setSeleccionado(false);
          copa->setSeleccionado(true);
          peon->setSeleccionado(false);
+         esfera->setSeleccionado(false);
 
          camaras[activa]->setObjetivo({-150,50,100}, {-150,0,0});
          break;
@@ -341,8 +359,21 @@ void Escena::dibujarSeleccion(int selected){
          ply->setSeleccionado(false);
          copa->setSeleccionado(false);
          peon->setSeleccionado(true);
+         esfera->setSeleccionado(false);
 
          camaras[activa]->setObjetivo({150,50,100}, {150,30,0});
+         break;
+
+      case 7:
+         modelo->setSeleccionado(false);
+         cono->setSeleccionado(false);
+         cuadro->setSeleccionado(false);
+         ply->setSeleccionado(false);
+         copa->setSeleccionado(false);
+         peon->setSeleccionado(false);
+         esfera->setSeleccionado(true);
+
+         camaras[activa]->setObjetivo({100,-25,100}, {100,-75,0});
          break;
    }
 }
@@ -444,9 +475,9 @@ void Escena::ratonMovido( int x, int y )
 {
    if (clickDer){
       if (camaras[activa]->getEstadoCamara() == EXAMINAR)
-         camaras[activa]->mover(x, y, LIMITE, 1);
+         camaras[activa]->mover(x, y, LIMITE);
       else
-         camaras[activa]->mover(x-xant, y-yant, LIMITE, 1);
+         camaras[activa]->mover(xant-x, yant-y, LIMITE);
 
       xant = x;
       yant = y;
@@ -474,11 +505,11 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       // Teclas propias
 
       case 'Z': // Eje Z++
-         camaras[activa]->mover(LIMITE,LIMITE,++Observer_distance, 0);
+         camaras[activa]->mover(LIMITE,LIMITE,++Observer_distance);
          break;
 
       case 'X': // Eje Z--
-         camaras[activa]->mover(LIMITE,LIMITE,--Observer_distance, 0);
+         camaras[activa]->mover(LIMITE,LIMITE,--Observer_distance);
          break;
 
       case 'R': // Reset Camara
@@ -916,16 +947,16 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
    switch ( Tecla1 )
    {
 	   case GLUT_KEY_LEFT:
-         camaras[activa]->mover(--Observer_angle_y,LIMITE,LIMITE, 0);
+         camaras[activa]->mover(--Observer_angle_y,LIMITE,LIMITE);
          break;
 	   case GLUT_KEY_RIGHT:
-         camaras[activa]->mover(++Observer_angle_y,LIMITE,LIMITE, 0);
+         camaras[activa]->mover(++Observer_angle_y,LIMITE,LIMITE);
          break;
 	   case GLUT_KEY_UP:
-         camaras[activa]->mover(LIMITE,++Observer_angle_x,LIMITE, 0);
+         camaras[activa]->mover(LIMITE,++Observer_angle_x,LIMITE);
          break;
 	   case GLUT_KEY_DOWN:
-         camaras[activa]->mover(LIMITE,--Observer_angle_x,LIMITE, 0);
+         camaras[activa]->mover(LIMITE,--Observer_angle_x,LIMITE);
          break;
 	   case GLUT_KEY_PAGE_UP:
          camaras[activa]->zoom(1.2, Width*10, Height*10);
