@@ -17,7 +17,7 @@
 
 class ObjRevolucion : public Malla3D
 {
-   public:
+public:
     ObjRevolucion();
     ObjRevolucion(const std::string & archivo, int num_instancias, bool textura = false) ;
     ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, bool textura = false) ;
@@ -29,6 +29,10 @@ protected:
 
     void calcularTexturas();
     void crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool textura = false);
+
+private:
+    const float LIM_TAPAS = 0.000000001f;
+    
 } ;
 
 

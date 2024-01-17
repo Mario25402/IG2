@@ -20,13 +20,11 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 {
    // leer datos del archivo PLY
    ply::read_vertices(archivo, v);
-   //ply::read(archivo, v, f);
 
    // rellenar en orden ascendente en el eje Y
-   if (v.front()[1] > v.back()[1]){
+   if (v.front()[1] > v.back()[1])
       std::reverse(v.begin(), v.end());
-   }
-
+   
    /////
 
    Tupla3f polo_sur, polo_norte;
@@ -35,14 +33,14 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
 
    // Comprobar si hay polo sur
    polo_sur = v.front();
-   tapa_inf = (polo_sur[0] <= 0.000000001f and polo_sur[2] <= 0.000000001f);
+   tapa_inf = (polo_sur[0] <= LIM_TAPAS and polo_sur[2] <= LIM_TAPAS);
 
    // eliminar polo sur
    if (tapa_inf) v.erase(v.begin());
 
    // Comprobar si hay polo norte
    polo_norte = v.back();
-   tapa_sup = (polo_norte[0] <= 0.000000001f and polo_norte[2] <= 0.000000001f);
+   tapa_sup = (polo_norte[0] <= LIM_TAPAS and polo_norte[2] <= LIM_TAPAS);
 
    // eliminar polo norte
    if (tapa_sup) v.pop_back();
@@ -108,14 +106,14 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
 
    // Comprobar si hay polo sur
    polo_sur = v.front();
-   tapa_inf = (polo_sur[0] <= 0.000000001f and polo_sur[2] <= 0.000000001f);
+   tapa_inf = (polo_sur[0] <= LIM_TAPAS and polo_sur[2] <= LIM_TAPAS);
 
    // eliminar polo sur
    if (tapa_inf) v.erase(v.begin());
 
    // Comprobar si hay polo norte
    polo_norte = v.back();
-   tapa_sup = (polo_norte[0] <= 0.000000001f and polo_norte[2] <= 0.000000001f);
+   tapa_sup = (polo_norte[0] <= LIM_TAPAS and polo_norte[2] <= LIM_TAPAS);
 
    // eliminar polo norte
    if (tapa_sup) v.pop_back();
@@ -163,38 +161,39 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
 
 void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias, bool textura) 
 {
-    int N = num_instancias;
-    int M = perfil_original.size();
+   int N = num_instancias;
+   int M = perfil_original.size();
 
-    v.clear();
-    for (int i = 0; i < N; i++){
-        for (int j = 0; j < M; j++){
-            float x = perfil_original[j][0] * cos(2.0f*M_PI*i/N) + 
-                      perfil_original[j][2] * sin(2.0f*M_PI*i/N);
+   v.clear();
+   for (int i = 0; i < N; i++){
+      for (int j = 0; j < M; j++){
+         float x = perfil_original[j][0] * cos(2.0f*M_PI*i/N) + 
+                     perfil_original[j][2] * sin(2.0f*M_PI*i/N);
 
-            float y = perfil_original[j][1];
+         float y = perfil_original[j][1];
 
-            float z = perfil_original[j][0] * (-1 * sin(2.0f*M_PI*i/N)) + 
-                      perfil_original[j][2] * cos(2.0f*M_PI*i/N);
+         float z = perfil_original[j][0] * (-1 * sin(2.0f*M_PI*i/N)) + 
+                     perfil_original[j][2] * cos(2.0f*M_PI*i/N);
 
-            v.push_back(Tupla3f(x,y,z));
-        }
-    }
+         v.push_back(Tupla3f(x,y,z));
+      }
+   }
 
-    c.resize(v.size());
-    f.clear();
+   c.resize(v.size());
+   f.clear();
 
-    for (int i = 0; i < N; i++){
-        for (int j = 0; j < M-1; j++){
-            int a = M * i + j;
-            int b = M * ((i+1) % N) + j;
+   for (int i = 0; i < N; i++){
+      for (int j = 0; j < M-1; j++){
+         int a = M * i + j;
+         int b = M * ((i+1) % N) + j;
 
-            f.push_back(Tupla3i(a,b,b+1));   //f.push_back(Tupla3i(a, b+1, b)); 
-            f.push_back(Tupla3i(a,b+1,a+1)); //f.push_back(Tupla3i(a, a+1, b+1));
-        }
-    }
+         f.push_back(Tupla3i(a,b,b+1));   //f.push_back(Tupla3i(a, b+1, b)); 
+         f.push_back(Tupla3i(a,b+1,a+1)); //f.push_back(Tupla3i(a, a+1, b+1));
+      }
+   }
+   
 
-    if (textura) calcularTexturas();
+   if (textura) calcularTexturas();
     
 }
 
@@ -222,30 +221,12 @@ void ObjRevolucion::calcularTexturas()
     for (int i = 0; i < numVert; i++){           // Recorre los vertices de la malla
         Tupla3f normalizado = v[i].normalized(); // Normaliza el vertice (módulo 1)
 
-        float phi = atan2(normalizado[2], normalizado[0]); // atan2(y,x) posicion en coordenadas esfericas
-        float theta = acos(normalizado[1]);                // acos(z) posicion en coordenadas esfericas
+        float phi = atan2(normalizado[2], normalizado[0]); // atan2(z,x) posicion en coordenadas esfericas
+        float theta = acos(normalizado[1]);                // acos(y) posicion en coordenadas esfericas
 
         float s = 1.0f - (phi / (2.0f * M_PI));  // Eje X en la textura, normalizado entre 0 y 1
         float t = (theta / M_PI);                // Eje Y en la textura, normalizado entre 0 y 1
 
         ct.push_back(Tupla2f(s,t));   // Añade la coordenada de textura al vector
-
     }
-
-    // M = vertices por cada repeticion
-    // N = numero de repeticiones
-
-    /*ct.clear();
-    ct.resize(v.size());
-    // V(i,j) = T(Si, Tj) [0,1]
-    for (int i = 0; i < N; i++){ // Recorre las repeticiones
-        float s = i/(N-1);  // Eje X en la textura
-
-        for (int j = 0; j < M; j++){ // Recorre los vertices de la malla
-            float t = d[j]/d[M-1]; // Eje Y en la textura 
-
-            ct.push_back(Tupla2f(s,t));
-        }
-    }*/
-
 }

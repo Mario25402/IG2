@@ -116,6 +116,7 @@ void Escena::init_objetos()
 
    modelo->setTextura();
    cuadro->setTextura("../texturas/text-mundo.jpg");
+   esfera->setTextura("../texturas/text-mundo.jpg");
 }
 
 void Escena::init_luces()
@@ -944,7 +945,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 
 void Escena::teclaEspecial( int Tecla1, int x, int y )
 {
-   switch ( Tecla1 )
+   /*switch ( Tecla1 )
    {
 	   case GLUT_KEY_LEFT:
          camaras[activa]->mover(--Observer_angle_y,LIMITE,LIMITE);
@@ -964,7 +965,7 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
 	   case GLUT_KEY_PAGE_DOWN:
          camaras[activa]->zoom(-1.2, Width*10, Height*10);
          break;
-	}
+	}*/
 }
 
 //**************************************************************************
