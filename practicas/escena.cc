@@ -889,11 +889,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                   cout << "TRASLACIÓN DE LA BARRA: " << velBarra << endl;
                }
                else if (move == ASIENTO){
-                  velAsiento = fmod(velAsiento++, 360);
+                  velAsiento++;
+                  velAsiento = fmod(velAsiento, 360);
                   cout << "ROTACIÓN DE LA ASIENTO: " << velAsiento << endl;
                }
                else if (move == ATRACCION){
-                  velAtraccion = fmod(velAtraccion++, 360);
+                  velAtraccion++;
+                  velAtraccion = fmod(velAtraccion, 360);
                   cout << "ROTACIÓN DE LA ATRACCIÓN: " << velAtraccion << endl;
                }
                else
@@ -920,11 +922,13 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
                   cout << "TRASLACIÓN DE LA BARRA: " << velBarra << endl;
                }
                else if (move == ASIENTO){
-                  velAsiento = fmod(velAsiento--, 360);
+                  velAsiento--;
+                  velAsiento = fmod(velAsiento, 360);
                   cout << "ROTACIÓN DE LA ASIENTO: " << velAsiento << endl;
                }
                else if (move == ATRACCION){
-                  velAtraccion = fmod(velAtraccion--, 360);
+                  velAtraccion--;
+                  velAtraccion = fmod(velAtraccion, 360);
                   cout << "ROTACIÓN DE LA ATRACCIÓN: " << velAtraccion << endl;
                }
                else

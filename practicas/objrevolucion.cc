@@ -140,7 +140,7 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> archivo, int num_instancias, b
       int M = v.size() / N; // inicio o fin de la fila en la malla
 
       // determinar posición del polo sur en el vector de vértices
-      int pos_polo = v.size()-1;;
+      int pos_polo = v.size()-1;
       if (tapa_inf and tapa_sup) pos_polo = v.size()-2;
 
       // añadir caras de la tapas
@@ -168,12 +168,12 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
    for (int i = 0; i < N; i++){
       for (int j = 0; j < M; j++){
          float x = perfil_original[j][0] * cos(2.0f*M_PI*i/N) + 
-                     perfil_original[j][2] * sin(2.0f*M_PI*i/N);
+                   perfil_original[j][2] * sin(2.0f*M_PI*i/N);
 
          float y = perfil_original[j][1];
 
          float z = perfil_original[j][0] * (-1 * sin(2.0f*M_PI*i/N)) + 
-                     perfil_original[j][2] * cos(2.0f*M_PI*i/N);
+                   perfil_original[j][2] * cos(2.0f*M_PI*i/N);
 
          v.push_back(Tupla3f(x,y,z));
       }
@@ -187,12 +187,11 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
          int a = M * i + j;
          int b = M * ((i+1) % N) + j;
 
-         f.push_back(Tupla3i(a,b,b+1));   //f.push_back(Tupla3i(a, b+1, b)); 
-         f.push_back(Tupla3i(a,b+1,a+1)); //f.push_back(Tupla3i(a, a+1, b+1));
+         f.push_back(Tupla3i(a,b,b+1));
+         f.push_back(Tupla3i(a,b+1,a+1));
       }
    }
    
-
    if (textura) calcularTexturas();
     
 }
@@ -215,18 +214,18 @@ float ObjRevolucion::centrar()
 
 void ObjRevolucion::calcularTexturas()
 {
-    ct.clear();
-    int numVert = v.size();
+   ct.clear();
+   int numVert = v.size();
 
-    for (int i = 0; i < numVert; i++){           // Recorre los vertices de la malla
-        Tupla3f normalizado = v[i].normalized(); // Normaliza el vertice (módulo 1)
+   for (int i = 0; i < numVert; i++){           // Recorre los vertices de la malla
+      Tupla3f normalizado = v[i].normalized(); // Normaliza el vertice (módulo 1)
 
-        float phi = atan2(normalizado[2], normalizado[0]); // atan2(z,x) posicion en coordenadas esfericas
-        float theta = acos(normalizado[1]);                // acos(y) posicion en coordenadas esfericas
+      float phi = atan2(normalizado[2], normalizado[0]); // atan2(z,x) posicion en coordenadas esfericas
+      float theta = acos(normalizado[1]);                // acos(y) posicion en coordenadas esfericas
 
-        float s = 1.0f - (phi / (2.0f * M_PI));  // Eje X en la textura, normalizado entre 0 y 1
-        float t = (theta / M_PI);                // Eje Y en la textura, normalizado entre 0 y 1
+      float s = 1.0f - (phi / (2.0f * M_PI));  // Eje X en la textura, normalizado entre 0 y 1
+      float t = (theta / M_PI);                // Eje Y en la textura, normalizado entre 0 y 1
 
-        ct.push_back(Tupla2f(s,t));   // Añade la coordenada de textura al vector
-    }
+      ct.push_back(Tupla2f(s,t));   // Añade la coordenada de textura al vector
+   }
 }
