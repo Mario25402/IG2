@@ -5,12 +5,17 @@ class ModeloJerarquico{
     private:    
         Soporte *soporte;
         Atraccion *atraccion;
+        PiramidePentagonal *gema;
+
+        Material *matGema;
 
         float rotacion;
+        int rotGema;
 
     public:
         ModeloJerarquico();
 
+        void animarGema();
         void animar(float velAnimacion);
         void draw(bool puntos, bool alambre, bool solido);
 

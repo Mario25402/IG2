@@ -113,6 +113,8 @@ void idle()
       escena->animarModeloJerarquico();
       escena->animarLuzPosicional();
       escena->animarLuzDireccional();
+      escena->animarGema();
+      escena->animarFocos();
    }
       
    glutPostRedisplay();

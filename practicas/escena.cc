@@ -31,8 +31,12 @@ Escena::Escena()
 
 void Escena::animarModeloJerarquico()
 {
-   if (animacion)
+   if (animacion){
       modelo->animar(velAnimacion);
+      avance += 0.5;
+
+      camaras[3]->setObjetivo({20,70,250-avance}, {0,50,0-avance});
+   }
 }
 
 void Escena::animarLuzPosicional()
@@ -45,6 +49,35 @@ void Escena::animarLuzPosicional()
 void Escena::animarLuzDireccional(){
    if (animacionDireccional){
       luzDir->animarColores();
+   }
+}
+
+void Escena::animarGema(){
+   modelo->animarGema();
+}
+
+void Escena::animarFocos(){
+   if (iluminado){
+      alfaFocos += 0.1*180/M_PI;
+      betaFocos += 0.1*180/M_PI;
+
+      luzRoja->setAnguloAlfa(alfaFocos);
+      luzRoja->setAnguloBeta(betaFocos);
+
+      float auxAlfa = 2*alfaFocos;
+
+      luzVerde->setAnguloAlfa(alfaFocos);
+      luzVerde->setAnguloBeta(betaFocos);
+
+      auxAlfa = 3*alfaFocos;
+
+      luzAzul->setAnguloAlfa(alfaFocos);
+      luzAzul->setAnguloBeta(betaFocos);
+
+      auxAlfa = 4*alfaFocos;
+
+      luzBlanca->setAnguloAlfa(alfaFocos);
+      luzBlanca->setAnguloBeta(betaFocos);     
    }
 }
 
@@ -79,9 +112,12 @@ void Escena::init_camaras(){
    camaras[2] = new Camara({0,50,150}, {0,0,0}, {0,1,0}, 1,
    -Width, Width, -Height, Height, Front_plane, Back_plane);
 
-   Observer_angle_x = camaras[0]->getEye()[0];
-   Observer_angle_y = camaras[0]->getEye()[1];
-   Observer_distance = camaras[0]->getEye()[2];
+   camaras[3] = new Camara({20,70,250}, {0,50,0}, {0,1,0}, 1,
+   -Width*2, Width*2, -Height*2, Height*2, Front_plane, Back_plane);
+
+   Observer_angle_x = camaras[3]->getEye()[0];
+   Observer_angle_y = camaras[3]->getEye()[1];
+   Observer_distance = camaras[3]->getEye()[2];
 }
 
 void Escena::init_objetos()
@@ -112,6 +148,13 @@ void Escena::init_objetos()
    copa = new ObjRevolucion("../plys_ejemplo/copa.ply", 25);
    peon = new ObjRevolucion(perfil, 25);
 
+   cuboR = new Cubo(10, 1, 0, 0);
+   cuboG = new Cubo(10, 0, 1, 0);
+   cuboB = new Cubo(10, 0, 0, 1);
+   cuboW = new Cubo(10, 1, 1, 1);
+
+   tetraedro = new Tetraedro(50);
+
    /////
 
    modelo->setTextura();
@@ -126,6 +169,14 @@ void Escena::init_luces()
    
    luzPos = new LuzPosicional({100,0,0}, GL_LIGHT1, {0.0,0.0,1,1}, {0,0,1,1}, {0,0,1,1});
    luzDir = new LuzDireccional({angulo_alfa, angulo_beta}, GL_LIGHT2, {0.2,0.2,0.2,1}, {0.4,0.4,0.4,1}, {0.4,0.4,0.4,1});
+
+   alfaFocos = M_PI/180;
+   betaFocos = 0;
+
+   luzRoja   = new LuzDireccional({alfaFocos,betaFocos}, GL_LIGHT2, {1,0,0,1}, {1,0,0,1}, {1,0,0,1});
+   luzVerde  = new LuzDireccional({2*alfaFocos,betaFocos}, GL_LIGHT3, {0,1,0,1}, {0,1,0,1}, {0,1,0,1});
+   luzAzul   = new LuzDireccional({3*alfaFocos,betaFocos}, GL_LIGHT4, {0,0,1,1}, {0,0,1,1}, {0,0,1,1});
+   luzBlanca = new LuzDireccional({4*alfaFocos,betaFocos}, GL_LIGHT5, {1,1,1,1}, {1,1,1,1}, {1,1,1,1});
 }
 
 void Escena::init_materiales()
@@ -165,6 +216,7 @@ void Escena::draw_objects()
    if (puntos or alambre or solido){
       glMatrixMode(GL_MODELVIEW);
       glPushMatrix();
+      glTranslatef(0,0, -avance);
       glScalef(0.1,0.1,0.1);
          glLoadName(1);
          glPushName(1);
@@ -176,72 +228,31 @@ void Escena::draw_objects()
       glPopMatrix();
 
       glPushMatrix();
-      glTranslatef(-100,0,0);
-      glScalef(0.5, 0.5, 0.5);
-         glLoadName(2);
-         glPushName(2);
-         cono->setMaterial(matRojo);
-         cono->draw(puntos, false, false);
-         cono->draw(false, alambre, false);
-         cono->draw(false, false, solido);
-         glPopName();
+      glTranslatef(-15,0,0);
+      cuboR->setMaterial(new Material({1, 0, 0, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}, 10));
+      cuboR->draw(false, false, true);
+      glPopMatrix();
+      glPushMatrix();
+      glTranslatef(-5,0,0);
+      cuboG->setMaterial(new Material({0, 1, 0, 1}, {0, 1, 0, 1}, {0, 1, 0, 1}, 10));
+      cuboG->draw(false, false, true);
+      glPopMatrix();
+      glPushMatrix();
+      glTranslatef(5,0,0);
+      cuboB->setMaterial(new Material({0, 0, 1, 1}, {0, 0, 1, 1}, {0, 0, 1, 1}, 10));
+      cuboB->draw(false, false, true);
+      glPopMatrix();
+      glPushMatrix();
+      glTranslatef(15,0,0);
+      cuboW->setMaterial(new Material({1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, 10));
+      cuboW->draw(false, false, true);
       glPopMatrix();
 
       glPushMatrix();
-      glTranslatef(-100,-75,0);
-         glLoadName(3);
-         glPushName(3);
-         cuadro->setMaterial(matCromado);
-         cuadro->draw(puntos, false, false);
-         cuadro->draw(false, alambre, false);
-         cuadro->draw(false, false, solido);
-         glPopName();
-      glPopMatrix();
-
-      glPushMatrix();
-      glTranslatef(100,30,0);
-      glScalef(5,5,5);
-         glLoadName(4);
-         glPushName(4);
-         ply->setMaterial(matRojo);
-         ply->draw(puntos, false, false);
-         ply->draw(false, alambre, false);
-         ply->draw(false, false, solido);
-         glPopName();
-      glPopMatrix();
-
-      glPushMatrix();
-      glTranslatef(-150,0,0);
-      glScalef(5,5,5);
-         glLoadName(5);
-         glPushName(5);
-         copa->setMaterial(matCyan);
-         copa->draw(puntos, false, false);
-         copa->draw(false, alambre, false);
-         copa->draw(false, false, solido);
-         glPopName();
-      glPopMatrix();
-
-      glPushMatrix();
-      glTranslatef(150,30,0);
-      glScalef(20,20,20);
-         glLoadName(6);
-         glPushName(6);
-         peon->setMaterial(matCyan);
-         peon->draw(puntos, false, false);
-         peon->draw(false, alambre, false);
-         peon->draw(false, false, solido);
-         glPopName();
-      glPopMatrix();
-
-      glPushMatrix();
-      glTranslatef(100,-75,0);
-         glLoadName(7);
-         glPushName(7);
-         esfera->setMaterial(matCromado);
-         esfera->draw(puntos, false, false);
-         esfera->draw(false, alambre, false);
-         esfera->draw(false, false, solido);
+         tetraedro->setMaterial(matCromado);
+         tetraedro->draw(puntos, false, false);
+         tetraedro->draw(false, alambre, false);
+         tetraedro->draw(false, false, solido);
          glPopName();
       glPopMatrix();
    }
@@ -251,6 +262,11 @@ void Escena::draw_lights()
 {
    if (iluminado){
       glEnable(GL_LIGHTING);
+
+      luzRoja->activar();
+      luzVerde->activar();
+      luzAzul->activar();
+      luzBlanca->activar();
 
       if (luz1) luzPos->activar();
       else luzPos->desactivar();
@@ -846,6 +862,21 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             cout << "MOVIMIENTO GIRATORIO DE LA ATRACCION" << endl;
          }
 
+         else cout << "Letra incorrecta" << endl;
+         break;
+
+      case '4':
+         if (modoMenu == CAMARA){
+            activa = 3;
+            seleccionado = 0;
+            dibujarSeleccion(seleccionado);
+
+            Observer_angle_x = camaras[3]->getEye()[0];
+            Observer_angle_y = camaras[3]->getEye()[1];
+            Observer_distance = camaras[3]->getEye()[2];
+            
+            cout << "CÁMARA 4 ACTIVADA" << endl;
+         }
          else cout << "Letra incorrecta" << endl;
          break;
 

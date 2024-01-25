@@ -97,11 +97,16 @@ void Malla3D::draw(bool puntos, bool alambre, bool solido)
 void Malla3D::init_color(){
    primera = false;
 
+   if (c.size() != 0)
+      cSolido = c;
+
    for (int i = 0; i < v.size(); i++){
       cPuntos.push_back(Tupla3f(0.41, 0.41, 0.41));
       cAlambre.push_back(Tupla3f(0, 0, 0));
-      cSolido.push_back(Tupla3f(1, 1, 1));
       cSelected.push_back(Tupla3f(1, 0, 0));
+
+      if (cSolido.empty())
+         cSolido.push_back(Tupla3f(1, 1, 1));
    }
 }
 

@@ -32,16 +32,18 @@ void Camara::setProyeccion(float width, float height){
     
     float aspecto = width / height;
 
-    if(tipo == ORTOGONAL)
+    if(tipo == ORTOGONAL){
         if (aspecto >= 1)
             glOrtho(left * aspecto, right * aspecto, bottom, top, near, far);
         else
             glOrtho(left, right, bottom / aspecto, top / aspecto, near, far);
-    else
+    }
+    else{
         if (aspecto >= 1)
             glFrustum(left * aspecto, right * aspecto, bottom, top, near, far);
         else
             glFrustum(left, right, bottom / aspecto, top / aspecto, near, far);
+    }
 
     glMatrixMode(GL_MODELVIEW);
 }

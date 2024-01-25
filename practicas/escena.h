@@ -15,6 +15,7 @@
 #include "modelo_jerarquico.h"
 #include "cuadro.h"
 #include "camara.h"
+#include "tetraedro.h"
 
 typedef enum {NADA, VISUALIZACION, CAMARA} menu;
 typedef enum {BARRA, ASIENTO, ATRACCION, NONE} movimiento;
@@ -49,7 +50,7 @@ private:
     /////
 
     // Variables de la camara
-    Camara *camaras[3] = {nullptr};
+    Camara *camaras[4] = {nullptr};
 
     // Objetos de la escena, importante inicializarlos a nullptr
     Ejes ejes;
@@ -63,9 +64,21 @@ private:
     Esfera *esfera = nullptr;
     ModeloJerarquico *modelo = nullptr;
 
+    Cubo *cuboR = nullptr;
+    Cubo *cuboG = nullptr;
+    Cubo *cuboB = nullptr;
+    Cubo *cuboW = nullptr;
+
+    Tetraedro *tetraedro = nullptr;
+
     // Objetos de iluminación
     LuzPosicional *luzPos = nullptr;
     LuzDireccional *luzDir = nullptr;
+
+    LuzDireccional *luzRoja = nullptr;
+    LuzDireccional *luzVerde = nullptr;
+    LuzDireccional *luzAzul = nullptr;
+    LuzDireccional *luzBlanca = nullptr;
 
     // Variables relacionadas con el material
     Material *matCromado = nullptr;
@@ -76,7 +89,7 @@ private:
 
     // Variables de estado de visualización
     bool puntos = false;
-    bool alambre = true;
+    bool alambre = false;
     bool solido = true;
 
     // Variables relacionadas con la iliuminación
@@ -88,8 +101,11 @@ private:
     float angulo_alfa = 0.0f;
     float angulo_beta = 0.0f;
 
-    bool luz1 = true;
-    bool luz2 = true;
+    float alfaFocos;
+    float betaFocos;
+
+    bool luz1 = false;
+    bool luz2 = false;
 
     // Variables de moviemiento de la animación
     bool animacion = true;
@@ -103,9 +119,10 @@ private:
     float velBarra = 0.0f;
     float velAsiento = 0.0f;
     float velAtraccion = 0.0f;
+    float avance = 0.0f;
 
     // Variables de selección y camara
-    int activa = 0;
+    int activa = 3;
     int seleccionado = 0;
     int xant = 0, yant = 0;
     bool clickDer = false;
@@ -138,6 +155,8 @@ public:
     void animarModeloJerarquico();
     void animarLuzPosicional();
     void animarLuzDireccional();
+    void animarGema();
+    void animarFocos();
 
     // Interacción con la escena por teclado
     bool teclaPulsada(unsigned char Tecla1, int x, int y);

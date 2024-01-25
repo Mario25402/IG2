@@ -2,9 +2,14 @@
 
 ModeloJerarquico::ModeloJerarquico(){
     rotacion = 0;
+    rotGema = 0;
+
+    matGema = new Material({0,0.5,0,1}, {0,0.5,0,1}, {0,0.5,0,1}, 50);
 
     soporte = new Soporte();
     atraccion = new Atraccion();
+    gema = new PiramidePentagonal(100, 100);
+
 }
 
 void ModeloJerarquico::draw(bool puntos, bool alambre, bool solido){
@@ -17,9 +22,17 @@ void ModeloJerarquico::draw(bool puntos, bool alambre, bool solido){
         atraccion->draw(puntos, alambre, solido);
     glPopMatrix();
 
-    glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
         soporte->draw(puntos, alambre, solido);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(0, 2000, 0);
+        glRotatef(rotGema, 0, 1, 0);
+        gema->setMaterial(matGema);
+        gema->draw(puntos, false, false);
+        gema->draw(false, alambre, false);
+        gema->draw(false, false, solido);
     glPopMatrix();
 
 }
@@ -50,4 +63,9 @@ void ModeloJerarquico::setMaterial(Material *mat){
 void ModeloJerarquico::setTextura(){
     atraccion->setTextura();
     soporte->setTextura();
+}
+
+void ModeloJerarquico::animarGema(){
+    rotGema++;
+    rotGema %= 360;
 }
